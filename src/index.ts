@@ -58,7 +58,7 @@ function KiB(size: number) {
 }
 
 function generateBundle(_, bundle: OutputBundle) {
-    console.log(pc.cyan('\n\nsingleFileGzip ') + pc.green('building...'))
+    console.log('\n\n' + pc.cyan('vite-plugin-singlefile-compression') + ' ' + pc.green('building...'))
     const setDel = new Set() as Set<string>
 
     for (const htmlFileName of Object.keys(bundle)) {
