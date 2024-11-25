@@ -34,6 +34,7 @@
   ],
   "dependencies": {
     "mime": "^4.0.4",
+    "mini-svg-data-uri": "^1.4.4",
     "picocolors": "^1.1.1",
     "rimraf": "^6.0.1",
     "terser": "^5.36.0",

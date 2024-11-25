@@ -52,37 +52,23 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  101.12 KiB -> 52.39 KiB
+  97.2 KiB -> 50.93 KiB
 
 Finish.
 
-dist/index.html  53.64 kB
-✓ built in 742ms
+dist/index.html  52.15 kB
+✓ built in 758ms
 ```
 
 ```html
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" href="data:assets,favicon-uSLXchjO.ico" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta charset="UTF-8">
+		<link rel="icon" href="data:assets,logo-_cUAdIX-.svg">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Vite App</title>
-		<script type="module">
-			fetch("data:application/gzip;base64,H4sIAAAA******y5kBAA==")
-				.then((e) => e.blob())
-				.then((e) =>
-					new Response(
-						e.stream().pipeThrough(new DecompressionStream("gzip")),
-						{ headers: { "Content-Type": "text/javascript" } }
-					).blob()
-				)
-				.then((e) =>
-					import((e = URL.createObjectURL(e))).finally(() =>
-						URL.revokeObjectURL(e)
-					)
-				);
-		</script>
+		<script type="module">fetch("data:application/gzip;base64,H4sIAAAA******T5qJhAEA").then((e=>e.blob())).then((e=>new Response(e.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob())).then((e=>import(e=URL.createObjectURL(e)).finally((()=>URL.revokeObjectURL(e)))));</script>
 	</head>
 	<body>
 		<div id="app"></div>

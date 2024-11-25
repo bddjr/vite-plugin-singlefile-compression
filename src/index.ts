@@ -2,6 +2,7 @@ import { UserConfig, PluginOption } from "vite"
 import { OutputChunk, OutputAsset, OutputBundle } from "rollup"
 import mime from 'mime'
 import pc from "picocolors"
+import svgToTinyDataUri from "mini-svg-data-uri"
 
 import zlib from 'zlib'
 import path from 'path'
@@ -103,11 +104,10 @@ function generateBundle(_, bundle: OutputBundle) {
             if (!o) continue
 
             oldSize += o.source.length
-            const type = mime.getType(o.fileName)
             assets[name] =
-                type == "image/svg+xml"
-                    ? `data:${type},${o.source}`
-                    : `data:${type};base64,${Buffer.from(o.source).toString('base64')}`
+                name.endsWith('.svg')
+                    ? svgToTinyDataUri(Buffer.from(o.source).toString())
+                    : `data:${mime.getType(o.fileName)};base64,${Buffer.from(o.source).toString('base64')}`
             setDel.add(bundleName)
         }
 
