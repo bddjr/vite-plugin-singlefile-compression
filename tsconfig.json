@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"module": "esnext",
+		"target": "esnext",
+		"lib": ["ESNext", "DOM"],
+		"outDir": "dist",
+		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "node",
+		"skipLibCheck": true,
+		"declaration": true,
+		"declarationMap": false,
+	},
+	"include": ["src"],
+	"exclude": ["dist", "node_modules"]
+}

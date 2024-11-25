@@ -1,0 +1,45 @@
+{
+  "name": "vite-plugin-singlefile-compression",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "tsc && node build.js && cd test && npm run build"
+  },
+  "author": "bddjr",
+  "license": "MIT",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bddjr/vite-plugin-singlefile-gzip"
+  },
+  "keywords": [
+    "vite",
+    "SFA",
+    "single-file",
+    "singlefile",
+    "single",
+    "compression",
+    "compress",
+    "gzip",
+    "inline",
+    "frontend",
+    "js",
+    "javascript",
+    "css"
+  ],
+  "dependencies": {
+    "mime": "^4.0.4",
+    "picocolors": "^1.1.1",
+    "terser": "^5.36.0",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.3"
+  }
+}
