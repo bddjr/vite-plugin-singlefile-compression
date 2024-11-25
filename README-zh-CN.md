@@ -1,5 +1,3 @@
-[English](README.md) | 简体中文
-
 # vite plugin singlefile compression
 
 该插件使用 `gzip` 将所有 JavaScript、CSS、图片等资源压缩后，嵌入到 `dist/index.html` ，方便作为单个 `html` 文件分享。
@@ -7,6 +5,11 @@
 接收方可以直接使用浏览器打开，无需手动解压文件。
 
 改编自 [vite-plugin-singlefile](https://www.npmjs.com/package/vite-plugin-singlefile)
+
+### README Language
+
+> [English](README.md)  
+> 简体中文
 
 ## 安装
 
