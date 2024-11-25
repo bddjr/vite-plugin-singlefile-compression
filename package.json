@@ -16,7 +16,7 @@
   "description": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bddjr/vite-plugin-singlefile-gzip"
+    "url": "https://github.com/bddjr/vite-plugin-singlefile-compression"
   },
   "keywords": [
     "vite",
