@@ -74,15 +74,14 @@ function generateBundle(_, bundle: OutputBundle) {
         const htmlChunk = bundle[htmlFileName] as OutputAsset
         let newHtml = htmlChunk.source as string
         let oldSize = newHtml.length
-        let cssFileName = ""
 
         // Fix async import
-        let newJSCode = ["var __VITE_PRELOAD__"] as string[]
+        let newJSCode = ["self.__VITE_PRELOAD__=0"] as string[]
 
         // get css tag
         newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
             (match, name: string) => {
-                cssFileName = name
+                setDel.add(name)
                 const css = bundle[name] as OutputAsset
                 let cssSource = css.source as string
                 oldSize += cssSource.length
@@ -105,15 +104,15 @@ function generateBundle(_, bundle: OutputBundle) {
                     const bundleName = "assets/" + name
                     const a = bundle[bundleName] as OutputAsset
                     if (a) {
+                        setDel.add(bundleName)
                         oldSize += a.source.length
                         assets[name] =
                             name.endsWith('.svg')
                                 ? svgToTinyDataUri(Buffer.from(a.source).toString())
                                 : `data:${mime.getType(a.fileName)};base64,${Buffer.from(a.source).toString('base64')}`
-                        setDel.add(bundleName)
                     }
                 }
-                return ` ${attrName}="data:assets,${name}"`
+                return `${attrName}="data:assets,${name}"`
             }
         )
 
@@ -136,7 +135,6 @@ function generateBundle(_, bundle: OutputBundle) {
             }
         )
         if (!ok) continue
-        setDel.add(cssFileName)
 
         // finish
         htmlChunk.source = newHtml
