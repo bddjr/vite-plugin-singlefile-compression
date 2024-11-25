@@ -8,7 +8,8 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "rimraf dist && tsc && node build.js && cd test && npm run build"
+    "build": "rimraf dist && tsc && node build.js && cd test && npm run build",
+    "prepublishOnly": "npm run build"
   },
   "author": "bddjr",
   "license": "MIT",

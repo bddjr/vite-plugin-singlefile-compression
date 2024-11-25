@@ -74,72 +74,73 @@ function generateBundle(_, bundle: OutputBundle) {
         const htmlChunk = bundle[htmlFileName] as OutputAsset
         let newHtml = htmlChunk.source as string
         let oldSize = newHtml.length
-        let newJSCode = `var __VITE_PRELOAD__;`
         let cssFileName = ""
 
+        // Fix async import
+        let newJSCode = ["var __VITE_PRELOAD__"] as string[]
+
         // get css tag
-        let tag = /\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/.exec(newHtml)
-        if (tag) {
-            cssFileName = tag[1]
-            const css = bundle[cssFileName] as OutputAsset
-            let cssSource = css.source as string
-            oldSize += cssSource.length
-            cssSource = cssSource.replace(/\s+$/, '')
-            // add script for load css
-            if (cssSource)
-                newJSCode += `document.head.appendChild(document.createElement("style")).innerHTML=${JSON.stringify(cssSource)};`
-            // delete css tag
-            newHtml = newHtml.slice(0, tag.index)
-                + newHtml.slice(tag.index + tag[0].length)
-        }
+        newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
+            (match, name: string) => {
+                cssFileName = name
+                const css = bundle[name] as OutputAsset
+                let cssSource = css.source as string
+                oldSize += cssSource.length
+                cssSource = cssSource.replace(/\s+$/, '')
+                // add script for load css
+                if (cssSource)
+                    newJSCode.push(`document.head.appendChild(document.createElement("style")).innerHTML=${JSON.stringify(cssSource)}`)
+                // delete tag
+                return ''
+            }
+        )
 
         // get html assets
         const assets = {}
-        for (const i of newHtml.matchAll(/[\s"'](src|href)="\.\/assets\/([^"]+)"/g)) {
-            const name = i[2]
-            if (name.endsWith('.js') || Object.hasOwn(assets, name)) continue
-
-            const bundleName = "assets/" + name
-            const o = bundle[bundleName] as OutputAsset
-            if (!o) continue
-
-            oldSize += o.source.length
-            assets[name] =
-                name.endsWith('.svg')
-                    ? svgToTinyDataUri(Buffer.from(o.source).toString())
-                    : `data:${mime.getType(o.fileName)};base64,${Buffer.from(o.source).toString('base64')}`
-            setDel.add(bundleName)
-        }
+        newHtml = newHtml.replace(/(?<=[\s"])(src|href)="\.\/assets\/([^"]+)"/g,
+            (match, attrName: string, name: string) => {
+                if (name.endsWith('.js'))
+                    return match
+                if (!Object.hasOwn(assets, name)) {
+                    const bundleName = "assets/" + name
+                    const a = bundle[bundleName] as OutputAsset
+                    if (a) {
+                        oldSize += a.source.length
+                        assets[name] =
+                            name.endsWith('.svg')
+                                ? svgToTinyDataUri(Buffer.from(a.source).toString())
+                                : `data:${mime.getType(a.fileName)};base64,${Buffer.from(a.source).toString('base64')}`
+                        setDel.add(bundleName)
+                    }
+                }
+                return ` ${attrName}="data:assets,${name}"`
+            }
+        )
 
         // add script for load html assets
         const assetsJSON = JSON.stringify(assets)
         if (assetsJSON != '{}')
-            newJSCode += templateAssets.replace('{"":""}', assetsJSON)
+            newJSCode.push(templateAssets.replace('{"":""}', assetsJSON))
 
-        // get js tag
-        tag = /<script type="module"[^>]* src="\.\/(assets\/[^"]+)"[^>]*><\/script>/.exec(newHtml)
-        if (!tag) continue
-        const jsFileName = tag[1]
-        const js = bundle[jsFileName] as OutputChunk
-        oldSize += js.code.length
-
-        // gzip
-        newJSCode += js.code
-        const outputScript = template.replace('{<script>}', gzipToBase64(newJSCode))
-
-
-        // write js tag
-        newHtml = newHtml.slice(0, tag.index)
-            + `<script type="module">${outputScript}</script>`
-            + newHtml.slice(tag.index + tag[0].length)
-
-        // replace assets
-        newHtml = newHtml.replace(/="\.\/assets\//g, '="data:assets,')
+        let ok = false
+        newHtml = newHtml.replace(/<script type="module"[^>]* src="\.\/(assets\/[^"]+)"[^>]*><\/script>/,
+            (match, name: string) => {
+                ok = true
+                setDel.add(name)
+                const js = bundle[name] as OutputChunk
+                oldSize += js.code.length
+                newJSCode.push(js.code.replace(/;\n?$/, ''))
+                // gzip
+                const out = template.replace('{<script>}', gzipToBase64(newJSCode.join(';')))
+                return `<script type="module">${out}</script>`
+            }
+        )
+        if (!ok) continue
+        setDel.add(cssFileName)
 
         // finish
         htmlChunk.source = newHtml
         console.log(
-            // "dist/%s  %d KiB => %d KiB",
             "\n  "
             + pc.underline(pc.cyan(fileProtocolDistPath) + pc.greenBright(htmlFileName))
             + "\n  "
@@ -147,9 +148,6 @@ function generateBundle(_, bundle: OutputBundle) {
             + pc.cyanBright(KiB(newHtml.length))
             + "\n"
         )
-
-        setDel.add(cssFileName)
-        setDel.add(jsFileName)
     }
 
     // delete inlined assets
