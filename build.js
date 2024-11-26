@@ -11,6 +11,9 @@ const result = esbuild.buildSync({
     write: false,
 })
 
+if (result.errors.length)
+    throw result.errors
+
 for (const i of result.outputFiles) {
     fs.writeFileSync(i.path, i.text.replace(/;?\n?$/, ''))
 }
