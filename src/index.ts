@@ -60,7 +60,7 @@ function KiB(size: number) {
 
 function generateBundle(_, bundle: OutputBundle) {
     console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ') + pc.green('building...'))
-    const globalDel = new Set() as Set<string>
+    const globalDel = new Set<string>()
 
     for (const htmlFileName of Object.keys(bundle)) {
         // key format:
@@ -74,22 +74,25 @@ function generateBundle(_, bundle: OutputBundle) {
         const htmlChunk = bundle[htmlFileName] as OutputAsset
         let newHtml = htmlChunk.source as string
         let oldSize = newHtml.length
-        const thisDel = new Set() as Set<string>
+        const thisDel = new Set<string>()
 
         // Fix async import
-        const newJSCode = ["self.__VITE_PRELOAD__=void 0"] as string[]
+        const newJSCode = ["self.__VITE_PRELOAD__=void 0"]
 
         // get css tag
         newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
             (match, name: string) => {
                 thisDel.add(name)
                 const css = bundle[name] as OutputAsset
-                let cssSource = css.source as string
-                oldSize += cssSource.length
-                cssSource = cssSource.replace(/\s+$/, '')
-                // add script for load css
-                if (cssSource)
-                    newJSCode.push('document.head.appendChild(document.createElement("style")).innerHTML=' + JSON.stringify(cssSource))
+                const cssSource = css.source as string
+                if (cssSource) {
+                    oldSize += cssSource.length
+                    // add script for load css
+                    newJSCode.push(
+                        'document.head.appendChild(document.createElement("style")).innerHTML='
+                        + JSON.stringify(cssSource.replace(/\s+$/, ''))
+                    )
+                }
                 // delete tag
                 return ''
             }
@@ -107,8 +110,8 @@ function generateBundle(_, bundle: OutputBundle) {
                     if (!a)
                         return match
                     thisDel.add(bundleName)
-                    oldSize += a.source.length
                     const b = Buffer.from(a.source)
+                    oldSize += b.length
                     assets[name] =
                         name.endsWith('.svg')
                             ? svgToTinyDataUri(b.toString())
