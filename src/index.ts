@@ -77,7 +77,7 @@ function generateBundle(_, bundle: OutputBundle) {
         const thisDel = new Set() as Set<string>
 
         // Fix async import
-        let newJSCode = ["self.__VITE_PRELOAD__=null"] as string[]
+        const newJSCode = ["self.__VITE_PRELOAD__=null"] as string[]
 
         // get css tag
         newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
