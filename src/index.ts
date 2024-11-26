@@ -60,7 +60,7 @@ function KiB(size: number) {
 
 function generateBundle(_, bundle: OutputBundle) {
     console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ') + pc.green('building...'))
-    const setDel = new Set() as Set<string>
+    const globalDel = new Set() as Set<string>
 
     for (const htmlFileName of Object.keys(bundle)) {
         // key format:
@@ -74,6 +74,7 @@ function generateBundle(_, bundle: OutputBundle) {
         const htmlChunk = bundle[htmlFileName] as OutputAsset
         let newHtml = htmlChunk.source as string
         let oldSize = newHtml.length
+        const thisDel = new Set() as Set<string>
 
         // Fix async import
         let newJSCode = ["self.__VITE_PRELOAD__=0"] as string[]
@@ -81,7 +82,7 @@ function generateBundle(_, bundle: OutputBundle) {
         // get css tag
         newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
             (match, name: string) => {
-                setDel.add(name)
+                thisDel.add(name)
                 const css = bundle[name] as OutputAsset
                 let cssSource = css.source as string
                 oldSize += cssSource.length
@@ -104,7 +105,7 @@ function generateBundle(_, bundle: OutputBundle) {
                     const bundleName = "assets/" + name
                     const a = bundle[bundleName] as OutputAsset
                     if (a) {
-                        setDel.add(bundleName)
+                        thisDel.add(bundleName)
                         oldSize += a.source.length
                         assets[name] =
                             name.endsWith('.svg')
@@ -125,7 +126,7 @@ function generateBundle(_, bundle: OutputBundle) {
         newHtml = newHtml.replace(/<script type="module"[^>]* src="\.\/(assets\/[^"]+)"[^>]*><\/script>/,
             (match, name: string) => {
                 ok = true
-                setDel.add(name)
+                thisDel.add(name)
                 const js = bundle[name] as OutputChunk
                 oldSize += js.code.length
                 newJSCode.push(js.code.replace(/;\n?$/, ''))
@@ -143,10 +144,15 @@ function generateBundle(_, bundle: OutputBundle) {
             + "  " + pc.underline(pc.cyan(fileProtocolDistPath) + pc.greenBright(htmlFileName)) + '\n'
             + "  " + pc.gray(KiB(oldSize) + " -> ") + pc.cyanBright(KiB(newHtml.length)) + '\n'
         )
+
+        // delete assets
+        for (const name of thisDel) {
+            globalDel.add(name)
+        }
     }
 
     // delete inlined assets
-    for (const name of setDel) {
+    for (const name of globalDel) {
         delete bundle[name]
     }
     console.log(pc.green('Finish.\n'))
