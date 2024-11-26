@@ -52,12 +52,12 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  97.2 KiB -> 50.93 KiB
+  97.2 KiB -> 50.92 KiB
 
 Finish.
 
-dist/index.html  52.15 kB
-✓ built in 758ms
+dist/index.html  52.14 kB
+✓ built in 737ms
 ```
 
 ```html

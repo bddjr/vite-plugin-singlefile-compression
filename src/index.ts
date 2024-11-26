@@ -77,7 +77,7 @@ function generateBundle(_, bundle: OutputBundle) {
         const thisDel = new Set() as Set<string>
 
         // Fix async import
-        let newJSCode = ["self.__VITE_PRELOAD__=0"] as string[]
+        let newJSCode = ["self.__VITE_PRELOAD__=null"] as string[]
 
         // get css tag
         newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
@@ -104,16 +104,17 @@ function generateBundle(_, bundle: OutputBundle) {
                 if (!Object.hasOwn(assets, name)) {
                     const bundleName = "assets/" + name
                     const a = bundle[bundleName] as OutputAsset
-                    if (a) {
-                        thisDel.add(bundleName)
-                        oldSize += a.source.length
-                        assets[name] =
-                            name.endsWith('.svg')
-                                ? svgToTinyDataUri(Buffer.from(a.source).toString())
-                                : `data:${mime.getType(a.fileName)};base64,${Buffer.from(a.source).toString('base64')}`
-                    }
+                    if (!a)
+                        return match
+                    thisDel.add(bundleName)
+                    oldSize += a.source.length
+                    const b = Buffer.from(a.source)
+                    assets[name] =
+                        name.endsWith('.svg')
+                            ? svgToTinyDataUri(b.toString())
+                            : `data:${mime.getType(a.fileName)};base64,${b.toString('base64')}`
                 }
-                return `${attrName}="data:assets,${name}"`
+                return `${attrName}="data:${name}"`
             }
         )
 
@@ -131,8 +132,9 @@ function generateBundle(_, bundle: OutputBundle) {
                 oldSize += js.code.length
                 newJSCode.push(js.code.replace(/;\n?$/, ''))
                 // gzip
-                const out = template.replace('{<script>}', gzipToBase64(newJSCode.join(';')))
-                return `<script type="module">${out}</script>`
+                return '<script type="module">'
+                    + template.replace('{<script>}', gzipToBase64(newJSCode.join(';')))
+                    + '</script>'
             }
         )
         if (!ok) continue
