@@ -65,10 +65,10 @@ dist/index.html  52.13 kB
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="icon" href="data:assets,logo-_cUAdIX-.svg">
+        <link rel="icon" href="data:logo-_cUAdIX-.svg">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Vite App</title>
-        <script type="module">fetch("data:application/gzip;base64,H4sIAAAA******T5qJhAEA").then((e=>e.blob())).then((e=>new Response(e.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob())).then((e=>import(e=URL.createObjectURL(e)).finally((()=>URL.revokeObjectURL(e)))));</script>
+        <script type="module">fetch("data:application/gzip;base64,H4sI******AQA=").then(r=>r.blob()).then(b=>new Response(b.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob()).then(b=>import(b=URL.createObjectURL(b)).finally(()=>URL.revokeObjectURL(b)))</script>
     </head>
     <body>
         <div id="app"></div>
