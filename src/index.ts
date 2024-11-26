@@ -55,7 +55,7 @@ function gzipToBase64(buf: zlib.InputType) {
 }
 
 function KiB(size: number) {
-    return String(Math.ceil(size / 10.24) / 100) + " KiB"
+    return `${Math.ceil(size / 10.24) / 100} KiB`
 }
 
 function generateBundle(_, bundle: OutputBundle) {
