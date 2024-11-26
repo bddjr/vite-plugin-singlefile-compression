@@ -1,14 +1,16 @@
-import { minify_sync } from 'terser'
+import esbuild from 'esbuild'
 import fs from 'fs'
 
-/** @param {string} name */
-function min(name) {
-    fs.writeFileSync(`dist/${name}.js`,
-        minify_sync(
-            fs.readFileSync(`src/${name}.js`).toString()
-        ).code
-    )
-}
+const result = esbuild.buildSync({
+    entryPoints: [
+        "src/template.js",
+        "src/template-assets.js",
+    ],
+    outdir: "dist",
+    minifyWhitespace: true,
+    write: false,
+})
 
-min("template")
-min("template-assets")
+for (const i of result.outputFiles) {
+    fs.writeFileSync(i.path, i.text.replace(/;?\n?$/, ''))
+}

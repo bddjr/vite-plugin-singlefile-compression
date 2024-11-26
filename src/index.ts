@@ -130,7 +130,7 @@ function generateBundle(_, bundle: OutputBundle) {
                 thisDel.add(name)
                 const js = bundle[name] as OutputChunk
                 oldSize += js.code.length
-                newJSCode.push(js.code.replace(/;\n?$/, ''))
+                newJSCode.push(js.code.replace(/;?\n?$/, ''))
                 // gzip
                 return '<script type="module">'
                     + template.replace('{<script>}', gzipToBase64(newJSCode.join(';')))
