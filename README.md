@@ -19,7 +19,7 @@ Using `npm` to install
 npm i vite-plugin-singlefile-compression
 ```
 
-Then modify `vite.config.ts`
+Then modify [vite.config.ts](test/vite.config.ts)
 
 ```ts
 // Import singleFileCompression
