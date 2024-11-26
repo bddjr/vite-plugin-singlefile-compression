@@ -5,7 +5,6 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
-    "test/vite.config.ts",
     "package.json",
     "package-lock.json",
     "LICENSE.txt",

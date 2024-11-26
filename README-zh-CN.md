@@ -19,7 +19,7 @@
 npm i vite-plugin-singlefile-compression
 ```
 
-然后修改 [vite.config.ts](test/vite.config.ts)
+然后修改 [vite.config.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/vite.config.ts)
 
 ```ts
 // 导入 singleFileCompression
