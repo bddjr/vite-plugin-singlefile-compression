@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-singlefile-compression",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -8,8 +8,7 @@
     "package.json",
     "package-lock.json",
     "LICENSE.txt",
-    "README.md",
-    "README-zh-CN.md"
+    "README.md"
   ],
   "type": "module",
   "scripts": {
