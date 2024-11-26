@@ -19,7 +19,7 @@ Using `npm` to install
 npm i vite-plugin-singlefile-compression
 ```
 
-Then modify [vite.config.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/vite.config.ts)
+Then modify [vite.config.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/vite.config.ts#L14)
 
 ```ts
 // Import singleFileCompression
@@ -35,7 +35,7 @@ export default defineConfig({
   ],
 ```
 
-Then modify `src/router/index.ts` , change `createWebHistory` to `createWebHashHistory`
+Then modify [src/router/index.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/src/router/index.ts#L5) , change `createWebHistory` to `createWebHashHistory`
 
 ```ts
 const router = createRouter({

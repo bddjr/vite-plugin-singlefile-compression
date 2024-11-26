@@ -19,7 +19,7 @@
 npm i vite-plugin-singlefile-compression
 ```
 
-然后修改 [vite.config.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/vite.config.ts)
+然后修改 [vite.config.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/vite.config.ts#L14)
 
 ```ts
 // 导入 singleFileCompression
@@ -35,7 +35,7 @@ export default defineConfig({
   ],
 ```
 
-然后修改 `src/router/index.ts` ，将 `createWebHistory` 改为 `createWebHashHistory`
+然后修改 [src/router/index.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/src/router/index.ts#L5) ，将 `createWebHistory` 改为 `createWebHashHistory`
 
 ```ts
 const router = createRouter({
