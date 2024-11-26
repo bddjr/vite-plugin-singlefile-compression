@@ -1,6 +1,6 @@
 # vite plugin singlefile compression
 
-This plugin compresses all JavaScript, CSS, images, etc. resources using `gzip` and embeds them into `dist/index.html`, making it convenient to share as a single `html` file.
+This plugin compresses all JavaScript, CSS, images, etc. resources using gzip and embeds them into `dist/index.html`, making it convenient to share as a single HTML file.
 
 The recipient can open it directly in the browser without manually unzipping the file.
 
