@@ -59,7 +59,7 @@ function KiB(size: number) {
 }
 
 function generateBundle(_, bundle: OutputBundle) {
-    console.log('\n\n' + pc.cyan('vite-plugin-singlefile-compression') + ' ' + pc.green('building...'))
+    console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ') + pc.green('building...'))
     const setDel = new Set() as Set<string>
 
     for (const htmlFileName of Object.keys(bundle)) {
@@ -139,12 +139,9 @@ function generateBundle(_, bundle: OutputBundle) {
         // finish
         htmlChunk.source = newHtml
         console.log(
-            "\n  "
-            + pc.underline(pc.cyan(fileProtocolDistPath) + pc.greenBright(htmlFileName))
-            + "\n  "
-            + pc.gray(KiB(oldSize) + " -> ")
-            + pc.cyanBright(KiB(newHtml.length))
-            + "\n"
+            "\n"
+            + "  " + pc.underline(pc.cyan(fileProtocolDistPath) + pc.greenBright(htmlFileName)) + '\n'
+            + "  " + pc.gray(KiB(oldSize) + " -> ") + pc.cyanBright(KiB(newHtml.length)) + '\n'
         )
     }
 
