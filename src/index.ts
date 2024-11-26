@@ -77,7 +77,7 @@ function generateBundle(_, bundle: OutputBundle) {
         const thisDel = new Set() as Set<string>
 
         // Fix async import
-        const newJSCode = ["self.__VITE_PRELOAD__=null"] as string[]
+        const newJSCode = ["self.__VITE_PRELOAD__=void 0"] as string[]
 
         // get css tag
         newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
@@ -89,7 +89,7 @@ function generateBundle(_, bundle: OutputBundle) {
                 cssSource = cssSource.replace(/\s+$/, '')
                 // add script for load css
                 if (cssSource)
-                    newJSCode.push(`document.head.appendChild(document.createElement("style")).innerHTML=${JSON.stringify(cssSource)}`)
+                    newJSCode.push('document.head.appendChild(document.createElement("style")).innerHTML=' + JSON.stringify(cssSource))
                 // delete tag
                 return ''
             }
