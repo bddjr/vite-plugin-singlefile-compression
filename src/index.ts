@@ -81,6 +81,7 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
     console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ') + pc.green('building...'))
 
     const globalDel = new Set<string>()
+    const globalDoNotDel = new Set<string>()
 
     for (const htmlFileName of Object.keys(bundle)) {
         // key format:
@@ -155,6 +156,10 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
                 oldSize += js.code.length
                 // fix new URL
                 newJSCode.push(`import.meta.url=location.origin+location.pathname.replace(/[^/]*$/,"${name}")`)
+                for (const i in assets) {
+                    if (js.code.includes(i))
+                        globalDoNotDel.add(i)
+                }
                 // add script
                 newJSCode.push(js.code.replace(/;?\n?$/, ''))
                 // gzip
@@ -184,7 +189,8 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
 
     // delete inlined assets
     for (const name of globalDel) {
-        delete bundle[name]
+        if (!globalDoNotDel.has(name))
+            delete bundle[name]
     }
     console.log(pc.green('Finish.\n'))
 }
