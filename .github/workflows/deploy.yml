@@ -35,3 +35,4 @@ jobs:
           branch: gh-pages
           folder: test/dist
           single-commit: true
+          force: true
