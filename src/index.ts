@@ -156,9 +156,10 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
                 oldSize += js.code.length
                 // fix new URL
                 newJSCode.push(`import.meta.url=location.origin+location.pathname.replace(/[^/]*$/,"${name}")`)
-                for (const i in assets) {
-                    if (js.code.includes(i))
-                        globalDoNotDel.add(i)
+                for (const name in assets) {
+                    // name: logo-XXXXXXXX.svg
+                    if (js.code.includes(name))
+                        globalDoNotDel.add("assets/" + name)
                 }
                 // add script
                 newJSCode.push(js.code.replace(/;?\n?$/, ''))
