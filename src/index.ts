@@ -3,7 +3,7 @@ import { OutputChunk, OutputAsset, OutputBundle } from "rollup"
 import mime from 'mime'
 import pc from "picocolors"
 import svgToTinyDataUri from "mini-svg-data-uri"
-import { minify as htmlMinify, htmlMinifierOptions } from 'html-minifier-terser'
+import { minify as htmlMinify, Options as htmlMinifierOptions } from 'html-minifier-terser'
 
 import zlib from 'zlib'
 import path from 'path'
