@@ -83,16 +83,19 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
     const globalDel = new Set<string>()
     const globalDoNotDel = new Set<string>()
 
-    const bundleNames = Object.keys(bundle)
+    /** fotmat: ["assets/index-XXXXXXXX.js"] */
+    const bundleAssetsNames = [] as string[]
+    /** format: ["index.html"] */
+    const bundleHTMLNames = [] as string[]
 
-    for (const htmlFileName of bundleNames) {
-        // key format:
-        //   index.html
-        //   assets/index-ZZZZZZZZ.js
+    for (const name of Object.keys(bundle)) {
+        if (name.startsWith('assets/'))
+            bundleAssetsNames.push(name)
+        else if (name.endsWith('.html'))
+            bundleHTMLNames.push(name)
+    }
 
-        // skip other file
-        if (!htmlFileName.endsWith('.html')) continue
-
+    for (const htmlFileName of bundleHTMLNames) {
         // init
         const htmlChunk = bundle[htmlFileName] as OutputAsset
         let newHtml = htmlChunk.source as string
@@ -110,6 +113,11 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
                 const cssSource = css.source as string
                 if (cssSource) {
                     oldSize += cssSource.length
+                    // do not delete not inlined asset
+                    for (const name of bundleAssetsNames) {
+                        if (cssSource.includes(name.slice('assets/'.length)))
+                            globalDoNotDel.add(name)
+                    }
                     // add script for load css
                     newJSCode.push(
                         'document.head.appendChild(document.createElement("style")).innerHTML='
@@ -158,8 +166,9 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
                 oldSize += js.code.length
                 // fix new URL
                 newJSCode.push(`import.meta.url=location.origin+location.pathname.replace(/[^/]*$/,"${name}")`)
-                for (const name of bundleNames) {
-                    if (name.startsWith('assets/') && js.code.includes(name.slice('assets/'.length)))
+                // do not delete not inlined asset
+                for (const name of bundleAssetsNames) {
+                    if (js.code.includes(name.slice('assets/'.length)))
                         globalDoNotDel.add(name)
                 }
                 // add script
@@ -191,6 +200,7 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
 
     // delete inlined assets
     for (const name of globalDel) {
+        // do not delete not inlined asset
         if (!globalDoNotDel.has(name))
             delete bundle[name]
     }
