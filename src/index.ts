@@ -97,7 +97,7 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
         const thisDel = new Set<string>()
 
         // Fix async import, fix new URL
-        const newJSCode = ["self.__VITE_PRELOAD__=void 0;import.meta.url=location.origin+location.pathname"]
+        const newJSCode = ["self.__VITE_PRELOAD__=void 0"]
 
         // get css tag
         newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
@@ -153,6 +153,9 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
                 thisDel.add(name)
                 const js = bundle[name] as OutputChunk
                 oldSize += js.code.length
+                // fix new URL
+                newJSCode.push(`import.meta.url=location.origin+location.pathname.replace(/[^/]*$/,"${name}")`)
+                // add script
                 newJSCode.push(js.code.replace(/;?\n?$/, ''))
                 // gzip
                 return '<script type="module">'
