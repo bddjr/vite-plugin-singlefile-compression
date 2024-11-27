@@ -8,6 +8,7 @@ import { minify as htmlMinify, Options as htmlMinifierOptions } from 'html-minif
 import zlib from 'zlib'
 import path from 'path'
 import fs from 'fs'
+import { pathToFileURL } from "url"
 
 export interface Options {
     /**
@@ -46,11 +47,7 @@ const template = fs.readFileSync(path.join(import.meta.dirname, "template.js")).
 
 const templateAssets = fs.readFileSync(path.join(import.meta.dirname, "template-assets.js")).toString()
 
-const fileProtocolDistPath = (p =>
-    p.startsWith('/')
-        ? `file://${p}/`
-        : `file:///${p.replaceAll('\\', '/')}/`
-)(path.resolve("dist"))
+const distURL = pathToFileURL(path.resolve("dist")) + "/"
 
 function gzipToBase64(buf: zlib.InputType) {
     return zlib.gzipSync(buf, {
@@ -99,8 +96,8 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
         let oldSize = newHtml.length
         const thisDel = new Set<string>()
 
-        // Fix async import
-        const newJSCode = ["self.__VITE_PRELOAD__=void 0"]
+        // Fix async import, fix new URL
+        const newJSCode = ["self.__VITE_PRELOAD__=void 0;import.meta.url=location.origin+location.pathname"]
 
         // get css tag
         newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
@@ -172,7 +169,7 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
         htmlChunk.source = newHtml
         console.log(
             "\n"
-            + "  " + pc.underline(pc.cyan(fileProtocolDistPath) + pc.greenBright(htmlFileName)) + '\n'
+            + "  " + pc.underline(pc.cyan(distURL) + pc.greenBright(htmlFileName)) + '\n'
             + "  " + pc.gray(KiB(oldSize) + " -> ") + pc.cyanBright(KiB(newHtml.length)) + '\n'
         )
 
