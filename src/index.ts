@@ -68,7 +68,7 @@ function setConfig(config: UserConfig) {
     if (!config.build)
         config.build = {}
 
-    config.build.assetsInlineLimit = Infinity
+    config.build.assetsInlineLimit = () => true
     config.build.chunkSizeWarningLimit = Infinity
     config.build.cssCodeSplit = false
     config.build.assetsDir = 'assets'
