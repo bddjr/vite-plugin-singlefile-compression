@@ -33,6 +33,20 @@ export default defineConfig({
     // Add singleFileCompression
     singleFileCompression(),
   ],
+  esbuild: {
+    // Remove license comments
+    legalComments: "none"
+  },
+  build: {
+    terserOptions: {
+      format: {
+        // Remove license comments
+        comments: false
+      }
+    },
+    target: 'esnext',
+    reportCompressedSize: false
+  },
 ```
 
 Then modify [src/router/index.ts](test/src/router/index.ts#L5) , change `createWebHistory` to `createWebHashHistory`
@@ -40,6 +54,18 @@ Then modify [src/router/index.ts](test/src/router/index.ts#L5) , change `createW
 ```ts
 const router = createRouter({
   history: createWebHashHistory(),
+```
+
+## Options
+
+```ts
+export interface Options {
+    /**
+     * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
+     * @default defaultHtmlMinifierTerserOptions
+     */
+    htmlMinifierTerser?: htmlMinifierOptions | true | false
+}
 ```
 
 ## Effect
@@ -52,28 +78,16 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  97.2 KiB -> 50.91 KiB
+  97.31 KiB -> 50.83 KiB
 
 Finish.
 
-dist/index.html  52.13 kB
-✓ built in 778ms
+dist/index.html  52.05 kB
+✓ built in 738ms
 ```
 
 ```html
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="icon" href="data:logo-_cUAdIX-.svg">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Vite App</title>
-        <script type="module">fetch("data:application/gzip;base64,H4sI******AQA=").then(r=>r.blob()).then(b=>new Response(b.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob()).then(b=>import(b=URL.createObjectURL(b)).finally(()=>URL.revokeObjectURL(b)))</script>
-    </head>
-    <body>
-        <div id="app"></div>
-    </body>
-</html>
+<!DOCTYPE html><meta charset=UTF-8><link rel=icon href=data:logo-_cUAdIX-.svg><meta name=viewport content="width=device-width,initial-scale=1"><title>Vite App</title><script type=module>fetch("data:application/gzip;base64,H4sI********hAEA").then(r=>r.blob()).then(b=>new Response(b.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob()).then(b=>import(b=URL.createObjectURL(b)).finally(()=>URL.revokeObjectURL(b)))</script><div id=app></div>
 ```
 
 ## Clone

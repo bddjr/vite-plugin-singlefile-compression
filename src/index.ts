@@ -3,17 +3,40 @@ import { OutputChunk, OutputAsset, OutputBundle } from "rollup"
 import mime from 'mime'
 import pc from "picocolors"
 import svgToTinyDataUri from "mini-svg-data-uri"
+import { minify as htmlMinify, htmlMinifierOptions } from 'html-minifier-terser'
 
 import zlib from 'zlib'
 import path from 'path'
 import fs from 'fs'
 
-export function singleFileCompression(): PluginOption {
+export interface Options {
+    /**
+     * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
+     * @default defaultHtmlMinifierTerserOptions
+     */
+    htmlMinifierTerser?: htmlMinifierOptions | boolean
+}
+
+export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
+    removeAttributeQuotes: true,
+    removeComments: true,
+    collapseWhitespace: true,
+    removeOptionalTags: true,
+    removeRedundantAttributes: true,
+    minifyJS: false,
+}
+
+export function singleFileCompression(options?: Options): PluginOption {
+    const htmlMinifierOptions =
+        options?.htmlMinifierTerser == null || options.htmlMinifierTerser === true
+            ? defaultHtmlMinifierTerserOptions
+            : options.htmlMinifierTerser
+
     return {
-        name: "singleFileGzip",
+        name: "singleFileCompression",
         enforce: "post",
         config: setConfig,
-        generateBundle,
+        generateBundle: (_, bundle) => generateBundle(bundle, htmlMinifierOptions),
     }
 }
 
@@ -28,6 +51,16 @@ const fileProtocolDistPath = (p =>
         ? `file://${p}/`
         : `file:///${p.replaceAll('\\', '/')}/`
 )(path.resolve("dist"))
+
+function gzipToBase64(buf: zlib.InputType) {
+    return zlib.gzipSync(buf, {
+        level: zlib.constants.Z_BEST_COMPRESSION,
+    }).toString('base64')
+}
+
+function KiB(size: number) {
+    return `${Math.ceil(size / 10.24) / 100} KiB`
+}
 
 function setConfig(config: UserConfig) {
     config.base = './'
@@ -45,21 +78,11 @@ function setConfig(config: UserConfig) {
         config.build.rollupOptions = {}
 
     config.build.rollupOptions.output = { inlineDynamicImports: true }
-
 }
 
-function gzipToBase64(buf: zlib.InputType) {
-    return zlib.gzipSync(buf, {
-        level: zlib.constants.Z_BEST_COMPRESSION,
-    }).toString('base64')
-}
-
-function KiB(size: number) {
-    return `${Math.ceil(size / 10.24) / 100} KiB`
-}
-
-function generateBundle(_, bundle: OutputBundle) {
+async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMinifierOptions | false) {
     console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ') + pc.green('building...'))
+
     const globalDel = new Set<string>()
 
     for (const htmlFileName of Object.keys(bundle)) {
@@ -141,6 +164,9 @@ function generateBundle(_, bundle: OutputBundle) {
             }
         )
         if (!ok) continue
+
+        if (htmlMinifierOptions)
+            newHtml = await htmlMinify(newHtml, htmlMinifierOptions)
 
         // finish
         htmlChunk.source = newHtml
