@@ -83,7 +83,9 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
     const globalDel = new Set<string>()
     const globalDoNotDel = new Set<string>()
 
-    for (const htmlFileName of Object.keys(bundle)) {
+    const bundleNames = Object.keys(bundle)
+
+    for (const htmlFileName of bundleNames) {
         // key format:
         //   index.html
         //   assets/index-ZZZZZZZZ.js
@@ -156,10 +158,9 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
                 oldSize += js.code.length
                 // fix new URL
                 newJSCode.push(`import.meta.url=location.origin+location.pathname.replace(/[^/]*$/,"${name}")`)
-                for (const name in assets) {
-                    // name: logo-XXXXXXXX.svg
-                    if (js.code.includes(name))
-                        globalDoNotDel.add("assets/" + name)
+                for (const name in bundleNames) {
+                    if (name.startsWith('assets/') && js.code.includes(name.slice('assets/'.length)))
+                        globalDoNotDel.add(name)
                 }
                 // add script
                 newJSCode.push(js.code.replace(/;?\n?$/, ''))
