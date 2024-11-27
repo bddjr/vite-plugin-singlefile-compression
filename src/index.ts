@@ -158,7 +158,7 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
                 oldSize += js.code.length
                 // fix new URL
                 newJSCode.push(`import.meta.url=location.origin+location.pathname.replace(/[^/]*$/,"${name}")`)
-                for (const name in bundleNames) {
+                for (const name of bundleNames) {
                     if (name.startsWith('assets/') && js.code.includes(name.slice('assets/'.length)))
                         globalDoNotDel.add(name)
                 }
