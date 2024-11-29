@@ -94,6 +94,8 @@ export interface Options {
 
 ## Effect
 
+https://bddjr.github.io/vite-plugin-singlefile-compression/
+
 ```
 vite v5.4.11 building for production...
 ✓ 45 modules transformed.
