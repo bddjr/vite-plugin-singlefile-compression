@@ -64,7 +64,31 @@ export interface Options {
      * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
      * @default defaultHtmlMinifierTerserOptions
      */
-    htmlMinifierTerser?: htmlMinifierOptions | true | false
+    htmlMinifierTerser?: htmlMinifierOptions | boolean
+
+    /**
+     * 尝试内联 html 用到的资源，如果在 JS 里被内联或未使用。
+     * @default true
+     */
+    tryInlineHtmlAssets?: boolean
+
+    /**
+     * 移除已内联的资源文件。
+     * @default true
+     */
+    removeInlinedAssetFiles?: boolean
+
+    /**
+     * 尝试内联 html 的图标，如果图标在 public 文件夹。
+     * @default true
+     */
+    tryInlineHtmlPublicIcon?: boolean
+
+    /**
+     * 移除已内联的 html 图标文件。
+     * @default true
+     */
+    removeInlinedPublicIconFiles?: boolean
 }
 ```
 
@@ -75,19 +99,19 @@ vite v5.4.11 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression building...
+vite-plugin-singlefile-compression 1.1.0 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  97.52 KiB -> 50.98 KiB
+  101.43 KiB -> 52.35 KiB
 
 Finish.
 
-dist/index.html  52.19 kB
-✓ built in 685ms
+dist/index.html  53.60 kB
+✓ built in 678ms
 ```
 
 ```html
-<!DOCTYPE html><meta charset=UTF-8><link rel=icon href=data:logo-_cUAdIX-.svg><meta name=viewport content="width=device-width,initial-scale=1"><title>Vite App</title><script type=module>fetch("data:application/gzip;base64,H4sI********hAEA").then(r=>r.blob()).then(b=>new Response(b.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob()).then(b=>import(b=URL.createObjectURL(b)).finally(()=>URL.revokeObjectURL(b)))</script><div id=app></div>
+<!DOCTYPE html><meta charset=UTF-8><link rel=icon href=data:><meta name=viewport content="width=device-width,initial-scale=1"><title>Vite App</title><script type=module>fetch("data:application/gzip;base64,********").then(r=>r.blob()).then(b=>new Response(b.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob()).then(b=>import(b=URL.createObjectURL(b)).finally(()=>URL.revokeObjectURL(b)))</script><div id=app></div>
 ```
 
 ## Clone

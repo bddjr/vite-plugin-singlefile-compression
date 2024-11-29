@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-singlefile-compression",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -23,7 +23,9 @@
     "url": "https://github.com/bddjr/vite-plugin-singlefile-compression"
   },
   "keywords": [
+    "vite-plugin",
     "vite",
+    "plugin",
     "SFA",
     "single-file",
     "singlefile",

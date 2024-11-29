@@ -64,7 +64,31 @@ export interface Options {
      * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
      * @default defaultHtmlMinifierTerserOptions
      */
-    htmlMinifierTerser?: htmlMinifierOptions | true | false
+    htmlMinifierTerser?: htmlMinifierOptions | boolean
+
+    /**
+     * Try inline html used assets, if inlined or not used in JS.
+     * @default true
+     */
+    tryInlineHtmlAssets?: boolean
+
+    /**
+     * Remove inlined asset files.
+     * @default true
+     */
+    removeInlinedAssetFiles?: boolean
+
+    /**
+     * Try inline html icon, if icon is in public dir.
+     * @default true
+     */
+    tryInlineHtmlPublicIcon?: boolean
+
+    /**
+     * Remove inlined html icon files.
+     * @default true
+     */
+    removeInlinedPublicIconFiles?: boolean
 }
 ```
 
@@ -75,19 +99,19 @@ vite v5.4.11 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression building...
+vite-plugin-singlefile-compression 1.1.0 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  97.52 KiB -> 50.98 KiB
+  101.43 KiB -> 52.35 KiB
 
 Finish.
 
-dist/index.html  52.19 kB
-✓ built in 685ms
+dist/index.html  53.60 kB
+✓ built in 678ms
 ```
 
 ```html
-<!DOCTYPE html><meta charset=UTF-8><link rel=icon href=data:logo-_cUAdIX-.svg><meta name=viewport content="width=device-width,initial-scale=1"><title>Vite App</title><script type=module>fetch("data:application/gzip;base64,H4sI********hAEA").then(r=>r.blob()).then(b=>new Response(b.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob()).then(b=>import(b=URL.createObjectURL(b)).finally(()=>URL.revokeObjectURL(b)))</script><div id=app></div>
+<!DOCTYPE html><meta charset=UTF-8><link rel=icon href=data:><meta name=viewport content="width=device-width,initial-scale=1"><title>Vite App</title><script type=module>fetch("data:application/gzip;base64,********").then(r=>r.blob()).then(b=>new Response(b.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob()).then(b=>import(b=URL.createObjectURL(b)).finally(()=>URL.revokeObjectURL(b)))</script><div id=app></div>
 ```
 
 ## Clone

@@ -1,4 +1,4 @@
-import { UserConfig, PluginOption } from "vite"
+import { UserConfig, PluginOption, ResolvedBuildOptions, ResolvedConfig } from "vite"
 import { OutputChunk, OutputAsset, OutputBundle } from "rollup"
 import mime from 'mime'
 import pc from "picocolors"
@@ -16,6 +16,38 @@ export interface Options {
      * @default defaultHtmlMinifierTerserOptions
      */
     htmlMinifierTerser?: htmlMinifierOptions | boolean
+
+    /**
+     * Try inline html used assets, if inlined or not used in JS.
+     * @default true
+     */
+    tryInlineHtmlAssets?: boolean
+
+    /**
+     * Remove inlined asset files.
+     * @default true
+     */
+    removeInlinedAssetFiles?: boolean
+
+    /**
+     * Try inline html icon, if icon is in public dir.
+     * @default true
+     */
+    tryInlineHtmlPublicIcon?: boolean
+
+    /**
+     * Remove inlined html icon files.
+     * @default true
+     */
+    removeInlinedPublicIconFiles?: boolean
+}
+
+interface innerOptions {
+    htmlMinifierTerser: htmlMinifierOptions | false
+    tryInlineHtmlAssets: boolean
+    removeInlinedAssetFiles: boolean
+    tryInlineHtmlPublicIcon: boolean
+    removeInlinedPublicIconFiles: boolean
 }
 
 export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
@@ -27,27 +59,68 @@ export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
     minifyJS: false,
 }
 
-export function singleFileCompression(options?: Options): PluginOption {
-    const htmlMinifierOptions =
-        options?.htmlMinifierTerser == null || options.htmlMinifierTerser === true
-            ? defaultHtmlMinifierTerserOptions
-            : options.htmlMinifierTerser
+export function singleFileCompression(opt?: Options): PluginOption {
+    opt ||= {}
+
+    const innerOpt: innerOptions = {
+        htmlMinifierTerser:
+            opt.htmlMinifierTerser == null || opt.htmlMinifierTerser === true
+                ? defaultHtmlMinifierTerserOptions
+                : opt.htmlMinifierTerser,
+
+        tryInlineHtmlAssets:
+            opt.tryInlineHtmlAssets == null
+                ? true
+                : opt.tryInlineHtmlAssets,
+
+        removeInlinedAssetFiles:
+            opt.removeInlinedAssetFiles == null
+                ? true
+                : opt.removeInlinedAssetFiles,
+
+        tryInlineHtmlPublicIcon:
+            opt.tryInlineHtmlPublicIcon == null
+                ? true
+                : opt.tryInlineHtmlPublicIcon,
+
+        removeInlinedPublicIconFiles:
+            opt.removeInlinedPublicIconFiles == null
+                ? true
+                : opt.removeInlinedPublicIconFiles
+    }
+
+    let conf: ResolvedConfig
 
     return {
         name: "singleFileCompression",
         enforce: "post",
         config: setConfig,
-        generateBundle: (_, bundle) => generateBundle(bundle, htmlMinifierOptions),
+        configResolved(c) { conf = c },
+        generateBundle: (_, bundle) => generateBundle(bundle, conf, innerOpt),
     }
 }
 
 export default singleFileCompression
 
-const template = fs.readFileSync(path.join(import.meta.dirname, "template.js")).toString()
+const template = fs.readFileSync(
+    path.join(import.meta.dirname, "template.js")
+).toString().split('{<script>}', 2)
 
-const templateAssets = fs.readFileSync(path.join(import.meta.dirname, "template-assets.js")).toString()
+const templateAssets = fs.readFileSync(
+    path.join(import.meta.dirname, "template-assets.js")
+).toString().split('{"":""}', 2)
 
-const distURL = pathToFileURL(path.resolve("dist")) + "/"
+const { version } = JSON.parse(
+    fs.readFileSync(
+        path.join(import.meta.dirname, "../package.json")
+    ).toString()
+) as { version: string }
+
+function bufferToDataURL(name: string, b: Buffer) {
+    return name.endsWith('.svg')
+        ? svgToTinyDataUri(b.toString())
+        : `data:${mime.getType(name)};base64,${b.toString('base64')}`
+}
 
 function gzipToBase64(buf: zlib.InputType) {
     return zlib.gzipSync(buf, {
@@ -77,11 +150,29 @@ function setConfig(config: UserConfig) {
     config.build.rollupOptions.output = { inlineDynamicImports: true }
 }
 
-async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMinifierOptions | false) {
-    console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ') + pc.green('building...'))
+async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: innerOptions) {
+    console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ' + version) + pc.green(' building...'))
 
-    const globalDel = new Set<string>()
-    const globalDoNotDel = new Set<string>()
+    if (config.base !== './')
+        return console.error("error: config.base has been changed!")
+    if (config.build.assetsDir !== 'assets')
+        return console.error("error: config.build.assetsDir has been changed!")
+
+    const distURL = (u =>
+        u.endsWith('/') ? u : u + '/'
+    )(pathToFileURL(path.resolve(config.build.outDir)).href)
+
+    const globalDelete = new Set<string>()
+    const globalDoNotDelete = new Set<string>()
+    const globalRemoveDistFileNames = new Set<string>()
+
+    const globalAssetsDataURL = {} as { [key: string]: string }
+    const globalPublicFilesCache = {} as {
+        [key: string]: {
+            dataURL: string,
+            size: number,
+        }
+    }
 
     /** fotmat: ["assets/index-XXXXXXXX.js"] */
     const bundleAssetsNames = [] as string[]
@@ -100,10 +191,15 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
         const htmlChunk = bundle[htmlFileName] as OutputAsset
         let newHtml = htmlChunk.source as string
         let oldSize = newHtml.length
+
         const thisDel = new Set<string>()
 
-        // Fix async import, fix new URL
+        // Fix async import
         const newJSCode = ["self.__VITE_PRELOAD__=void 0"]
+        newJSCode.toString = () => newJSCode.join(';')
+
+        // remove html comments
+        newHtml = newHtml.replaceAll(/<!--[\d\D]*?-->/g, '')
 
         // get css tag
         newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
@@ -116,7 +212,7 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
                     // do not delete not inlined asset
                     for (const name of bundleAssetsNames) {
                         if (cssSource.includes(name.slice('assets/'.length)))
-                            globalDoNotDel.add(name)
+                            globalDoNotDelete.add(name)
                     }
                     // add script for load css
                     newJSCode.push(
@@ -129,34 +225,83 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
             }
         )
 
-        // get html assets
-        const assets = {}
-        newHtml = newHtml.replace(/(?<=[\s"])(src|href)="\.\/assets\/([^"]+)"/g,
-            (match, attrName: string, name: string) => {
-                if (name.endsWith('.js'))
-                    return match
-                if (!Object.hasOwn(assets, name)) {
-                    const bundleName = "assets/" + name
-                    const a = bundle[bundleName] as OutputAsset
-                    if (!a)
+        // inline html assets
+        const assetsDataURL = {} as { [key: string]: string }
+        if (options.tryInlineHtmlAssets) {
+            newHtml = newHtml.replaceAll(/(?:[\s"])(?:src|href)="\.\/assets\/([^"]+)"/g,
+                (match, name: string) => {
+                    if (name.endsWith('.js'))
                         return match
-                    thisDel.add(bundleName)
-                    const b = Buffer.from(a.source)
-                    oldSize += b.length
-                    assets[name] =
-                        name.endsWith('.svg')
-                            ? svgToTinyDataUri(b.toString())
-                            : `data:${mime.getType(a.fileName)};base64,${b.toString('base64')}`
+                    if (!Object.hasOwn(assetsDataURL, name)) {
+                        const bundleName = "assets/" + name
+                        const a = bundle[bundleName] as OutputAsset
+                        if (!a)
+                            return match
+                        thisDel.add(bundleName)
+                        oldSize += a.source.length
+                        if (!Object.hasOwn(globalAssetsDataURL, name))
+                            globalAssetsDataURL[name] = bufferToDataURL(name, Buffer.from(a.source))
+                        assetsDataURL[name] = globalAssetsDataURL[name]
+                    }
+                    return `="data:${name}"`
                 }
-                return `${attrName}="data:${name}"`
+            )
+        }
+
+        // inline html icon
+        if (options.tryInlineHtmlPublicIcon) {
+            let needInline = true
+            let hasTag = false
+            let iconName = 'favicon.ico'
+            // replace tag
+            newHtml = newHtml.replace(/<link\s([^>]*\s)?rel="(?:shortcut )?icon"([^>]*\s)?href="\.\/([^"]+)"([^>]*)>/,
+                (match, p1, p2, name: string, after: string) => {
+                    hasTag = true
+                    iconName = name
+                    if (bundleAssetsNames.includes(name)) {
+                        needInline = false
+                        return match
+                    }
+                    p1 ||= ''
+                    p2 ||= ''
+                    return `<link ${p1}rel="icon"${p2}href="data:"${after}>`
+                }
+            )
+            if (needInline) {
+                // inline
+                try {
+                    if (!Object.hasOwn(globalPublicFilesCache, iconName)) {
+                        // dist/favicon.ico
+                        let Path = path.join(config.build.outDir, iconName)
+                        if (fs.existsSync(Path)) {
+                            globalRemoveDistFileNames.add(iconName)
+                        } else {
+                            // public/favicon.ico
+                            Path = path.join(config.publicDir, iconName)
+                        }
+                        // read
+                        const b = fs.readFileSync(Path)
+                        globalPublicFilesCache[iconName] = {
+                            dataURL: bufferToDataURL(iconName, b),
+                            size: b.length
+                        }
+                    }
+                    const { dataURL, size } = globalPublicFilesCache[iconName]
+                    oldSize += size
+                    newJSCode.push('document.querySelector("link[rel=icon]").href=' + JSON.stringify(dataURL))
+                    if (!hasTag) {
+                        // add link icon tag
+                        const l = '<link rel="icon" href="data:">'
+                        oldSize += l.length
+                        newHtml = newHtml.replace(/(?=<script )/, l)
+                    }
+                } catch (e) {
+                    if (hasTag) console.error(e)
+                }
             }
-        )
+        }
 
-        // add script for load html assets
-        const assetsJSON = JSON.stringify(assets)
-        if (assetsJSON != '{}')
-            newJSCode.push(templateAssets.replace('{"":""}', assetsJSON))
-
+        // script
         let ok = false
         newHtml = newHtml.replace(/<script type="module"[^>]* src="\.\/(assets\/[^"]+)"[^>]*><\/script>/,
             (match, name: string) => {
@@ -165,24 +310,34 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
                 const js = bundle[name] as OutputChunk
                 oldSize += js.code.length
                 // fix new URL
-                newJSCode.push(`import.meta.url=location.origin+location.pathname.replace(/[^/]*$/,"${name}")`)
+                newJSCode.push(`import.meta.url=location.origin+location.pathname.replace(/[^/]*$/,${JSON.stringify(name)})`)
                 // do not delete not inlined asset
                 for (const name of bundleAssetsNames) {
-                    if (js.code.includes(name.slice('assets/'.length)))
-                        globalDoNotDel.add(name)
+                    const assetName = name.slice('assets/'.length)
+                    if (js.code.includes(assetName)) {
+                        globalDoNotDelete.add(name)
+                        delete assetsDataURL[assetName]
+                    }
+                }
+                if (options.tryInlineHtmlAssets) {
+                    // add script for load html assets
+                    const assetsJSON = JSON.stringify(assetsDataURL)
+                    if (assetsJSON != '{}')
+                        newJSCode.push(templateAssets.join(assetsJSON))
                 }
                 // add script
                 newJSCode.push(js.code.replace(/;?\n?$/, ''))
                 // gzip
                 return '<script type="module">'
-                    + template.replace('{<script>}', gzipToBase64(newJSCode.join(';')))
+                    + template.join(gzipToBase64(newJSCode.toString()))
                     + '</script>'
             }
         )
         if (!ok) continue
 
-        if (htmlMinifierOptions)
-            newHtml = await htmlMinify(newHtml, htmlMinifierOptions)
+        // minify html
+        if (options.htmlMinifierTerser)
+            newHtml = await htmlMinify(newHtml, options.htmlMinifierTerser)
 
         // finish
         htmlChunk.source = newHtml
@@ -194,15 +349,27 @@ async function generateBundle(bundle: OutputBundle, htmlMinifierOptions: htmlMin
 
         // delete assets
         for (const name of thisDel) {
-            globalDel.add(name)
+            globalDelete.add(name)
         }
     }
 
-    // delete inlined assets
-    for (const name of globalDel) {
-        // do not delete not inlined asset
-        if (!globalDoNotDel.has(name))
-            delete bundle[name]
+    if (options.removeInlinedAssetFiles) {
+        // delete inlined assets
+        for (const name of globalDelete) {
+            // do not delete not inlined asset
+            if (!globalDoNotDelete.has(name))
+                delete bundle[name]
+        }
+    }
+    if (options.removeInlinedPublicIconFiles) {
+        // delete inlined public files
+        for (const name of globalRemoveDistFileNames) {
+            try {
+                fs.unlinkSync(path.join(config.build.outDir, name))
+            } catch (e) {
+                console.error(e)
+            }
+        }
     }
     console.log(pc.green('Finish.\n'))
 }
