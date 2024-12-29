@@ -13,7 +13,7 @@
   "type": "module",
   "scripts": {
     "build": "rimraf dist && tsc && node build.js && cd test && npm run build",
-    "prepublishOnly": "npm run build && npm config set registry https://registry.npmjs.org"
+    "prepublishOnly": "npm run build"
   },
   "author": "bddjr",
   "license": "MIT",
