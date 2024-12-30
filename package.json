@@ -20,7 +20,7 @@
   "description": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bddjr/vite-plugin-singlefile-compression"
+    "url": "git+https://github.com/bddjr/vite-plugin-singlefile-compression.git"
   },
   "keywords": [
     "vite-plugin",
