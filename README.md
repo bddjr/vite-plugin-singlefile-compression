@@ -97,39 +97,19 @@ export interface Options {
 https://bddjr.github.io/vite-plugin-singlefile-compression/
 
 ```
-vite v5.4.11 building for production...
+vite v6.0.6 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 1.1.0 building...
+vite-plugin-singlefile-compression 1.1.3 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  101.43 KiB -> 52.35 KiB
+  101.02 KiB -> 52.1 KiB
 
 Finish.
 
-dist/index.html  53.60 kB
-✓ built in 678ms
-```
-
-```html
-<!DOCTYPE html><meta charset="UTF-8" /><link rel="icon" href="data:" /><meta
-	name="viewport"
-	content="width=device-width,initial-scale=1"
-/><title>Vite App</title>
-<script type="module">
-	fetch("data:application/gzip;base64,********")
-		.then((r) => r.blob())
-		.then((b) =>
-			new Response(b.stream().pipeThrough(new DecompressionStream("gzip")), {
-				headers: { "Content-Type": "text/javascript" },
-			}).blob()
-		)
-		.then((b) =>
-			import((b = URL.createObjectURL(b))).finally(() => URL.revokeObjectURL(b))
-		);
-</script>
-<div id="app"></div>
+dist/index.html  53.35 kB
+✓ built in 734ms
 ```
 
 ## Clone
