@@ -1,6 +1,6 @@
 # vite plugin singlefile compression
 
-This plugin compresses all JavaScript, CSS, images, etc. resources using gzip and embeds them into `dist/index.html`, making it convenient to share as a single HTML file.
+Compress all assets and embeds them into `dist/index.html`, making it convenient to share as a single HTML file.
 
 The recipient can open it directly in the browser without manually unzipping the file.
 
@@ -60,35 +60,35 @@ const router = createRouter({
 
 ```ts
 export interface Options {
-    /**
-     * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
-     * @default defaultHtmlMinifierTerserOptions
-     */
-    htmlMinifierTerser?: htmlMinifierOptions | boolean
+	/**
+	 * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
+	 * @default defaultHtmlMinifierTerserOptions
+	 */
+	htmlMinifierTerser?: htmlMinifierOptions | boolean;
 
-    /**
-     * Try inline html used assets, if inlined or not used in JS.
-     * @default true
-     */
-    tryInlineHtmlAssets?: boolean
+	/**
+	 * Try inline html used assets, if inlined or not used in JS.
+	 * @default true
+	 */
+	tryInlineHtmlAssets?: boolean;
 
-    /**
-     * Remove inlined asset files.
-     * @default true
-     */
-    removeInlinedAssetFiles?: boolean
+	/**
+	 * Remove inlined asset files.
+	 * @default true
+	 */
+	removeInlinedAssetFiles?: boolean;
 
-    /**
-     * Try inline html icon, if icon is in public dir.
-     * @default true
-     */
-    tryInlineHtmlPublicIcon?: boolean
+	/**
+	 * Try inline html icon, if icon is in public dir.
+	 * @default true
+	 */
+	tryInlineHtmlPublicIcon?: boolean;
 
-    /**
-     * Remove inlined html icon files.
-     * @default true
-     */
-    removeInlinedPublicIconFiles?: boolean
+	/**
+	 * Remove inlined html icon files.
+	 * @default true
+	 */
+	removeInlinedPublicIconFiles?: boolean;
 }
 ```
 
@@ -113,7 +113,23 @@ dist/index.html  53.60 kB
 ```
 
 ```html
-<!DOCTYPE html><meta charset=UTF-8><link rel=icon href=data:><meta name=viewport content="width=device-width,initial-scale=1"><title>Vite App</title><script type=module>fetch("data:application/gzip;base64,********").then(r=>r.blob()).then(b=>new Response(b.stream().pipeThrough(new DecompressionStream("gzip")),{headers:{"Content-Type":"text/javascript"}}).blob()).then(b=>import(b=URL.createObjectURL(b)).finally(()=>URL.revokeObjectURL(b)))</script><div id=app></div>
+<!DOCTYPE html><meta charset="UTF-8" /><link rel="icon" href="data:" /><meta
+	name="viewport"
+	content="width=device-width,initial-scale=1"
+/><title>Vite App</title>
+<script type="module">
+	fetch("data:application/gzip;base64,********")
+		.then((r) => r.blob())
+		.then((b) =>
+			new Response(b.stream().pipeThrough(new DecompressionStream("gzip")), {
+				headers: { "Content-Type": "text/javascript" },
+			}).blob()
+		)
+		.then((b) =>
+			import((b = URL.createObjectURL(b))).finally(() => URL.revokeObjectURL(b))
+		);
+</script>
+<div id="app"></div>
 ```
 
 ## Clone
