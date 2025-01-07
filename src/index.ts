@@ -4,6 +4,7 @@ import mime from 'mime'
 import pc from "picocolors"
 import svgToTinyDataUri from "mini-svg-data-uri"
 import { minify as htmlMinify, Options as htmlMinifierOptions } from 'html-minifier-terser'
+import base128 from "base128-ascii"
 
 import zlib from 'zlib'
 import path from 'path'
@@ -40,6 +41,13 @@ export interface Options {
      * @default true
      */
     removeInlinedPublicIconFiles?: boolean
+
+    /**
+     * Use Base128 to encode gzipped script.
+     * If false, use Base64.
+     * @default true
+     */
+    useBase128?: boolean
 }
 
 interface innerOptions {
@@ -48,6 +56,7 @@ interface innerOptions {
     removeInlinedAssetFiles: boolean
     tryInlineHtmlPublicIcon: boolean
     removeInlinedPublicIconFiles: boolean
+    useBase128: boolean
 }
 
 export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
@@ -86,7 +95,12 @@ export function singleFileCompression(opt?: Options): PluginOption {
         removeInlinedPublicIconFiles:
             opt.removeInlinedPublicIconFiles == null
                 ? true
-                : opt.removeInlinedPublicIconFiles
+                : opt.removeInlinedPublicIconFiles,
+
+        useBase128:
+            opt.useBase128 == null
+                ? true
+                : opt.useBase128,
     }
 
     let conf: ResolvedConfig
@@ -105,6 +119,10 @@ export default singleFileCompression
 const template = fs.readFileSync(
     path.join(import.meta.dirname, "template.js")
 ).toString().split('{<script>}', 2)
+
+const templateBase128 = fs.readFileSync(
+    path.join(import.meta.dirname, "template-base128.js")
+).toString().split('"<script>"', 2)
 
 const templateAssets = fs.readFileSync(
     path.join(import.meta.dirname, "template-assets.js")
@@ -127,6 +145,13 @@ function gzipToBase64(buf: zlib.InputType) {
         level: zlib.constants.Z_BEST_COMPRESSION,
     }).toString('base64')
 }
+
+function gzipToBase128(buf: zlib.InputType) {
+    return base128.encodeToTemplateLiterals(Uint8Array.from(zlib.gzipSync(buf, {
+        level: zlib.constants.Z_BEST_COMPRESSION,
+    })))
+}
+
 
 function KiB(size: number) {
     return `${Math.ceil(size / 10.24) / 100} KiB`
@@ -327,10 +352,8 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                 }
                 // add script
                 newJSCode.push(js.code.replace(/;?\n?$/, ''))
-                // gzip
-                return '<script type="module">'
-                    + template.join(gzipToBase64(newJSCode.toString()))
-                    + '</script>'
+                // fill fake script
+                return '<script type="module">self.__vitePluginSinglefileCompression=1</script>'
             }
         )
         if (!ok) continue
@@ -338,6 +361,13 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
         // minify html
         if (options.htmlMinifierTerser)
             newHtml = await htmlMinify(newHtml, options.htmlMinifierTerser)
+
+        // fill script
+        newHtml = newHtml.split('self.__vitePluginSinglefileCompression=1', 2).join(
+            options.useBase128
+                ? templateBase128.join(gzipToBase128(newJSCode.toString()))
+                : template.join(gzipToBase64(newJSCode.toString()))
+        )
 
         // finish
         htmlChunk.source = newHtml

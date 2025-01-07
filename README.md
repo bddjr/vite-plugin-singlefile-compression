@@ -6,14 +6,7 @@ The recipient can open it directly in the browser without manually unzipping the
 
 Adapted from [vite-plugin-singlefile](https://www.npmjs.com/package/vite-plugin-singlefile)
 
-### README Language
-
-> English  
-> [简体中文](README-zh-CN.md)
-
-## Install
-
-Using `npm` to install
+## Setup
 
 ```
 npm i vite-plugin-singlefile-compression
@@ -60,35 +53,42 @@ const router = createRouter({
 
 ```ts
 export interface Options {
-	/**
-	 * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
-	 * @default defaultHtmlMinifierTerserOptions
-	 */
-	htmlMinifierTerser?: htmlMinifierOptions | boolean;
+    /**
+     * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
+     * @default defaultHtmlMinifierTerserOptions
+     */
+    htmlMinifierTerser?: htmlMinifierOptions | boolean;
 
-	/**
-	 * Try inline html used assets, if inlined or not used in JS.
-	 * @default true
-	 */
-	tryInlineHtmlAssets?: boolean;
+    /**
+     * Try inline html used assets, if inlined or not used in JS.
+     * @default true
+     */
+    tryInlineHtmlAssets?: boolean;
 
-	/**
-	 * Remove inlined asset files.
-	 * @default true
-	 */
-	removeInlinedAssetFiles?: boolean;
+    /**
+     * Remove inlined asset files.
+     * @default true
+     */
+    removeInlinedAssetFiles?: boolean;
 
-	/**
-	 * Try inline html icon, if icon is in public dir.
-	 * @default true
-	 */
-	tryInlineHtmlPublicIcon?: boolean;
+    /**
+     * Try inline html icon, if icon is in public dir.
+     * @default true
+     */
+    tryInlineHtmlPublicIcon?: boolean;
 
-	/**
-	 * Remove inlined html icon files.
-	 * @default true
-	 */
-	removeInlinedPublicIconFiles?: boolean;
+    /**
+     * Remove inlined html icon files.
+     * @default true
+     */
+    removeInlinedPublicIconFiles?: boolean;
+
+    /**
+     * Use Base128 to encode gzipped script.
+     * If false, use Base64.
+     * @default true
+     */
+    useBase128?: boolean
 }
 ```
 
@@ -101,15 +101,15 @@ vite v6.0.6 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 1.1.3 building...
+vite-plugin-singlefile-compression 1.2.0 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  101.02 KiB -> 52.1 KiB
+  101.02 KiB -> 46.81 KiB
 
 Finish.
 
-dist/index.html  53.35 kB
-✓ built in 734ms
+dist/index.html  47.93 kB
+✓ built in 687ms
 ```
 
 ## Clone
