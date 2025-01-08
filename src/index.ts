@@ -76,31 +76,20 @@ export function singleFileCompression(opt?: Options): PluginOption {
             opt.htmlMinifierTerser == null || opt.htmlMinifierTerser === true
                 ? defaultHtmlMinifierTerserOptions
                 : opt.htmlMinifierTerser,
-
         tryInlineHtmlAssets:
-            opt.tryInlineHtmlAssets == null
-                ? true
-                : opt.tryInlineHtmlAssets,
+            opt.tryInlineHtmlAssets ?? true,
 
         removeInlinedAssetFiles:
-            opt.removeInlinedAssetFiles == null
-                ? true
-                : opt.removeInlinedAssetFiles,
+            opt.removeInlinedAssetFiles ?? true,
 
         tryInlineHtmlPublicIcon:
-            opt.tryInlineHtmlPublicIcon == null
-                ? true
-                : opt.tryInlineHtmlPublicIcon,
+            opt.tryInlineHtmlPublicIcon ?? true,
 
         removeInlinedPublicIconFiles:
-            opt.removeInlinedPublicIconFiles == null
-                ? true
-                : opt.removeInlinedPublicIconFiles,
+            opt.removeInlinedPublicIconFiles ?? true,
 
         useBase128:
-            opt.useBase128 == null
-                ? true
-                : opt.useBase128,
+            opt.useBase128 ?? true,
     }
 
     let conf: ResolvedConfig
