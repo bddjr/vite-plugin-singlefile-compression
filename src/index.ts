@@ -140,18 +140,19 @@ function bufferToDataURL(name: string, b: Buffer) {
         : `data:${mime.getType(name)};base64,${b.toString('base64')}`
 }
 
-function gzipToBase64(buf: zlib.InputType) {
+function gzip(buf: zlib.InputType) {
     return zlib.gzipSync(buf, {
         level: zlib.constants.Z_BEST_COMPRESSION,
-    }).toString('base64')
+    })
+}
+
+function gzipToBase64(buf: zlib.InputType) {
+    return gzip(buf).toString('base64')
 }
 
 function gzipToBase128(buf: zlib.InputType) {
-    return base128.encodeToTemplateLiterals(Uint8Array.from(zlib.gzipSync(buf, {
-        level: zlib.constants.Z_BEST_COMPRESSION,
-    })))
+    return base128.encode(Uint8Array.from(gzip(buf))).toJSTemplateLiterals()
 }
-
 
 function KiB(size: number) {
     return `${Math.ceil(size / 10.24) / 100} KiB`
