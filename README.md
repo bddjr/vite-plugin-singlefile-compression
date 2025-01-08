@@ -86,6 +86,7 @@ export interface Options {
     /**
      * Use Base128 to encode gzipped script.
      * If false, use Base64.
+     * https://www.npmjs.com/package/base128-ascii
      * @default true
      */
     useBase128?: boolean
@@ -101,15 +102,15 @@ vite v6.0.6 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 1.2.2 building...
+vite-plugin-singlefile-compression 1.2.3 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  101.02 KiB -> 46.54 KiB
+  101.02 KiB -> 46.52 KiB
 
 Finish.
 
-dist/index.html  47.65 kB
-✓ built in 694ms
+dist/index.html  47.64 kB
+✓ built in 687ms
 ```
 
 ## Clone
