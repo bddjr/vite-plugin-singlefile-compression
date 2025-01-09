@@ -102,7 +102,7 @@ vite v6.0.6 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 1.2.3 building...
+vite-plugin-singlefile-compression 1.2.4 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
   101.02 KiB -> 46.52 KiB
@@ -110,7 +110,7 @@ vite-plugin-singlefile-compression 1.2.3 building...
 Finish.
 
 dist/index.html  47.64 kB
-✓ built in 687ms
+✓ built in 690ms
 ```
 
 ## Clone
