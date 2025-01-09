@@ -16,17 +16,19 @@ export default defineConfig({
     singleFileCompression(),
   ],
   esbuild: {
-    // Remove license comments
+    // Remove license comments, make file smaller.
     legalComments: "none"
   },
   build: {
     terserOptions: {
       format: {
-        // Remove license comments
+        // Remove license comments, make file smaller.
         comments: false
       }
     },
+    // Not use old syntax, make file smaller.
     target: 'esnext',
+    // Disable reporting compressed chunk sizes, slightly improve build speed.
     reportCompressedSize: false
   },
   resolve: {

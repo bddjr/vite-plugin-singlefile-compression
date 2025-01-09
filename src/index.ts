@@ -1,5 +1,5 @@
 import { UserConfig, PluginOption, ResolvedBuildOptions, ResolvedConfig } from "vite"
-import { OutputChunk, OutputAsset, OutputBundle } from "rollup"
+import { OutputChunk, OutputAsset, OutputBundle, RollupOptions } from "rollup"
 import mime from 'mime'
 import pc from "picocolors"
 import svgToTinyDataUri from "mini-svg-data-uri"
@@ -151,19 +151,22 @@ function KiB(size: number) {
 function setConfig(config: UserConfig) {
     config.base = './'
 
-    if (!config.build)
-        config.build = {}
-
+    config.build ??= {}
     config.build.assetsInlineLimit = () => true
     config.build.chunkSizeWarningLimit = Infinity
     config.build.cssCodeSplit = false
     config.build.assetsDir = 'assets'
     config.build.modulePreload = { polyfill: false }
 
-    if (!config.build.rollupOptions)
-        config.build.rollupOptions = {}
-
-    config.build.rollupOptions.output = { inlineDynamicImports: true }
+    config.build.rollupOptions ??= {}
+    config.build.rollupOptions.output ??= {}
+    if (Array.isArray(config.build.rollupOptions.output)) {
+        for (const output of config.build.rollupOptions.output) {
+            output.inlineDynamicImports = true
+        }
+    } else {
+        config.build.rollupOptions.output.inlineDynamicImports = true
+    }
 }
 
 async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: innerOptions) {
@@ -174,9 +177,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
     if (config.build.assetsDir !== 'assets')
         return console.error("error: config.build.assetsDir has been changed!")
 
-    const distURL = (u =>
-        u.endsWith('/') ? u : u + '/'
-    )(pathToFileURL(path.resolve(config.build.outDir)).href)
+    const distURL = pathToFileURL(path.resolve(config.build.outDir)).href + '/'
 
     const globalDelete = new Set<string>()
     const globalDoNotDelete = new Set<string>()
@@ -212,7 +213,9 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
 
         // Fix async import
         const newJSCode = ["self.__VITE_PRELOAD__=void 0"]
-        newJSCode.toString = () => newJSCode.join(';')
+        newJSCode.toString = function () {
+            return this.join(';')
+        }
 
         // remove html comments
         newHtml = newHtml.replaceAll(/<!--[\d\D]*?-->/g, '')
