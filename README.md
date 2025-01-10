@@ -26,19 +26,8 @@ export default defineConfig({
     singleFileCompression(),
   ],
 
-  // Not required options:
-  esbuild: {
-    // Remove license comments, make file smaller.
-    legalComments: "none"
-  },
   build: {
-    terserOptions: {
-      format: {
-        // Remove license comments, make file smaller.
-        comments: false
-      }
-    },
-    // Not use old syntax, make file smaller.
+	// Not use old syntax, make file smaller.
     target: 'esnext',
     // Disable reporting compressed chunk sizes, slightly improve build speed.
     reportCompressedSize: false
@@ -106,15 +95,15 @@ vite v6.0.7 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 1.2.5 building...
+vite-plugin-singlefile-compression 1.2.6 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  101.02 KiB -> 46.52 KiB
+  101.56 KiB -> 46.84 KiB
 
 Finish.
 
-dist/index.html  47.64 kB
-✓ built in 716ms
+dist/index.html  47.96 kB
+✓ built in 686ms
 ```
 
 ## Clone

@@ -358,9 +358,11 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
 
         // fill script
         newHtml = newHtml.split('self.__vitePluginSinglefileCompression=1', 2).join(
-            options.useBase128
-                ? templateBase128.join(gzipToBase128(newJSCode.toString()))
-                : template.join(gzipToBase64(newJSCode.toString()))
+            '/*vite-plugin-singlefile-compression*/' + (
+                options.useBase128
+                    ? templateBase128.join(gzipToBase128(newJSCode.toString()))
+                    : template.join(gzipToBase64(newJSCode.toString()))
+            )
         )
 
         // finish
