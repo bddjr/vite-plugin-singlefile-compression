@@ -15,12 +15,6 @@ export default defineConfig({
     // Add singleFileCompression
     singleFileCompression(),
   ],
-  build: {
-    // Not use old syntax, make file smaller.
-    target: 'esnext',
-    // Disable reporting compressed chunk sizes, slightly improve build speed.
-    reportCompressedSize: false
-  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

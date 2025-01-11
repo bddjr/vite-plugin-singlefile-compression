@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 {
     const a = { "": "" }
     for (const n in a) {

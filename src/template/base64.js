@@ -1,8 +1,6 @@
-//@ts-nocheck
-
-fetch("data:application/gzip;base64,{<script>}")
+fetch("data:;base64,<script>")
 	.then(r => new Response(
-		r.body.pipeThrough(new DecompressionStream("gzip")),
+		r.body.pipeThrough(new DecompressionStream("<format>")),
 		{ headers: { "Content-Type": "text/javascript" } }
 	).blob())
 	.then(b =>

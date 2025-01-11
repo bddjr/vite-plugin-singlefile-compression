@@ -1,181 +1,66 @@
-import { UserConfig, PluginOption, ResolvedBuildOptions, ResolvedConfig } from "vite"
-import { OutputChunk, OutputAsset, OutputBundle, RollupOptions } from "rollup"
-import mime from 'mime'
+import { UserConfig, PluginOption, ResolvedConfig } from "vite"
+import { OutputChunk, OutputAsset, OutputBundle, OutputOptions } from "rollup"
 import pc from "picocolors"
-import svgToTinyDataUri from "mini-svg-data-uri"
-import { minify as htmlMinify, Options as htmlMinifierOptions } from 'html-minifier-terser'
-import base128 from "base128-ascii"
+import { minify as htmlMinify } from 'html-minifier-terser'
 
-import zlib from 'zlib'
 import path from 'path'
 import fs from 'fs'
 import { pathToFileURL } from "url"
 
-export interface Options {
-    /**
-     * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
-     * @default defaultHtmlMinifierTerserOptions
-     */
-    htmlMinifierTerser?: htmlMinifierOptions | boolean
-
-    /**
-     * Try inline html used assets, if inlined or not used in JS.
-     * @default true
-     */
-    tryInlineHtmlAssets?: boolean
-
-    /**
-     * Remove inlined asset files.
-     * @default true
-     */
-    removeInlinedAssetFiles?: boolean
-
-    /**
-     * Try inline html icon, if icon is in public dir.
-     * @default true
-     */
-    tryInlineHtmlPublicIcon?: boolean
-
-    /**
-     * Remove inlined html icon files.
-     * @default true
-     */
-    removeInlinedPublicIconFiles?: boolean
-
-    /**
-     * Use Base128 to encode gzipped script.
-     * If false, use Base64.
-     * https://www.npmjs.com/package/base128-ascii
-     * @default true
-     */
-    useBase128?: boolean
-}
-
-interface innerOptions {
-    htmlMinifierTerser: htmlMinifierOptions | false
-    tryInlineHtmlAssets: boolean
-    removeInlinedAssetFiles: boolean
-    tryInlineHtmlPublicIcon: boolean
-    removeInlinedPublicIconFiles: boolean
-    useBase128: boolean
-}
-
-export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
-    removeAttributeQuotes: true,
-    removeComments: true,
-    collapseWhitespace: true,
-    removeOptionalTags: true,
-    removeRedundantAttributes: true,
-    minifyJS: false,
-}
+import { version } from './getVersion.js'
+import { template } from './getTemplate.js'
+import { compress } from "./compress.js"
+import { bufferToDataURL } from "./dataurl.js"
+import { KiB } from "./KiB.js"
+import { getInnerOptions, Options, innerOptions } from "./options.js"
 
 export function singleFileCompression(opt?: Options): PluginOption {
-    opt ||= {}
-
-    const innerOpt: innerOptions = {
-        htmlMinifierTerser:
-            opt.htmlMinifierTerser == null || opt.htmlMinifierTerser === true
-                ? defaultHtmlMinifierTerserOptions
-                : opt.htmlMinifierTerser,
-        tryInlineHtmlAssets:
-            opt.tryInlineHtmlAssets ?? true,
-
-        removeInlinedAssetFiles:
-            opt.removeInlinedAssetFiles ?? true,
-
-        tryInlineHtmlPublicIcon:
-            opt.tryInlineHtmlPublicIcon ?? true,
-
-        removeInlinedPublicIconFiles:
-            opt.removeInlinedPublicIconFiles ?? true,
-
-        useBase128:
-            opt.useBase128 ?? true,
-    }
-
     let conf: ResolvedConfig
-
     return {
         name: "singleFileCompression",
         enforce: "post",
         config: setConfig,
         configResolved(c) { conf = c },
-        generateBundle: (_, bundle) => generateBundle(bundle, conf, innerOpt),
+        generateBundle: (_, bundle) => generateBundle(bundle, conf, getInnerOptions(opt)),
     }
 }
 
 export default singleFileCompression
 
-const template = fs.readFileSync(
-    path.join(import.meta.dirname, "template.js")
-).toString().split('{<script>}', 2)
-
-const templateBase128 = fs.readFileSync(
-    path.join(import.meta.dirname, "template-base128.js")
-).toString().split('"<script>"', 2)
-
-const templateAssets = fs.readFileSync(
-    path.join(import.meta.dirname, "template-assets.js")
-).toString().split('{"":""}', 2)
-
-const { version } = JSON.parse(
-    fs.readFileSync(
-        path.join(import.meta.dirname, "../package.json")
-    ).toString()
-) as { version: string }
-
-function bufferToDataURL(name: string, b: Buffer) {
-    return name.endsWith('.svg')
-        ? svgToTinyDataUri(b.toString())
-        : `data:${mime.getType(name)};base64,${b.toString('base64')}`
-}
-
-function gzip(buf: zlib.InputType) {
-    return zlib.gzipSync(buf, {
-        level: zlib.constants.Z_BEST_COMPRESSION,
-    })
-}
-
-function gzipToBase64(buf: zlib.InputType) {
-    return gzip(buf).toString('base64')
-}
-
-function gzipToBase128(buf: zlib.InputType) {
-    return base128.encode(Uint8Array.from(gzip(buf))).toJSTemplateLiterals()
-}
-
-function KiB(size: number) {
-    return `${Math.ceil(size / 10.24) / 100} KiB`
-}
-
 function setConfig(config: UserConfig) {
     config.base = './'
 
     config.build ??= {}
-    config.build.assetsInlineLimit = () => true
-    config.build.chunkSizeWarningLimit = Infinity
-    config.build.cssCodeSplit = false
     config.build.assetsDir = 'assets'
-    config.build.modulePreload = { polyfill: false }
+    config.build.cssCodeSplit = false
+
+    config.build.assetsInlineLimit ??= () => true
+    config.build.chunkSizeWarningLimit ??= Infinity
+    config.build.modulePreload ??= { polyfill: false }
+    config.build.target ??= 'esnext'
+    config.build.reportCompressedSize ??= false
 
     config.build.rollupOptions ??= {}
     config.build.rollupOptions.output ??= {}
+
+    function setRollupOutput(output: OutputOptions) {
+        output.inlineDynamicImports = true
+        delete output.assetFileNames
+        delete output.chunkFileNames
+        delete output.entryFileNames
+    }
+
     if (Array.isArray(config.build.rollupOptions.output)) {
         for (const output of config.build.rollupOptions.output) {
-            output.inlineDynamicImports = true
+            setRollupOutput(output)
         }
     } else {
-        config.build.rollupOptions.output.inlineDynamicImports = true
+        setRollupOutput(config.build.rollupOptions.output)
     }
 }
 
 async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: innerOptions) {
     console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ' + version) + pc.green(' building...'))
-
-    if (config.base !== './')
-        return console.error("error: config.base has been changed!")
-    if (config.build.assetsDir !== 'assets')
-        return console.error("error: config.build.assetsDir has been changed!")
 
     const distURL = pathToFileURL(path.resolve(config.build.outDir)).href + '/'
 
@@ -213,9 +98,6 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
 
         // Fix async import
         const newJSCode = ["self.__VITE_PRELOAD__=void 0"]
-        newJSCode.toString = function () {
-            return this.join(';')
-        }
 
         // remove html comments
         newHtml = newHtml.replaceAll(/<!--[\d\D]*?-->/g, '')
@@ -342,7 +224,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                     // add script for load html assets
                     const assetsJSON = JSON.stringify(assetsDataURL)
                     if (assetsJSON != '{}')
-                        newJSCode.push(templateAssets.join(assetsJSON))
+                        newJSCode.push(template.assets(assetsJSON))
                 }
                 // add script
                 newJSCode.push(js.code.replace(/;?\n?$/, ''))
@@ -357,12 +239,9 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
             newHtml = await htmlMinify(newHtml, options.htmlMinifierTerser)
 
         // fill script
+        const compressedScript = compress(options.compressFormat, newJSCode.join(';'), options.useBase128)
         newHtml = newHtml.split('self.__vitePluginSinglefileCompression=1', 2).join(
-            '\n//vite-plugin-singlefile-compression\n' + (
-                options.useBase128
-                    ? templateBase128.join(gzipToBase128(newJSCode.toString()))
-                    : template.join(gzipToBase64(newJSCode.toString()))
-            )
+            template.base(compressedScript, options.compressFormat, options.useBase128)
         )
 
         // finish

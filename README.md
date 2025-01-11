@@ -25,13 +25,6 @@ export default defineConfig({
     // Add singleFileCompression
     singleFileCompression(),
   ],
-
-  build: {
-	// Not use old syntax, make file smaller.
-    target: 'esnext',
-    // Disable reporting compressed chunk sizes, slightly improve build speed.
-    reportCompressedSize: false
-  },
 ```
 
 Then modify [src/router/index.ts](test/src/router/index.ts#L5)
@@ -44,47 +37,7 @@ const router = createRouter({
 
 ## Options
 
-```ts
-export interface Options {
-	/**
-	 * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
-	 * @default defaultHtmlMinifierTerserOptions
-	 */
-	htmlMinifierTerser?: htmlMinifierOptions | boolean;
-
-	/**
-	 * Try inline html used assets, if inlined or not used in JS.
-	 * @default true
-	 */
-	tryInlineHtmlAssets?: boolean;
-
-	/**
-	 * Remove inlined asset files.
-	 * @default true
-	 */
-	removeInlinedAssetFiles?: boolean;
-
-	/**
-	 * Try inline html icon, if icon is in public dir.
-	 * @default true
-	 */
-	tryInlineHtmlPublicIcon?: boolean;
-
-	/**
-	 * Remove inlined html icon files.
-	 * @default true
-	 */
-	removeInlinedPublicIconFiles?: boolean;
-
-	/**
-	 * Use Base128 to encode gzipped script.
-	 * If false, use Base64.
-	 * https://www.npmjs.com/package/base128-ascii
-	 * @default true
-	 */
-	useBase128?: boolean;
-}
-```
+See [src/options.ts](src/options.ts)
 
 ## Effect
 
@@ -95,15 +48,15 @@ vite v6.0.7 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 1.2.6 building...
+vite-plugin-singlefile-compression 1.3.0 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  101.56 KiB -> 46.84 KiB
+  101.56 KiB -> 46.76 KiB
 
 Finish.
 
-dist/index.html  47.96 kB
-✓ built in 686ms
+dist/index.html  47.88 kB
+✓ built in 677ms
 ```
 
 ## Clone
@@ -120,6 +73,7 @@ npm run build
 
 ## License
 
-[MIT](LICENSE.txt)
+Using [MIT License](LICENSE.txt).  
+[src/template](src/template) using [Unlicense](src/template/LICENSE.txt).
 
 Adapted from [vite-plugin-singlefile](https://www.npmjs.com/package/vite-plugin-singlefile).
