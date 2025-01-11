@@ -4,7 +4,7 @@ import zlib from 'zlib'
 export type compressFormat = "deflate-raw" | "deflate" | "gzip"
 
 export function compress(format: compressFormat, buf: zlib.InputType, useBase128: boolean) {
-    const options = {
+    const options: zlib.ZlibOptions = {
         level: zlib.constants.Z_BEST_COMPRESSION,
     }
     let outBuf: Buffer
