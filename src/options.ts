@@ -63,7 +63,7 @@ export interface innerOptions {
     tryInlineHtmlPublicIcon: boolean
     removeInlinedPublicIconFiles: boolean
     useBase128: boolean
-    compressFormat: "deflate-raw" | "deflate" | "gzip"
+    compressFormat: compressFormat
 }
 
 export function getInnerOptions(opt?: Options): innerOptions {
