@@ -1,3 +1,4 @@
+//@ts-nocheck
 fetch("data:;base64,<script>")
 	.then(r => new Response(
 		r.body.pipeThrough(new DecompressionStream("<format>")),

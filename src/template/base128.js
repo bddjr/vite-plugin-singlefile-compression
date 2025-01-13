@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { decode } from "base128-ascii";
 
 new Response(
