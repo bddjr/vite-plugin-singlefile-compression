@@ -211,7 +211,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                 const js = bundle[name] as OutputChunk
                 oldSize += js.code.length
                 // fix new URL
-                newJSCode.push(`import.meta.url=location.origin+location.pathname.replace(/[^/]*$/,${JSON.stringify(name)})`)
+                newJSCode.push(`import.meta.url=new URL(${JSON.stringify(name)},location).href`)
                 // do not delete not inlined asset
                 for (const name of bundleAssetsNames) {
                     const assetName = name.slice('assets/'.length)

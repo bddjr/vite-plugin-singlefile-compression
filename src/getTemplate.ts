@@ -1,17 +1,17 @@
-import path from 'path'
 import fs from 'fs'
+import { fileURLToPath } from 'url'
 
 const files = {
     base64: fs.readFileSync(
-        path.join(import.meta.dirname, "template/base64.js")
+        fileURLToPath(import.meta.resolve("./template/base64.js"))
     ).toString(),
 
     base128: fs.readFileSync(
-        path.join(import.meta.dirname, "template/base128.js")
+        fileURLToPath(import.meta.resolve("./template/base128.js"))
     ).toString(),
 
     assets: fs.readFileSync(
-        path.join(import.meta.dirname, "template/assets.js")
+        fileURLToPath(import.meta.resolve("./template/assets.js"))
     ).toString().split('{"":""}', 2),
 }
 
