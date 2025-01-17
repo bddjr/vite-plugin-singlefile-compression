@@ -62,7 +62,7 @@ function setConfig(config: UserConfig) {
 async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: innerOptions) {
     console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ' + version) + pc.green(' building...'))
 
-    const distURL = pathToFileURL(path.resolve(config.build.outDir)).href + '/'
+    const distURL = pathToFileURL(config.build.outDir).href + '/'
 
     const globalDelete = new Set<string>()
     const globalDoNotDelete = new Set<string>()
