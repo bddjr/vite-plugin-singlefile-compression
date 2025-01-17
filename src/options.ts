@@ -3,6 +3,11 @@ import { compressFormat } from './compress.js'
 
 export interface Options {
     /**
+     * Rename index.html
+     */
+    rename?: string
+
+    /**
      * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
      * @default defaultHtmlMinifierTerserOptions
      */
@@ -57,6 +62,7 @@ export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
 }
 
 export interface innerOptions {
+    rename?: string
     htmlMinifierTerser: htmlMinifierOptions | false
     tryInlineHtmlAssets: boolean
     removeInlinedAssetFiles: boolean
@@ -69,6 +75,9 @@ export interface innerOptions {
 export function getInnerOptions(opt?: Options): innerOptions {
     opt ||= {}
     return {
+        rename:
+            opt.rename && opt.rename.replace(/(\.(html?)?)?$/, '.html'),
+
         htmlMinifierTerser:
             opt.htmlMinifierTerser == null || opt.htmlMinifierTerser === true
                 ? defaultHtmlMinifierTerserOptions

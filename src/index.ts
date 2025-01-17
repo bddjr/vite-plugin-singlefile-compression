@@ -60,7 +60,18 @@ function setConfig(config: UserConfig) {
 }
 
 async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: innerOptions) {
-    console.log(pc.cyan('\n\nvite-plugin-singlefile-compression ' + version) + pc.green(' building...'))
+    console.log(pc.reset('') + pc.cyan('\n\nvite-plugin-singlefile-compression ' + version) + pc.green(' building...'))
+
+    // rename
+    if (options.rename
+        && options.rename !== "index.html"
+        && ("index.html" in bundle)
+        && !(options.rename in bundle)
+    ) {
+        bundle[options.rename] = bundle["index.html"]
+        bundle[options.rename].fileName = options.rename
+        delete bundle["index.html"]
+    }
 
     const distURL = pathToFileURL(config.build.outDir).href + '/'
 
@@ -248,7 +259,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
         htmlChunk.source = newHtml
         console.log(
             "\n"
-            + "  " + pc.underline(pc.cyan(distURL) + pc.greenBright(htmlFileName)) + '\n'
+            + "  " + pc.underline(pc.cyan(distURL) + pc.greenBright(bundle[htmlFileName].fileName)) + '\n'
             + "  " + pc.gray(KiB(oldSize) + " -> ") + pc.cyanBright(KiB(newHtml.length)) + '\n'
         )
 
@@ -276,5 +287,6 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
             }
         }
     }
+
     console.log(pc.green('Finish.\n'))
 }

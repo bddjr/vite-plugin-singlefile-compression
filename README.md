@@ -42,6 +42,11 @@ See [src/options.ts](src/options.ts)
 ```ts
 export interface Options {
     /**
+     * Rename index.html
+     */
+    rename?: string
+
+    /**
      * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
      * @default defaultHtmlMinifierTerserOptions
      */
@@ -96,7 +101,7 @@ vite v6.0.7 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 1.3.4 building...
+vite-plugin-singlefile-compression 1.4.0 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
   101.56 KiB -> 46.32 KiB
@@ -104,7 +109,7 @@ vite-plugin-singlefile-compression 1.3.4 building...
 Finish.
 
 dist/index.html  47.42 kB
-✓ built in 696ms
+✓ built in 698ms
 ```
 
 ![](effect.jpg)
