@@ -37,58 +37,66 @@ const router = createRouter({
 
 ## Options
 
-See [src/options.ts](src/options.ts)
+Example:
+
+```ts
+singleFileCompression({
+  rename: 'example.html'
+}),
+```
+
+More info see [src/options.ts](src/options.ts)
 
 ```ts
 export interface Options {
-    /**
-     * Rename index.html
-     */
-    rename?: string
+	/**
+	 * Rename index.html
+	 */
+	rename?: string;
 
-    /**
-     * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
-     * @default defaultHtmlMinifierTerserOptions
-     */
-    htmlMinifierTerser?: htmlMinifierOptions | boolean
+	/**
+	 * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
+	 * @default defaultHtmlMinifierTerserOptions
+	 */
+	htmlMinifierTerser?: htmlMinifierOptions | boolean;
 
-    /**
-     * Try inline html used assets, if inlined or not used in JS.
-     * @default true
-     */
-    tryInlineHtmlAssets?: boolean
+	/**
+	 * Try inline html used assets, if inlined or not used in JS.
+	 * @default true
+	 */
+	tryInlineHtmlAssets?: boolean;
 
-    /**
-     * Remove inlined asset files.
-     * @default true
-     */
-    removeInlinedAssetFiles?: boolean
+	/**
+	 * Remove inlined asset files.
+	 * @default true
+	 */
+	removeInlinedAssetFiles?: boolean;
 
-    /**
-     * Try inline html icon, if icon is in public dir.
-     * @default true
-     */
-    tryInlineHtmlPublicIcon?: boolean
+	/**
+	 * Try inline html icon, if icon is in public dir.
+	 * @default true
+	 */
+	tryInlineHtmlPublicIcon?: boolean;
 
-    /**
-     * Remove inlined html icon files.
-     * @default true
-     */
-    removeInlinedPublicIconFiles?: boolean
+	/**
+	 * Remove inlined html icon files.
+	 * @default true
+	 */
+	removeInlinedPublicIconFiles?: boolean;
 
-    /**
-     * Use Base128 to encode gzipped script.
-     * If false, use Base64.
-     * https://www.npmjs.com/package/base128-ascii
-     * @default true
-     */
-    useBase128?: boolean
+	/**
+	 * Use Base128 to encode gzipped script.
+	 * If false, use Base64.
+	 * https://www.npmjs.com/package/base128-ascii
+	 * @default true
+	 */
+	useBase128?: boolean;
 
-    /**
-     * Compress format.
-     * @default "deflate-raw"
-     */
-    compressFormat?: compressFormat
+	/**
+	 * Compress format.
+	 * @default "deflate-raw"
+	 */
+	compressFormat?: compressFormat;
 }
 ```
 
@@ -97,11 +105,11 @@ export interface Options {
 https://bddjr.github.io/vite-plugin-singlefile-compression/
 
 ```
-vite v6.0.7 building for production...
+vite v6.0.11 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 1.4.0 building...
+vite-plugin-singlefile-compression 1.4.1 building...
 
   file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
   101.56 KiB -> 46.32 KiB
@@ -109,7 +117,7 @@ vite-plugin-singlefile-compression 1.4.0 building...
 Finish.
 
 dist/index.html  47.42 kB
-✓ built in 698ms
+✓ built in 680ms
 ```
 
 ![](effect.jpg)

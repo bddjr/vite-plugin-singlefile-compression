@@ -60,7 +60,7 @@ function setConfig(config: UserConfig) {
 }
 
 async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: innerOptions) {
-    console.log(pc.reset('') + pc.cyan('\n\nvite-plugin-singlefile-compression ' + version) + pc.green(' building...'))
+    console.log(pc.reset('\n\n') + pc.cyan('vite-plugin-singlefile-compression ' + version) + pc.green(' building...'))
 
     // rename
     if (options.rename
