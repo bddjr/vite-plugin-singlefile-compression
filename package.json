@@ -4,11 +4,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "package.json",
-    "package-lock.json",
-    "LICENSE.txt",
-    "README.md"
+    "dist"
   ],
   "type": "module",
   "scripts": {
