@@ -2,6 +2,7 @@ import { UserConfig, PluginOption, ResolvedConfig } from "vite"
 import { OutputChunk, OutputAsset, OutputBundle, OutputOptions } from "rollup"
 import pc from "picocolors"
 import { minify as htmlMinify } from 'html-minifier-terser'
+import { JSDOM } from 'jsdom'
 
 import path from 'path'
 import fs from 'fs'
@@ -31,7 +32,7 @@ function setConfig(config: UserConfig) {
     config.base = './'
 
     config.build ??= {}
-    config.build.assetsDir = 'assets'
+    // config.build.assetsDir = 'assets'
     config.build.cssCodeSplit = false
 
     config.build.assetsInlineLimit ??= () => true
@@ -45,9 +46,9 @@ function setConfig(config: UserConfig) {
 
     function setRollupOutput(output: OutputOptions) {
         output.inlineDynamicImports = true
-        delete output.assetFileNames
-        delete output.chunkFileNames
-        delete output.entryFileNames
+        // delete output.assetFileNames
+        // delete output.chunkFileNames
+        // delete output.entryFileNames
     }
 
     if (Array.isArray(config.build.rollupOptions.output)) {
@@ -74,6 +75,14 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
     }
 
     const distURL = pathToFileURL(config.build.outDir).href + '/'
+    /** "assets/" */
+    const assetsDir = path.posix.join(config.build.assetsDir, '/')
+    /** '[href^="./assets/"]' */
+    const assetsHrefSelector = `[href^="./${assetsDir}"]`
+    /** '[src^="./assets/"]' */
+    const assetsSrcSelector = `[src^="./${assetsDir}"]`
+
+    const fakeScript = `_vitePluginSinglefileCompression(${Date.now()})`
 
     const globalDelete = new Set<string>()
     const globalDoNotDelete = new Set<string>()
@@ -93,7 +102,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
     const bundleHTMLNames = [] as string[]
 
     for (const name of Object.keys(bundle)) {
-        if (name.startsWith('assets/'))
+        if (name.startsWith(assetsDir))
             bundleAssetsNames.push(name)
         else if (name.endsWith('.html'))
             bundleHTMLNames.push(name)
@@ -102,20 +111,27 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
     for (const htmlFileName of bundleHTMLNames) {
         // init
         const htmlChunk = bundle[htmlFileName] as OutputAsset
-        let newHtml = htmlChunk.source as string
-        let oldSize = newHtml.length
+        const oldHTML = htmlChunk.source as string
+        let oldSize = oldHTML.length
+        const dom = new JSDOM(oldHTML)
+        const document = dom.window.document
+
+        const scriptElement = document.querySelector(`script[type=module]${assetsSrcSelector}`) as HTMLScriptElement
+        if (!scriptElement) {
+            console.error(`Error: Can not find script tag from ${htmlFileName}`)
+            continue
+        }
 
         const thisDel = new Set<string>()
 
         // Fix async import
         const newJSCode = ["self.__VITE_PRELOAD__=void 0"]
 
-        // remove html comments
-        newHtml = newHtml.replaceAll(/<!--[\d\D]*?-->/g, '')
-
         // get css tag
-        newHtml = newHtml.replace(/\s*<link rel="stylesheet"[^>]* href="\.\/(assets\/[^"]+)"[^>]*>/,
-            (match, name: string) => {
+        {
+            const element = document.querySelector(`link[rel=stylesheet]${assetsHrefSelector}`) as HTMLLinkElement
+            if (element) {
+                const name = element.href.slice("./".length)
                 thisDel.add(name)
                 const css = bundle[name] as OutputAsset
                 const cssSource = css.source as string
@@ -123,62 +139,58 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                     oldSize += cssSource.length
                     // do not delete not inlined asset
                     for (const name of bundleAssetsNames) {
-                        if (cssSource.includes(name.slice('assets/'.length)))
+                        if (cssSource.includes(name.slice(assetsDir.length)))
                             globalDoNotDelete.add(name)
                     }
                     // add script for load css
                     newJSCode.push(
+                        // 'document.querySelector("script[type=module]").insertAdjacentElement("afterend",document.createElement("style")).innerHTML='
                         'document.head.appendChild(document.createElement("style")).innerHTML='
-                        + JSON.stringify(cssSource.replace(/\s+$/, ''))
+                        + JSON.stringify(cssSource.replace(/\n$/, ''))
                     )
                 }
                 // delete tag
-                return ''
+                element.remove()
             }
-        )
+        }
 
         // inline html assets
         const assetsDataURL = {} as { [key: string]: string }
         if (options.tryInlineHtmlAssets) {
-            newHtml = newHtml.replaceAll(/(?:[\s"])(?:src|href)="\.\/assets\/([^"]+)"/g,
-                (match, name: string) => {
-                    if (name.endsWith('.js'))
-                        return match
-                    if (!Object.hasOwn(assetsDataURL, name)) {
-                        const bundleName = "assets/" + name
-                        const a = bundle[bundleName] as OutputAsset
-                        if (!a)
-                            return match
-                        thisDel.add(bundleName)
-                        oldSize += a.source.length
-                        if (!Object.hasOwn(globalAssetsDataURL, name))
-                            globalAssetsDataURL[name] = bufferToDataURL(name, Buffer.from(a.source))
-                        assetsDataURL[name] = globalAssetsDataURL[name]
-                    }
-                    return `="data:${name}"`
+            for (const element of (document.querySelectorAll(assetsSrcSelector) as NodeListOf<HTMLImageElement>)) {
+                const name = element.src.slice(`./${assetsDir}`.length)
+                if (name.endsWith('.js'))
+                    continue
+                if (!Object.hasOwn(assetsDataURL, name)) {
+                    const bundleName = assetsDir + name
+                    const a = bundle[bundleName] as OutputAsset
+                    if (!a)
+                        continue
+                    thisDel.add(bundleName)
+                    oldSize += a.source.length
+                    if (!Object.hasOwn(globalAssetsDataURL, name))
+                        globalAssetsDataURL[name] = bufferToDataURL(name, Buffer.from(a.source))
+                    assetsDataURL[name] = globalAssetsDataURL[name]
                 }
-            )
+                element.src = `data:${name}`
+            }
         }
 
         // inline html icon
         if (options.tryInlineHtmlPublicIcon) {
             let needInline = true
-            let hasTag = false
             let iconName = 'favicon.ico'
             // replace tag
-            newHtml = newHtml.replace(/<link\s([^>]*\s)?rel="(?:shortcut )?icon"([^>]*\s)?href="\.\/([^"]+)"([^>]*)>/,
-                (match, p1, p2, name: string, after: string) => {
-                    hasTag = true
-                    iconName = name
-                    if (bundleAssetsNames.includes(name)) {
-                        needInline = false
-                        return match
-                    }
-                    p1 ||= ''
-                    p2 ||= ''
-                    return `<link ${p1}rel="icon"${p2}href="data:"${after}>`
+            const element = document.querySelector('link[rel=icon][href^="./"], link[rel="shortcut icon"][href^="./"]') as HTMLLinkElement
+            if (element) {
+                iconName = element.href.slice("./".length)
+                if (bundleAssetsNames.includes(iconName)) {
+                    needInline = false
+                } else {
+                    element.rel = 'icon'
+                    element.href = 'data:'
                 }
-            )
+            }
             if (needInline) {
                 // inline
                 try {
@@ -201,66 +213,72 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                     const { dataURL, size } = globalPublicFilesCache[iconName]
                     oldSize += size
                     newJSCode.push('document.querySelector("link[rel=icon]").href=' + JSON.stringify(dataURL))
-                    if (!hasTag) {
+                    if (!element) {
                         // add link icon tag
-                        const l = '<link rel="icon" href="data:">'
-                        oldSize += l.length
-                        newHtml = newHtml.replace(/(?=<script )/, l)
+                        document.head.insertAdjacentHTML('beforeend', '<link rel="icon" href="data:">')
                     }
                 } catch (e) {
-                    if (hasTag) console.error(e)
+                    if (element) console.error(e)
                 }
             }
         }
 
         // script
-        let ok = false
-        newHtml = newHtml.replace(/<script type="module"[^>]* src="\.\/(assets\/[^"]+)"[^>]*><\/script>/,
-            (match, name: string) => {
-                ok = true
-                thisDel.add(name)
-                const js = bundle[name] as OutputChunk
-                oldSize += js.code.length
-                // fix new URL
-                newJSCode.push(`import.meta.url=new URL(${JSON.stringify(name)},location).href`)
-                // do not delete not inlined asset
-                for (const name of bundleAssetsNames) {
-                    const assetName = name.slice('assets/'.length)
-                    if (js.code.includes(assetName)) {
-                        globalDoNotDelete.add(name)
-                        delete assetsDataURL[assetName]
-                    }
+        {
+            const name = scriptElement.src.slice("./".length)
+            thisDel.add(name)
+            const js = bundle[name] as OutputChunk
+            oldSize += js.code.length
+
+            // fix new URL
+            newJSCode.push(`import.meta.url=new URL(${JSON.stringify(name)},location).href`)
+            // fix import.meta.resolve
+            newJSCode.push(template.resolve)
+
+            // do not delete not inlined asset
+            for (const name of bundleAssetsNames) {
+                const assetName = name.slice(assetsDir.length)
+                if (js.code.includes(assetName)) {
+                    globalDoNotDelete.add(name)
+                    delete assetsDataURL[assetName]
                 }
-                if (options.tryInlineHtmlAssets) {
-                    // add script for load html assets
-                    const assetsJSON = JSON.stringify(assetsDataURL)
-                    if (assetsJSON != '{}')
-                        newJSCode.push(template.assets(assetsJSON))
-                }
-                // add script
-                newJSCode.push(js.code.replace(/;?\n?$/, ''))
-                // fill fake script
-                return '<script type="module">self.__vitePluginSinglefileCompression=1</script>'
             }
-        )
-        if (!ok) continue
+            if (options.tryInlineHtmlAssets) {
+                // add script for load html assets
+                const assetsJSON = JSON.stringify(assetsDataURL)
+                if (assetsJSON != '{}')
+                    newJSCode.push(template.assets(assetsJSON))
+            }
+            // add script
+            newJSCode.push(js.code.replace(/;?\n?$/, ''))
+        }
+
+        // fill fake script
+        scriptElement.removeAttribute('src')
+        scriptElement.removeAttribute('crossorigin')
+        scriptElement.innerHTML = fakeScript
+
+        // generate html
+        htmlChunk.source = dom.serialize()
 
         // minify html
         if (options.htmlMinifierTerser)
-            newHtml = await htmlMinify(newHtml, options.htmlMinifierTerser)
+            htmlChunk.source = await htmlMinify(htmlChunk.source, options.htmlMinifierTerser)
 
         // fill script
-        const compressedScript = compress(options.compressFormat, newJSCode.join(';'), options.useBase128)
-        newHtml = newHtml.split('self.__vitePluginSinglefileCompression=1', 2).join(
-            template.base(compressedScript, options.compressFormat, options.useBase128)
+        htmlChunk.source = htmlChunk.source.split(fakeScript, 2).join(
+            template.base(
+                compress(options.compressFormat, newJSCode.join(';'), options.useBase128),
+                options.compressFormat,
+                options.useBase128
+            )
         )
 
-        // finish
-        htmlChunk.source = newHtml
+        // log
         console.log(
             "\n"
             + "  " + pc.underline(pc.cyan(distURL) + pc.greenBright(bundle[htmlFileName].fileName)) + '\n'
-            + "  " + pc.gray(KiB(oldSize) + " -> ") + pc.cyanBright(KiB(newHtml.length)) + '\n'
+            + "  " + pc.gray(KiB(oldSize) + " -> ") + pc.cyanBright(KiB(htmlChunk.source.length)) + '\n'
         )
 
         // delete assets

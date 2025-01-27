@@ -6,11 +6,9 @@ const inDir = "src/template"
 const outdir = "dist/template"
 
 let result = esbuild.buildSync({
-    entryPoints: [
-        path.join(inDir, "base128.js"),
-        path.join(inDir, "base64.js"),
-        path.join(inDir, "assets.js"),
-    ],
+    entryPoints: fs.readdirSync(inDir)
+        .filter(i => i.endsWith('.js'))
+        .map(i => path.join(inDir, i)),
     outdir: outdir,
     minify: true,
     bundle: true,
@@ -22,7 +20,8 @@ let result = esbuild.buildSync({
 if (result.errors.length)
     throw result.errors
 
-fs.mkdirSync(outdir)
+if (!fs.existsSync(outdir))
+    fs.mkdirSync(outdir)
 
 for (const i of result.outputFiles) {
     fs.writeFileSync(i.path, i.text.replace(/;?\n?$/, ''))

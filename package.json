@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-singlefile-compression",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -36,16 +36,20 @@
     "css"
   ],
   "dependencies": {
-    "@types/html-minifier-terser": "^7.0.2",
-    "@types/node": "^22.10.7",
     "base128-ascii": "^2.1.0",
-    "esbuild": "^0.24.0",
     "html-minifier-terser": "^7.2.0",
+    "jsdom": "^26.0.0",
     "mime": "^4.0.4",
     "mini-svg-data-uri": "^1.4.4",
     "picocolors": "^1.1.1",
     "rimraf": "^6.0.1",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.11"
+    "vite": "^6.0.11",
+    "@types/html-minifier-terser": "^7.0.2",
+    "@types/node": "^22.10.7",
+    "@types/jsdom": "^21.1.7"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.2"
   }
 }

@@ -13,6 +13,10 @@ const files = {
     assets: fs.readFileSync(
         fileURLToPath(import.meta.resolve("./template/assets.js"))
     ).toString().split('{"":""}', 2),
+
+    resolve: fs.readFileSync(
+        fileURLToPath(import.meta.resolve("./template/resolve.js"))
+    ).toString(),
 }
 
 export const template = {
@@ -29,4 +33,5 @@ export const template = {
     assets(assetsJSON: string) {
         return files.assets.join(assetsJSON)
     },
+    resolve: files.resolve,
 }
