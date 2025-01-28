@@ -1,10 +1,9 @@
 //@ts-nocheck
 {
-    const a = { "": "" }
-    for (const n in a) {
-        for (const e of document.querySelectorAll(`[src="data:${n}"]`))
-            e.src = a[n]
-        for (const e of document.querySelectorAll(`[href="data:${n}"]`))
-            e.href = a[n]
+    const assets = { "": "" }
+    for (const name in assets) {
+        for (const element of document.querySelectorAll(`[src="data:${name}"]`)) {
+            element.src = assets[name]
+        }
     }
 }
