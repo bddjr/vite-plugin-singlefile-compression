@@ -49,7 +49,7 @@
     "@types/jsdom": "^21.1.7"
   },
   "devDependencies": {
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.0",
     "typescript": "^5.7.2"
   }
 }
