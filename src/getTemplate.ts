@@ -10,6 +10,10 @@ const files = {
         fileURLToPath(import.meta.resolve("./template/base128.js"))
     ).toString(),
 
+    base128_brotli: fs.readFileSync(
+        fileURLToPath(import.meta.resolve("./template/base128-brotli.js"))
+    ).toString(),
+
     assets: fs.readFileSync(
         fileURLToPath(import.meta.resolve("./template/assets.js"))
     ).toString().split('{"":""}', 2),
@@ -21,6 +25,10 @@ const files = {
 
 export const template = {
     base(script: string, format: string, useBase128: boolean) {
+        if (["br","brotli"].includes(format)){
+            return files.base128_brotli
+            .split('"<script>"', 2).join(script)
+        }
         if (useBase128) {
             return files.base128
                 .replace("<format>", format)

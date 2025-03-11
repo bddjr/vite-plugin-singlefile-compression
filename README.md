@@ -87,6 +87,7 @@ export interface Options {
 	/**
 	 * Use Base128 to encode gzipped script.
 	 * If false, use Base64.
+	 * If compressFormat is "br" or "brotli", always true.
 	 * https://www.npmjs.com/package/base128-ascii
 	 * @default true
 	 */

@@ -40,6 +40,7 @@ export interface Options {
     /**
      * Use Base128 to encode gzipped script.
      * If false, use Base64.
+     * If compressFormat is "br" or "brotli", always true.
      * https://www.npmjs.com/package/base128-ascii
      * @default true
      */
@@ -99,7 +100,7 @@ export function getInnerOptions(opt?: Options): innerOptions {
             opt.useBase128 ?? true,
 
         compressFormat:
-            ["deflate-raw", "deflate", "gzip"].includes(opt.compressFormat)
+            ["deflate-raw", "deflate", "gzip", "br", "brotli"].includes(opt.compressFormat)
                 ? opt.compressFormat
                 : "deflate-raw",
     }

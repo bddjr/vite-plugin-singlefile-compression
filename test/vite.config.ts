@@ -13,7 +13,9 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     // Add singleFileCompression
-    singleFileCompression(),
+    singleFileCompression({
+      compressFormat: 'br'
+    }),
   ],
   resolve: {
     alias: {
