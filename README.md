@@ -1,5 +1,25 @@
 # vite plugin singlefile compression
 
+该分支使用谷歌官方解压器，实测文件较小时体积膨胀很厉害，不建议采用该方案，应当等待 `DecompressionStream` 可以解压 `brotli` 再实现。
+
+```
+vite v6.0.11 building for production...
+✓ 45 modules transformed.
+rendering chunks (1)...
+
+vite-plugin-singlefile-compression brotli.2.1.0 building...
+
+  file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
+  101.6 KiB -> 118.1 KiB
+
+Finish.
+
+dist/index.html  120.93 kB
+✓ built in 899ms
+```
+
+---
+
 Compress all assets and embeds them into `dist/index.html`, making it convenient to share as a single HTML file.
 
 The recipient can open it directly in the browser without manually unzipping the file.
