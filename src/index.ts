@@ -169,7 +169,10 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                     thisDel.add(bundleName)
                     oldSize += a.source.length
                     if (!Object.hasOwn(globalAssetsDataURL, name))
-                        globalAssetsDataURL[name] = bufferToDataURL(name, Buffer.from(a.source as Uint8Array<ArrayBufferLike>))
+                        globalAssetsDataURL[name] = bufferToDataURL(name, Buffer.from(
+                            //@ts-ignore
+                            a.source
+                        ))
                     assetsDataURL[name] = globalAssetsDataURL[name]
                 }
                 element.src = `data:${name}`
