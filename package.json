@@ -43,7 +43,7 @@
     "mini-svg-data-uri": ">=1.4.4",
     "picocolors": ">=1.1.1",
     "rimraf": ">=6.0.1",
-    "vite": ">=6.0.13",
+    "vite": ">=6.2.5",
     "@types/html-minifier-terser": ">=7.0.2",
     "@types/node": ">=22.10.7",
     "@types/jsdom": ">=21.1.7"
