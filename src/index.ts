@@ -1,5 +1,5 @@
 import { UserConfig, PluginOption, ResolvedConfig } from "vite"
-import { OutputChunk, OutputAsset, OutputBundle, OutputOptions } from "rollup"
+import { OutputChunk, OutputAsset, OutputBundle } from "rollup"
 import pc from "picocolors"
 import { minify as htmlMinify } from 'html-minifier-terser'
 import { JSDOM } from 'jsdom'
@@ -36,27 +36,16 @@ function setConfig(config: UserConfig) {
     config.build.cssCodeSplit = false
 
     config.build.assetsInlineLimit ??= () => true
-    config.build.chunkSizeWarningLimit ??= Infinity
+    config.build.chunkSizeWarningLimit ??= Number.MAX_SAFE_INTEGER
     config.build.modulePreload ??= { polyfill: false }
-    config.build.target ??= 'esnext'
+    // config.build.target ??= 'esnext'
     config.build.reportCompressedSize ??= false
 
     config.build.rollupOptions ??= {}
-    config.build.rollupOptions.output ??= {}
+    config.build.rollupOptions.output ??= {};
 
-    function setRollupOutput(output: OutputOptions) {
+    for (const output of [config.build.rollupOptions.output].flat(1)) {
         output.inlineDynamicImports = true
-        // delete output.assetFileNames
-        // delete output.chunkFileNames
-        // delete output.entryFileNames
-    }
-
-    if (Array.isArray(config.build.rollupOptions.output)) {
-        for (const output of config.build.rollupOptions.output) {
-            setRollupOutput(output)
-        }
-    } else {
-        setRollupOutput(config.build.rollupOptions.output)
     }
 }
 
