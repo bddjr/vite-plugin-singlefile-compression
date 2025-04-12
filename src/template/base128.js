@@ -1,4 +1,7 @@
 //@ts-nocheck
+
+// Unlicense.
+
 import { decode } from "base128-ascii";
 
 new Response(

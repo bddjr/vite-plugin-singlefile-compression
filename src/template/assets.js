@@ -1,4 +1,7 @@
 //@ts-nocheck
+
+// Unlicense.
+
 {
     const assets = { "": "" }
     for (const name in assets) {

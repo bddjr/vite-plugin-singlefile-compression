@@ -26,8 +26,3 @@ if (!fs.existsSync(outdir))
 for (const i of result.outputFiles) {
     fs.writeFileSync(i.path, i.text.replace(/;?\n?$/, ''))
 }
-
-fs.copyFileSync(
-    path.join(inDir, "LICENSE.txt"),
-    path.join(outdir, "LICENSE.txt")
-)

@@ -1,8 +1,11 @@
 {
   "name": "vite-plugin-singlefile-compression",
-  "version": "2.0.4",
+  "version": "2.0.5",
+  "author": "bddjr",
+  "license": "MIT",
+  "description": "",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -11,9 +14,6 @@
     "build": "rimraf dist && tsc && node build.js && cd test && npm run build",
     "prepublishOnly": "npm run build"
   },
-  "author": "bddjr",
-  "license": "MIT",
-  "description": "",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bddjr/vite-plugin-singlefile-compression.git"

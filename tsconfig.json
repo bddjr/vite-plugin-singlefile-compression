@@ -1,14 +1,11 @@
 {
 	"compilerOptions": {
-		"module": "esnext",
-		"target": "esnext",
-		"lib": ["ESNext", "DOM"],
+		"module": "NodeNext",
 		"outDir": "dist",
 		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "node",
+		"moduleResolution": "nodenext",
 		"skipLibCheck": true,
 		"declaration": true,
-		"declarationMap": false,
 		"checkJs": false,
 	},
 	"include": ["src"],

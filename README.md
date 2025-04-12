@@ -105,19 +105,19 @@ export interface Options {
 https://bddjr.github.io/vite-plugin-singlefile-compression/
 
 ```
-vite v6.0.11 building for production...
+vite v6.2.6 building for production...
 ✓ 45 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.0.1 building...
+vite-plugin-singlefile-compression 2.0.5 building...
 
-  file:///D:/bddjr/Desktop/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  101.6 KiB -> 46.39 KiB
+  file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
+  101.63 KiB -> 46.42 KiB
 
 Finish.
 
-dist/index.html  47.50 kB
-✓ built in 732ms
+dist/index.html  47.53 kB
+✓ built in 770ms
 ```
 
 ![](effect.jpg)
@@ -133,10 +133,3 @@ npm i
 cd ..
 npm run build
 ```
-
-## License
-
-Using [MIT License](LICENSE.txt).  
-[src/template](src/template) using [Unlicense](src/template/LICENSE.txt).
-
-Adapted from [vite-plugin-singlefile](https://www.npmjs.com/package/vite-plugin-singlefile).

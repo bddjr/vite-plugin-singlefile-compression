@@ -1,6 +1,10 @@
 //@ts-nocheck
+
+// Unlicense.
+
 {
-    const resolve = import.meta.resolve;
+    import.meta.url = new URL("<path>", location).href
+    const resolve = import.meta.resolve
     import.meta.resolve = (name) => (
         /^\.{0,2}\//.test(name)
             ? new URL(name, import.meta.url).href
