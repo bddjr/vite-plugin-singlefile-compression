@@ -2,15 +2,14 @@ name: Deploy
 
 on:
   push:
-    branches:
-      - main
-
-permissions:
-  contents: write
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,16 +17,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: latest
           check-latest: true
 
-      - name: Build
-        run: |
-          npm i
-          cd test
-          npm i
-          cd ..
-          npm run build
+      - run: npm i
+      - run: cd test
+      - run: npm i
+      - run: cd ..
+      - run: node --run build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
