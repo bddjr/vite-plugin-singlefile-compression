@@ -1,5 +1,5 @@
 import { Options as htmlMinifierOptions } from 'html-minifier-terser'
-import { compressFormat } from './compress.js'
+import { compressFormat, compressor } from './compress.js'
 
 export interface Options {
     /**
@@ -46,10 +46,16 @@ export interface Options {
     useBase128?: boolean
 
     /**
-     * Compress format.
+     * Compress format.  
+     * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
      * @default "deflate-raw"
      */
     compressFormat?: compressFormat
+
+    /**
+     * Custom compressor.
+     */
+    compressor?: compressor
 }
 
 export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
@@ -70,6 +76,7 @@ export interface innerOptions {
     removeInlinedPublicIconFiles: boolean
     useBase128: boolean
     compressFormat: compressFormat
+    compressor?: compressor
 }
 
 export function getInnerOptions(opt?: Options): innerOptions {
@@ -99,8 +106,9 @@ export function getInnerOptions(opt?: Options): innerOptions {
             opt.useBase128 ?? true,
 
         compressFormat:
-            ["deflate-raw", "deflate", "gzip"].includes(opt.compressFormat)
-                ? opt.compressFormat
-                : "deflate-raw",
+            opt.compressFormat || "deflate-raw",
+
+        compressor:
+            typeof opt.compressor == 'function' ? opt.compressor : undefined,
     }
 }

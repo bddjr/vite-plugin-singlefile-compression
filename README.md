@@ -49,54 +49,60 @@ More info see [src/options.ts](src/options.ts)
 
 ```ts
 export interface Options {
-	/**
-	 * Rename index.html
-	 */
-	rename?: string;
+    /**
+     * Rename index.html
+     */
+    rename?: string
 
-	/**
-	 * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
-	 * @default defaultHtmlMinifierTerserOptions
-	 */
-	htmlMinifierTerser?: htmlMinifierOptions | boolean;
+    /**
+     * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
+     * @default defaultHtmlMinifierTerserOptions
+     */
+    htmlMinifierTerser?: htmlMinifierOptions | boolean
 
-	/**
-	 * Try inline html used assets, if inlined or not used in JS.
-	 * @default true
-	 */
-	tryInlineHtmlAssets?: boolean;
+    /**
+     * Try inline html used assets, if inlined or not used in JS.
+     * @default true
+     */
+    tryInlineHtmlAssets?: boolean
 
-	/**
-	 * Remove inlined asset files.
-	 * @default true
-	 */
-	removeInlinedAssetFiles?: boolean;
+    /**
+     * Remove inlined asset files.
+     * @default true
+     */
+    removeInlinedAssetFiles?: boolean
 
-	/**
-	 * Try inline html icon, if icon is in public dir.
-	 * @default true
-	 */
-	tryInlineHtmlPublicIcon?: boolean;
+    /**
+     * Try inline html icon, if icon is in public dir.
+     * @default true
+     */
+    tryInlineHtmlPublicIcon?: boolean
 
-	/**
-	 * Remove inlined html icon files.
-	 * @default true
-	 */
-	removeInlinedPublicIconFiles?: boolean;
+    /**
+     * Remove inlined html icon files.
+     * @default true
+     */
+    removeInlinedPublicIconFiles?: boolean
 
-	/**
-	 * Use Base128 to encode gzipped script.
-	 * If false, use Base64.
-	 * https://www.npmjs.com/package/base128-ascii
-	 * @default true
-	 */
-	useBase128?: boolean;
+    /**
+     * Use Base128 to encode gzipped script.
+     * If false, use Base64.
+     * https://www.npmjs.com/package/base128-ascii
+     * @default true
+     */
+    useBase128?: boolean
 
-	/**
-	 * Compress format.
-	 * @default "deflate-raw"
-	 */
-	compressFormat?: compressFormat;
+    /**
+     * Compress format.  
+     * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
+     * @default "deflate-raw"
+     */
+    compressFormat?: compressFormat
+
+    /**
+     * Custom compressor.
+     */
+    compressor?: compressor
 }
 ```
 
@@ -105,19 +111,19 @@ export interface Options {
 https://bddjr.github.io/vite-plugin-singlefile-compression/
 
 ```
-vite v6.2.6 building for production...
-✓ 45 modules transformed.
+vite v7.3.1 building client environment for production...
+✓ 46 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.0.5 building...
+vite-plugin-singlefile-compression 2.0.6 building...
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  101.63 KiB -> 46.42 KiB
+  107.124 kB -> 48.342 kB
 
 Finish.
 
-dist/index.html  47.53 kB
-✓ built in 770ms
+dist/index.html  48.34 kB
+✓ built in 783ms
 ```
 
 ![](effect.jpg)
@@ -131,5 +137,5 @@ npm i
 cd test
 npm i
 cd ..
-npm run build
+node --run build
 ```

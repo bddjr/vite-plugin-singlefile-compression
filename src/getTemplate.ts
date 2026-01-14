@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { fileURLToPath } from 'url'
-import { compress, compressFormat } from './compress.js'
+import { compress, compressFormat, compressor } from './compress.js'
 
 function r(name: string) {
     return fs.readFileSync(
@@ -9,8 +9,8 @@ function r(name: string) {
 }
 
 function rt(name: string, template: string) {
-    const s = r(name).split(template, 2)
-    if (s.length !== 2) throw "s.length!==2"
+    const s = r(name).split(template)
+    if (s.length !== 2) throw Error("s.length!==2")
     return s
 }
 
@@ -24,8 +24,8 @@ const files = {
 }
 
 export const template = {
-    base(script: string, format: compressFormat, useBase128: boolean) {
-        script = compress(format, script, useBase128)
+    base(script: string, format: compressFormat, useBase128: boolean, compressor: compressor) {
+        script = compress(format, script, useBase128, compressor)
         if (useBase128) {
             return files.base128
                 .replace("<format>", format)

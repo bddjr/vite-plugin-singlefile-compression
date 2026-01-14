@@ -11,7 +11,7 @@ import { pathToFileURL } from "url"
 import { version } from './getVersion.js'
 import { template } from './getTemplate.js'
 import { bufferToDataURL } from "./dataurl.js"
-import { KiB } from "./KiB.js"
+import { kB } from "./kB.js"
 import { getInnerOptions, Options, innerOptions } from "./options.js"
 import { cutPrefix } from "./cutPrefix.js"
 
@@ -150,14 +150,14 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                 const name = cutPrefix(element.src, assetsDirWithBase)
                 if (name.endsWith('.js'))
                     continue
-                if (!Object.hasOwn(assetsDataURL, name)) {
+                if (!Object.prototype.hasOwnProperty.call(assetsDataURL, name)) {
                     const bundleName = assetsDir + name
                     const a = bundle[bundleName] as OutputAsset
                     if (!a)
                         continue
                     thisDel.add(bundleName)
                     oldSize += a.source.length
-                    if (!Object.hasOwn(globalAssetsDataURL, name))
+                    if (!Object.prototype.hasOwnProperty.call(globalAssetsDataURL, name))
                         globalAssetsDataURL[name] = bufferToDataURL(name, Buffer.from(
                             //@ts-ignore
                             a.source
@@ -186,7 +186,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
             if (needInline) {
                 // inline
                 try {
-                    if (!Object.hasOwn(globalPublicFilesCache, iconName)) {
+                    if (!Object.prototype.hasOwnProperty.call(globalPublicFilesCache, iconName)) {
                         // dist/favicon.ico
                         let Path = path.join(config.build.outDir, iconName)
                         if (fs.existsSync(Path)) {
@@ -258,11 +258,11 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
         }
 
         htmlChunk.source = htmlChunk.source.split(fakeScript, 2).join(
-            template.base(newJSCode.join(';'), options.compressFormat, options.useBase128)
+            template.base(newJSCode.join(';'), options.compressFormat, options.useBase128, options.compressor)
         )
 
         // log
-        console.log("  " + pc.gray(KiB(oldSize) + " -> ") + pc.cyanBright(KiB(htmlChunk.source.length)) + '\n')
+        console.log("  " + pc.gray(kB(oldSize) + " -> ") + pc.cyanBright(kB(htmlChunk.source.length)) + '\n')
 
         // delete assets
         for (const name of thisDel) {
