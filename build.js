@@ -15,6 +15,7 @@ let result = esbuild.buildSync({
     format: 'esm',
     charset: 'ascii',
     write: false,
+    logLevel: 'warning',
 })
 
 if (result.errors.length)
