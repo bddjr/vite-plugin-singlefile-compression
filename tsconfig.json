@@ -1,13 +1,15 @@
 {
-	"compilerOptions": {
-		"module": "NodeNext",
-		"outDir": "dist",
-		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "nodenext",
-		"skipLibCheck": true,
-		"declaration": true,
-		"checkJs": false,
-	},
-	"include": ["src"],
-	"exclude": ["dist", "node_modules"]
+  "compilerOptions": {
+    "target": "ES2020",
+    "moduleResolution": "node16",
+    "module": "Node16",
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "strict": false,
+    "checkJs": false
+  },
+  "include": ["src"],
+  "exclude": ["src/template", "dist", "node_modules"]
 }
