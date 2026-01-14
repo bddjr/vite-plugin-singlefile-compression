@@ -2,17 +2,35 @@
 
 // Unlicense.
 
-import { decode } from "base128-ascii";
+var input = "<script>"
+    , il = input.length
+    , out = new Uint8Array(Math.floor(il / 8 * 7))
+    , ii = 0
+    , oi = 0
+    , cache
+    , next = () => (
+        (cache = input.charCodeAt(ii++)) > 127
+            ? cache = 0 // In HTML, 0 is likely to be converted to 65533 (�)
+            : cache
+    )
+while (ii < il) {
+    //     0        1        2        3        4        5        6        7
+    // in  _0000000 _1111111 _2222222 _3333333 _4444444 _5555555 _6666666 _7777777
+    // out 00000001 11111122 22222333 33334444 44455555 55666666 67777777
+
+    /* 0 */ out[oi++] = next() << 1 | next() >> 6
+    /* 1 */ out[oi++] = cache << 2 | next() >> 5
+    /* 2 */ out[oi++] = cache << 3 | next() >> 4
+    /* 3 */ out[oi++] = cache << 4 | next() >> 3
+    /* 4 */ out[oi++] = cache << 5 | next() >> 2
+    /* 5 */ out[oi++] = cache << 6 | next() >> 1
+    /* 6 */ out[oi++] = cache << 7 | next()
+}
 
 new Response(
-    new ReadableStream({
-        start(c) {
-            c.enqueue(decode("<script>"))
-            c.close()
-        }
-    }).pipeThrough(new DecompressionStream("<format>")),
+    new Blob([out]).stream().pipeThrough(new DecompressionStream("<format>")),
     { headers: { "Content-Type": "text/javascript" } }
 ).blob().then(b =>
     import(b = URL.createObjectURL(b))
-        .finally(() => URL.revokeObjectURL(b))
+        .finally(_ => URL.revokeObjectURL(b))
 );

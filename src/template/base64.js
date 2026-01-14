@@ -9,5 +9,5 @@ fetch("data:;base64,<script>")
 	).blob())
 	.then(b =>
 		import(b = URL.createObjectURL(b))
-			.finally(() => URL.revokeObjectURL(b))
+			.finally(_ => URL.revokeObjectURL(b))
 	);
