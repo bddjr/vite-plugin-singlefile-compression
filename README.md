@@ -115,7 +115,7 @@ vite v7.3.1 building client environment for production...
 ✓ 46 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.0.6 building...
+vite-plugin-singlefile-compression 2.0.8 building...
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
   107.124 kB -> 48.342 kB
@@ -123,7 +123,7 @@ vite-plugin-singlefile-compression 2.0.6 building...
 Finish.
 
 dist/index.html  48.34 kB
-✓ built in 783ms
+✓ built in 800ms
 ```
 
 ![](effect.jpg)
