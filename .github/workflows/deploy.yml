@@ -3,8 +3,8 @@ name: Deploy
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  #pull_request:
+  #  branches: ["main"]
 
 jobs:
   build:
@@ -21,9 +21,7 @@ jobs:
           check-latest: true
 
       - run: npm i
-      - run: cd test
-      - run: npm i
-      - run: cd ..
+      - run: cd test && npm i
       - run: node --run build
 
       - name: Deploy

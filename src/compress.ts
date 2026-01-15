@@ -23,12 +23,13 @@ export type compressor = ((buf: zlib.InputType) => Buffer)
 export type compressFormat = keyof typeof compressors
 
 function switchCompressor(format: compressFormat): compressor {
-    const f = compressors[format] || zlib[format + 'CompressSync']
-    if (!f) {
-        if (Object.prototype.hasOwnProperty.call(compressors, format))
-            throw Error(`Could not get compressor: Please upgrade node.js or set your compressor function.`)
-        throw Error(`Could not get compressor: Unknown compress format '${format}', please set your compressor function.`)
+    if (!Object.prototype.hasOwnProperty.call(compressors, format)) {
+        const f = zlib[format + 'CompressSync']
+        if (!f) throw Error(`Could not get compressor: Unknown compress format '${format}', please set your compressor function.`)
+        return f
     }
+    const f = compressors[format]
+    if (!f) throw Error(`Could not get compressor: Please upgrade node.js or set your compressor function.`)
     return f
 }
 
