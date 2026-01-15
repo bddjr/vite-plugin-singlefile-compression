@@ -245,7 +245,9 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                 }
             }
             inlineHtmlAssets()
-            newJSCode.push(template.importmeta(scriptName))
+
+            if (options.useImportMetaPolyfill)
+                newJSCode.push(template.importmeta(scriptName))
 
             // 此 polyfill 仅在以下选项的值为 true 时需要。
             // config.build.rollupOptions.output.inlineDynamicImports

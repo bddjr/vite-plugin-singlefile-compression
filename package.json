@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-singlefile-compression",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "author": "bddjr",
   "license": "MIT",
   "description": "Compress all assets and embeds them into dist/index.html, making it convenient to share as a single HTML file.",

@@ -56,6 +56,12 @@ export interface Options {
      * Custom compressor.
      */
     compressor?: compressor
+
+    /**
+     * Use import.meta polyfill.
+     * @default true
+     */
+    useImportMetaPolyfill?: boolean
 }
 
 export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
@@ -77,6 +83,7 @@ export interface innerOptions {
     useBase128: boolean
     compressFormat: compressFormat
     compressor?: compressor
+    useImportMetaPolyfill: boolean
 }
 
 export function getInnerOptions(opt?: Options): innerOptions {
@@ -110,5 +117,8 @@ export function getInnerOptions(opt?: Options): innerOptions {
 
         compressor:
             typeof opt.compressor == 'function' ? opt.compressor : undefined,
+
+        useImportMetaPolyfill:
+            opt.useImportMetaPolyfill ?? true,
     }
 }

@@ -3,11 +3,13 @@
 // Unlicense.
 
 {
-    import.meta.url = new URL("<path>", location).href
-    const resolve = import.meta.resolve
-    import.meta.resolve = (name) => (
-        /^\.{0,2}\//.test(name)
-            ? new URL(name, import.meta.url).href
-            : resolve(name)
-    )
+    let meta = import.meta
+        , resolve = meta.resolve
+        , url = (meta.url = new URL("<path>", location).href)
+
+    meta.resolve = function (name) {
+        return /^\.{0,2}\//.test(name)
+            ? new URL(name, url).href
+            : resolve.apply(this, arguments)
+    }
 }

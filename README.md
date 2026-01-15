@@ -103,6 +103,12 @@ export interface Options {
      * Custom compressor.
      */
     compressor?: compressor
+
+    /**
+     * Use import.meta polyfill.
+     * @default true
+     */
+    useImportMetaPolyfill?: boolean
 }
 ```
 
@@ -115,15 +121,15 @@ vite v7.3.1 building client environment for production...
 ✓ 46 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.0.8 building...
+vite-plugin-singlefile-compression 2.0.9 building...
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  107.124 kB -> 48.342 kB
+  107.149 kB -> 48.323 kB
 
 Finish.
 
-dist/index.html  48.34 kB
-✓ built in 800ms
+dist/index.html  48.32 kB
+✓ built in 826ms
 ```
 
 ![](effect.jpg)
