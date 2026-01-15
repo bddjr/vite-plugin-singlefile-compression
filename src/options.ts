@@ -48,6 +48,7 @@ export interface Options {
     /**
      * Compress format.  
      * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
+     * @type "deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd"
      * @default "deflate-raw"
      */
     compressFormat?: compressFormat
