@@ -2,9 +2,11 @@ name: Deploy
 
 on:
   push:
-    branches: ["main"]
-  #pull_request:
-  #  branches: ["main"]
+    branches-ignore:
+      - gh-pages
+  pull_request:
+    branches-ignore:
+      - gh-pages
 
 jobs:
   build:
@@ -24,6 +26,11 @@ jobs:
       - run: cd test && npm i
       - run: node --run build
 
+  deploy:
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
