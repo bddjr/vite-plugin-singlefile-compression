@@ -8,24 +8,8 @@ on:
     types: [created]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          check-latest: true
-
-      - run: npm i
-      - run: cd test && npm i
-      - run: node --run build
-
   publish-npm:
-    needs: build
+    #needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,6 +18,9 @@ jobs:
           node-version: latest
           check-latest: true
           registry-url: https://registry.npmjs.org/
+
+      - run: npm i
+      - run: cd test && npm i
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
