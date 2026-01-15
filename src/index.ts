@@ -1,5 +1,5 @@
-import { UserConfig, PluginOption, ResolvedConfig } from "vite"
-import { OutputChunk, OutputAsset, OutputBundle } from "rollup"
+import { UserConfig, PluginOption, ResolvedConfig, BuildEnvironmentOptions, ConfigPluginContext, ConfigEnv } from "vite"
+import { OutputChunk, OutputAsset, OutputBundle, RollupOptions } from "rollup"
 import pc from "picocolors"
 import { minify as htmlMinify } from 'html-minifier-terser'
 import { JSDOM } from 'jsdom'
@@ -28,19 +28,28 @@ export function singleFileCompression(opt?: Options): PluginOption {
 
 export default singleFileCompression
 
-function setConfig(config: UserConfig) {
+function setConfig(this: ConfigPluginContext, config: UserConfig, env: ConfigEnv) {
     config.base ??= './'
 
-    config.build ??= {}
-    config.build.cssCodeSplit ??= false
+    interface RolldownViteBuildOptionsLike extends BuildEnvironmentOptions {
+        rolldownOptions?: RollupOptions
+    }
 
-    config.build.assetsInlineLimit ??= () => true
-    config.build.chunkSizeWarningLimit ??= Number.MAX_SAFE_INTEGER
-    config.build.modulePreload ??= { polyfill: false }
-    config.build.reportCompressedSize ??= false
+    const build = (config.build ??= {}) as RolldownViteBuildOptionsLike
 
-    config.build.rollupOptions ??= {}
-    for (const output of [config.build.rollupOptions.output ??= {}].flat(1)) {
+    build.cssCodeSplit ??= false
+    build.assetsInlineLimit ??= () => true
+    build.chunkSizeWarningLimit ??= Number.MAX_SAFE_INTEGER
+    build.modulePreload ??= { polyfill: false }
+    build.reportCompressedSize ??= false
+
+    const rollupOptions = (
+        (this.meta as any).rolldownVersion
+            ? (build.rolldownOptions ?? build.rollupOptions ?? (build.rolldownOptions = {}))
+            : (build.rollupOptions ??= {})
+    )
+
+    for (const output of [rollupOptions.output ??= {}].flat(1)) {
         output.inlineDynamicImports ??= true
     }
 }
