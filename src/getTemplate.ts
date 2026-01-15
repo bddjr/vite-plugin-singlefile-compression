@@ -4,7 +4,7 @@ import { compress, compressFormat, compressor } from './compress.js'
 
 function r(name: string) {
     return fs.readFileSync(
-        fileURLToPath(import.meta.resolve(`./template/${name}.js`))
+        fileURLToPath(new URL(`./template/${name}.js`, import.meta.url))
     ).toString()
 }
 

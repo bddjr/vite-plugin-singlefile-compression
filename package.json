@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-singlefile-compression",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "author": "bddjr",
   "license": "MIT",
   "description": "Compress all assets and embeds them into dist/index.html, making it convenient to share as a single HTML file.",
@@ -13,7 +13,7 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "rimraf dist && tsc && node build.js && cd test && node --run build",
+    "build": "rimraf dist && tsc && node build.js && es-check es2021 --checkFeatures --module dist/**/*.js && cd test && node --run build",
     "prepublishOnly": "node --run build"
   },
   "repository": {
@@ -43,20 +43,21 @@
     "class"
   ],
   "dependencies": {
+    "@types/html-minifier-terser": ">=7.0.2",
     "base128-ascii": ">=2.1.0",
     "html-minifier-terser": ">=7.2.0",
     "jsdom": ">=26.0.0",
     "mime": ">=4.0.4",
     "mini-svg-data-uri": ">=1.4.4",
-    "picocolors": ">=1.1.1",
-    "@types/html-minifier-terser": ">=7.0.2"
+    "picocolors": ">=1.1.1"
   },
   "devDependencies": {
-    "vite": ">=6.2.5",
-    "rimraf": ">=6.0.1",
     "@types/jsdom": ">=21.1.7",
     "@types/node": ">=22.10.7",
+    "es-check": "^9.5.3",
     "esbuild": ">=0.25.0",
-    "typescript": ">=5.7.2"
+    "rimraf": ">=6.0.1",
+    "typescript": ">=5.7.2",
+    "vite": ">=6.2.5"
   }
 }

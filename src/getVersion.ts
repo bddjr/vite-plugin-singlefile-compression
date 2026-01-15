@@ -1,8 +1,8 @@
 import fs from 'fs'
 import { fileURLToPath } from 'url'
 
-export const { version } = JSON.parse(
+export const version = JSON.parse(
     fs.readFileSync(
-        fileURLToPath(import.meta.resolve("../package.json"))
+        fileURLToPath(new URL("../package.json", import.meta.url))
     ).toString()
-) as { version: string }
+).version as string
