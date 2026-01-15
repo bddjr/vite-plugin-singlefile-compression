@@ -26,12 +26,8 @@ jobs:
       - run: cd test && npm i
       - run: node --run build
 
-  deploy:
-    if: github.event_name == 'push' && github.ref_name == 'main'
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Deploy
+        if: github.event_name == 'push' && github.ref_name == 'main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
