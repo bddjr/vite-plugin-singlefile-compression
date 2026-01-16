@@ -27,6 +27,7 @@ jobs:
       - run: node --run build
 
       - name: Upload static files as artifact
+        if: github.event_name == 'push' && github.ref_name == 'main'
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
