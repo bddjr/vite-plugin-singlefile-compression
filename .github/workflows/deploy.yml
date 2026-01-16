@@ -26,11 +26,25 @@ jobs:
       - run: cd test && npm i
       - run: node --run build
 
-      - name: Deploy
-        if: github.event_name == 'push' && github.ref_name == 'main'
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: test/dist
-          single-commit: true
-          force: true
+          path: test/dist
+
+  deploy:
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
