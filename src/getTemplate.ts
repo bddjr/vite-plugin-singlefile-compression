@@ -24,7 +24,7 @@ const files = {
 }
 
 export const template = {
-    base(script: string, format: compressFormat, useBase128: boolean, compressor: compressor) {
+    base(script: string, format: compressFormat, useBase128: boolean, compressor: compressor | undefined) {
         script = compress(format, script, useBase128, compressor)
         if (useBase128) {
             return files.base128
