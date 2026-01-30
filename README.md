@@ -9,7 +9,7 @@ Using [DecompressionStream](https://developer.mozilla.org/docs/Web/API/Decompres
 ## Setup
 
 ```
-npm i vite-plugin-singlefile-compression
+npm i vite-plugin-singlefile-compression -D
 ```
 
 Then modify `vite.config.ts`, see [test/vite.config.ts](test/vite.config.ts)
