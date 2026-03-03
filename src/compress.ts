@@ -21,7 +21,7 @@ const compressors = {
     zstd: zlib.zstdCompressSync && function (buf: zlib.InputType) {
         return zlib.zstdCompressSync(buf, {
             params: {
-                [zlib.constants.ZSTD_c_compressionLevel]: 22
+                [zlib.constants.ZSTD_c_compressionLevel]: 19
             }
         })
     },
