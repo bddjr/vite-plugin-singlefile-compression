@@ -1,5 +1,6 @@
-import { UserConfig, PluginOption, ResolvedConfig, BuildEnvironmentOptions, ConfigPluginContext, ConfigEnv } from "vite"
-import { OutputChunk, OutputAsset, OutputBundle, RollupOptions } from "rollup"
+import { UserConfig, PluginOption, ResolvedConfig, ConfigPluginContext, ConfigEnv } from "vite"
+import { RollupOptions } from 'rollup'
+import { OutputBundle, OutputChunk, OutputAsset } from 'rolldown'
 import pc from "picocolors"
 import { minify as htmlMinify } from 'html-minifier-terser'
 import { JSDOM } from 'jsdom'
@@ -31,11 +32,7 @@ export default singleFileCompression
 function setConfig(this: ConfigPluginContext, config: UserConfig, env: ConfigEnv) {
     config.base ??= './'
 
-    interface RolldownViteBuildOptionsLike extends BuildEnvironmentOptions {
-        rolldownOptions?: RollupOptions
-    }
-
-    const build = (config.build ??= {}) as RolldownViteBuildOptionsLike
+    const build = config.build ??= {}
 
     build.cssCodeSplit ??= false
     build.assetsInlineLimit ??= () => true
@@ -43,14 +40,20 @@ function setConfig(this: ConfigPluginContext, config: UserConfig, env: ConfigEnv
     build.modulePreload ??= { polyfill: false }
     build.reportCompressedSize ??= false
 
-    const rollupOptions = (
-        (this.meta as any).rolldownVersion
-            ? (build.rolldownOptions ?? build.rollupOptions ?? (build.rolldownOptions = {}))
-            : (build.rollupOptions ??= {})
-    )
+    if (this.meta.rolldownVersion) {
+        // Vite 8
+        const rolldownOptions = build.rolldownOptions ?? build.rollupOptions ?? (build.rolldownOptions = {})
 
-    for (const output of [rollupOptions.output ??= {}].flat(1)) {
-        output.inlineDynamicImports ??= true
+        for (const output of [rolldownOptions.output ??= {}].flat(1)) {
+            output.codeSplitting ??= false
+        }
+    } else {
+        // Vite oldest
+        const rollupOptions = (build.rollupOptions ??= {}) as RollupOptions
+
+        for (const output of [rollupOptions.output ??= {}].flat(1)) {
+            output.inlineDynamicImports ??= true
+        }
     }
 }
 

@@ -118,19 +118,20 @@ export interface Options {
 https://bddjr.github.io/vite-plugin-singlefile-compression/
 
 ```
-vite v7.3.1 building client environment for production...
-✓ 46 modules transformed.
+vite v8.0.0 building client environment for production...
+✓ 41 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.0.10 building...
+vite-plugin-singlefile-compression 2.0.14 building...
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  107.149 kB -> 48.323 kB
+  106.506 kB -> 47.487 kB
 
 Finish.
 
-dist/index.html  48.32 kB
-✓ built in 829ms
+dist/index.html  47.48 kB
+
+✓ built in 296ms
 ```
 
 ![](effect.jpg)
