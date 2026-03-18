@@ -134,3 +134,5 @@ export function getInnerOptions(opt?: Options): innerOptions {
             opt.useImportMetaPolyfill ?? true,
     }
 }
+
+export { HtmlMinifierOptions }

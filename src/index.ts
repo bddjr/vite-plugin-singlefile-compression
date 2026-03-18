@@ -13,8 +13,9 @@ import { version } from './getVersion.js'
 import { template } from './getTemplate.js'
 import { bufferToDataURL } from "./dataurl.js"
 import { kB } from "./kB.js"
-import { getInnerOptions, Options, innerOptions } from "./options.js"
+import { getInnerOptions, Options, innerOptions, HtmlMinifierOptions } from "./options.js"
 import { cutPrefix } from "./cutPrefix.js"
+import { CompressFormat, CompressFormatAlias, Compressor } from "./compress.js"
 
 export function singleFileCompression(opt?: Options): PluginOption {
     let conf: ResolvedConfig
@@ -28,6 +29,14 @@ export function singleFileCompression(opt?: Options): PluginOption {
 }
 
 export default singleFileCompression
+
+export {
+    Options,
+    HtmlMinifierOptions,
+    CompressFormat,
+    CompressFormatAlias,
+    Compressor,
+}
 
 function setConfig(this: ConfigPluginContext, config: UserConfig, env: ConfigEnv) {
     config.base ??= './'

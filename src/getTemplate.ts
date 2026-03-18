@@ -1,26 +1,19 @@
-import fs from 'fs'
-import { fileURLToPath } from 'url'
 import { compress, CompressFormat, Compressor } from './compress.js'
+import { raw } from './templateRaw.js'
 
-function r(name: string) {
-    return fs.readFileSync(
-        fileURLToPath(new URL(`./template/${name}.js`, import.meta.url))
-    ).toString()
-}
-
-function rt(name: string, template: string) {
-    const s = r(name).split(template)
+function split2(str: string, separator: string) {
+    const s = str.split(separator)
     if (s.length !== 2) throw Error("s.length!==2")
     return s
 }
 
 const files = {
-    base64: r('base64'),
-    base128: r('base128'),
-    assets: rt('assets', '{"":""}'),
-    css: rt('css', '"<style>"'),
-    icon: rt('icon', '"<icon>"'),
-    importmeta: rt('importmeta', '"<path>"'),
+    base64: raw.base64,
+    base128: raw.base128,
+    assets: split2(raw.assets, '{"":""}'),
+    css: split2(raw.css, '"<style>"'),
+    icon: split2(raw.icon, '"<icon>"'),
+    importmeta: split2(raw.importmeta, '"<path>"'),
 }
 
 export const template = {

@@ -134,7 +134,7 @@ Finish.
 
 dist/index.html  47.47 kB
 
-✓ built in 284ms
+✓ built in 274ms
 ```
 
 ![](effect.jpg)
