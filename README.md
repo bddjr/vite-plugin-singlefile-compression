@@ -9,30 +9,28 @@ Using [DecompressionStream](https://developer.mozilla.org/docs/Web/API/Decompres
 ## Setup
 
 ```
-npm i vite-plugin-singlefile-compression -D
+npm i vite-plugin-singlefile-compression@latest -D
 ```
 
-Then modify `vite.config.ts`, see [test/vite.config.ts](test/vite.config.ts)
+Then modify `vite.config.ts`, like [test/vite.config.ts](test/vite.config.ts)
 
-```ts
-// Import singleFileCompression
-import singleFileCompression from 'vite-plugin-singlefile-compression'
+```diff
++ import singleFileCompression from 'vite-plugin-singlefile-compression'
 
 export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
-    // Add singleFileCompression
-    singleFileCompression(),
++   singleFileCompression(),
   ],
 ```
 
-Then modify [src/router/index.ts](test/src/router/index.ts#L5)
+Then use hash history, like [src/router/index.ts](test/src/router/index.ts#L5)
 
-```ts
+```diff
 const router = createRouter({
-  // Use Hash History
-  history: createWebHashHistory(),
+- history: createWebHistory(),
++ history: createWebHashHistory(),
 ```
 
 ## Options
@@ -128,20 +126,20 @@ Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/
 
 ```
 vite v8.0.0 building client environment for production...
-✓ 41 modules transformed.
-rendering chunks (1)...
+✓ 35 modules transformed.
+
 
 vite-plugin-singlefile-compression 2.1.0 deflate-raw
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  106.564 kB -> 47.458 kB
+  139.123 kB -> 58.867 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  47.45 kB │ gzip: 41.35 kB
+dist/index.html  58.86 kB │ gzip: 51.34 kB
 
-✓ built in 299ms
+✓ built in 276ms
 ```
 
 ![](effect.jpg)
