@@ -71,9 +71,9 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
 
     // rename
     if (options.rename
-        && options.rename !== "index.html"
-        && ("index.html" in bundle)
-        && !(options.rename in bundle)
+        && options.rename != "index.html"
+        && Object.prototype.hasOwnProperty.call(bundle, "index.html")
+        && !Object.prototype.hasOwnProperty.call(bundle, options.rename)
     ) {
         bundle[options.rename] = bundle["index.html"]
         bundle[options.rename].fileName = options.rename
