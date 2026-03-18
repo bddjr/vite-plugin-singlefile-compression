@@ -13,18 +13,25 @@ import { version } from './getVersion.js'
 import { template } from './getTemplate.js'
 import { bufferToDataURL } from "./dataurl.js"
 import { kB } from "./kB.js"
-import { getInnerOptions, Options, innerOptions, HtmlMinifierOptions } from "./options.js"
+import { getInnerOptions, Options, InnerOptions as InnerOptions, HtmlMinifierOptions, defaultHtmlMinifierTerserOptions } from "./options.js"
 import { cutPrefix } from "./cutPrefix.js"
 import { CompressFormat, CompressFormatAlias, Compressor } from "./compress.js"
 
 export function singleFileCompression(opt?: Options): PluginOption {
     let conf: ResolvedConfig
+    const innerOptions = getInnerOptions(opt)
     return {
         name: "singleFileCompression",
         enforce: "post",
-        config: setConfig,
-        configResolved(c) { conf = c },
-        generateBundle: (_, bundle) => generateBundle(bundle, conf, getInnerOptions(opt)),
+        config(...args) {
+            return setConfig.call(this, innerOptions, ...args)
+        },
+        configResolved(c) {
+            conf = c
+        },
+        generateBundle(outputOptions, bundle) {
+            return generateBundle(bundle, conf, innerOptions)
+        },
     }
 }
 
@@ -36,18 +43,17 @@ export {
     CompressFormat,
     CompressFormatAlias,
     Compressor,
+    defaultHtmlMinifierTerserOptions,
 }
 
-function setConfig(this: ConfigPluginContext, config: UserConfig, env: ConfigEnv) {
+function setConfig(this: ConfigPluginContext, opt: InnerOptions, config: UserConfig, env: ConfigEnv) {
     config.base ??= './'
 
     const build = (config.build ??= {})
 
     build.cssCodeSplit ??= false
     build.assetsInlineLimit ??= () => true
-    build.chunkSizeWarningLimit ??= Number.MAX_SAFE_INTEGER
     build.modulePreload ?? build.polyfillModulePreload ?? (build.modulePreload = { polyfill: false })
-    build.reportCompressedSize ??= false
 
     if (this.meta.rolldownVersion) {
         // Vite 8
@@ -66,8 +72,13 @@ function setConfig(this: ConfigPluginContext, config: UserConfig, env: ConfigEnv
     }
 }
 
-async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: innerOptions) {
-    console.log(pc.reset('\n\n') + pc.cyan('vite-plugin-singlefile-compression ' + version) + ' ' + pc.green(options.compressFormat))
+async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: InnerOptions) {
+    console.log(
+        pc.reset('\n\n') +
+        pc.cyan('vite-plugin-singlefile-compression ' + version) +
+        ' ' +
+        (options.enableCompress ? pc.green(options.compressFormat) : pc.red('disable compress'))
+    )
 
     // rename
     if (options.rename
@@ -113,7 +124,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
     for (const name in bundle) {
         if (name.startsWith(assetsDir))
             bundleAssetsNames.push(name)
-        else if (name.endsWith('.html'))
+        else if (/\.html$/i.test(name))
             bundleHTMLNames.push(name)
     }
 
@@ -136,6 +147,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
         if (scriptElement) {
             scriptElement.remove()
             scriptElement.removeAttribute('src')
+            scriptElement.removeAttribute('crossorigin')
             scriptElement.innerHTML = fakeScript
             document.body.appendChild(scriptElement)
         } else {
@@ -144,7 +156,8 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
 
         // get css tag
         let allCSS = ''
-        for (const element of document.querySelectorAll<HTMLLinkElement>(`link[rel=stylesheet]${assetsHrefSelector}`)) {
+        const linkStylesheet = document.querySelectorAll<HTMLLinkElement>(`link[rel=stylesheet]${assetsHrefSelector}`)
+        for (const element of linkStylesheet) {
             const name = cutPrefix(element.href, config.base)
             thisDel.add(name)
             const css = bundle[name] as OutputAsset
@@ -157,35 +170,54 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                         globalDoNotDelete.add(name)
                 }
                 // add script for load css
-                allCSS += cssSource.replace(/\n$/, '')
+                allCSS += cssSource.replace(/(\/\*[^*]*\*\/)?\s*$/, '')
             }
             // remove tag
-            element.remove()
+            if (options.enableCompress)
+                element.remove()
         }
-        newJSCode.push(template.css(allCSS))
+        if (allCSS) {
+            if (options.enableCompress) {
+                newJSCode.push(template.css(allCSS))
+            } else {
+                const e = document.createElement('style')
+                e.innerHTML = allCSS
+                linkStylesheet[0].before(e)
+                for (const e of linkStylesheet) {
+                    e.remove()
+                }
+            }
+        }
 
         // inline html assets
         const assetsDataURL = {} as { [key: string]: string }
         if (options.tryInlineHtmlAssets) {
-            for (const element of (document.querySelectorAll(assetsSrcSelector) as NodeListOf<HTMLImageElement>)) {
+            for (const element of document.querySelectorAll<HTMLImageElement>(assetsSrcSelector)) {
                 const name = cutPrefix(element.src, assetsDirWithBase)
-                if (name.endsWith('.js'))
+                if (/\.js$/i.test(name))
                     continue
-                if (!Object.prototype.hasOwnProperty.call(assetsDataURL, name)) {
+                if (!options.enableCompress || !Object.prototype.hasOwnProperty.call(assetsDataURL, name)) {
                     const bundleName = assetsDir + name
                     const a = bundle[bundleName] as OutputAsset
                     if (!a)
                         continue
                     thisDel.add(bundleName)
                     oldSize += a.source.length
-                    if (!Object.prototype.hasOwnProperty.call(globalAssetsDataURL, name))
-                        globalAssetsDataURL[name] = bufferToDataURL(name, Buffer.from(
-                            //@ts-ignore
-                            a.source
-                        ))
-                    assetsDataURL[name] = globalAssetsDataURL[name]
+                    let dataURL: string
+                    if (Object.prototype.hasOwnProperty.call(globalAssetsDataURL, name)) {
+                        dataURL = globalAssetsDataURL[name]
+                    } else {
+                        globalAssetsDataURL[name] = dataURL = bufferToDataURL(name, Buffer.from(a.source))
+                    }
+                    if (options.enableCompress) {
+                        assetsDataURL[name] = dataURL
+                    } else {
+                        element.src = dataURL
+                    }
                 }
-                element.src = `data:${name}`
+                if (options.enableCompress) {
+                    element.src = `data:${name}`
+                }
             }
         }
 
@@ -225,10 +257,20 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                     }
                     const { dataURL, size } = globalPublicFilesCache[iconName]
                     oldSize += size
-                    newJSCode.push(template.icon(dataURL))
-                    if (!element) {
-                        // add link icon tag
-                        document.head.insertAdjacentHTML('beforeend', '<link rel="icon" href="data:">')
+                    if (options.enableCompress) {
+                        newJSCode.push(template.icon(dataURL))
+                        if (!element) {
+                            // add link icon tag
+                            document.head.insertAdjacentHTML('beforeend', '<link rel="icon" href="data:">')
+                        }
+                    } else {
+                        if (element) {
+                            element.href = dataURL
+                        } else {
+                            const e = document.head.appendChild(document.createElement('link'))
+                            e.rel = 'icon'
+                            e.href = dataURL
+                        }
                     }
                 } catch (e) {
                     if (element) console.error(e)
@@ -280,9 +322,14 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
             inlineHtmlAssets()
         }
 
-        htmlChunk.source = htmlChunk.source.split(fakeScript, 2).join(
-            template.base(newJSCode.join(';'), options.compressFormat, options.useBase128, options.compressor)
-        )
+        let outputScript = newJSCode.join(';')
+        if (options.enableCompress) {
+            outputScript = template.base(outputScript, options.compressFormat, options.useBase128, options.compressor)
+        } else {
+            outputScript = outputScript.replaceAll('</script', '<\\/script')
+        }
+
+        htmlChunk.source = htmlChunk.source.split(fakeScript, 2).join(outputScript)
 
         // log
         console.log("  " + pc.gray(kB(oldSize) + " -> ") + pc.cyanBright(kB(htmlChunk.source.length)) + '\n')

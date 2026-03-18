@@ -3,6 +3,36 @@ import { CompressFormat, compressFormatAlias, CompressFormatAlias, Compressor } 
 
 export interface Options {
     /**
+     * Enable compress.
+     * @default true
+     */
+    enableCompress?: boolean
+
+    /**
+     * Use Base128 to encode compressed script.
+     * If false, use Base64.
+     * https://www.npmjs.com/package/base128-ascii
+     * @default true
+     */
+    useBase128?: boolean
+
+    /**
+     * Compress format.
+     * 
+     * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
+     * 
+     * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
+     * 
+     * @default "deflate-raw"
+     */
+    compressFormat?: CompressFormat | CompressFormatAlias
+
+    /**
+     * Custom compressor.
+     */
+    compressor?: Compressor
+
+    /**
      * Rename index.html
      */
     rename?: string
@@ -38,30 +68,6 @@ export interface Options {
     removeInlinedPublicIconFiles?: boolean
 
     /**
-     * Use Base128 to encode gzipped script.
-     * If false, use Base64.
-     * https://www.npmjs.com/package/base128-ascii
-     * @default true
-     */
-    useBase128?: boolean
-
-    /**
-     * Compress format.
-     * 
-     * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
-     * 
-     * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
-     * 
-     * @default "deflate-raw"
-     */
-    compressFormat?: CompressFormat | CompressFormatAlias
-
-    /**
-     * Custom compressor.
-     */
-    compressor?: Compressor
-
-    /**
      * Use import.meta polyfill.
      * @default true
      */
@@ -77,7 +83,8 @@ export const defaultHtmlMinifierTerserOptions: HtmlMinifierOptions = {
     minifyJS: false,
 }
 
-export interface innerOptions {
+export interface InnerOptions {
+    enableCompress: boolean
     rename?: string
     htmlMinifierTerser: HtmlMinifierOptions | false
     tryInlineHtmlAssets: boolean
@@ -90,9 +97,12 @@ export interface innerOptions {
     useImportMetaPolyfill: boolean
 }
 
-export function getInnerOptions(opt?: Options): innerOptions {
+export function getInnerOptions(opt?: Options): InnerOptions {
     opt ||= {}
     return {
+        enableCompress:
+            opt.enableCompress ?? true,
+
         rename:
             opt.rename == null
                 ? undefined

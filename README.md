@@ -50,6 +50,36 @@ More info see [src/options.ts](src/options.ts)
 ```ts
 export interface Options {
     /**
+     * Enable compress.
+     * @default true
+     */
+    enableCompress?: boolean
+
+    /**
+     * Use Base128 to encode compressed script.
+     * If false, use Base64.
+     * https://www.npmjs.com/package/base128-ascii
+     * @default true
+     */
+    useBase128?: boolean
+
+    /**
+     * Compress format.
+     * 
+     * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
+     * 
+     * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
+     * 
+     * @default "deflate-raw"
+     */
+    compressFormat?: CompressFormat | CompressFormatAlias
+
+    /**
+     * Custom compressor.
+     */
+    compressor?: Compressor
+
+    /**
      * Rename index.html
      */
     rename?: string
@@ -85,30 +115,6 @@ export interface Options {
     removeInlinedPublicIconFiles?: boolean
 
     /**
-     * Use Base128 to encode gzipped script.
-     * If false, use Base64.
-     * https://www.npmjs.com/package/base128-ascii
-     * @default true
-     */
-    useBase128?: boolean
-
-    /**
-     * Compress format.
-     * 
-     * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
-     * 
-     * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
-     * 
-     * @default "deflate-raw"
-     */
-    compressFormat?: CompressFormat | CompressFormatAlias
-
-    /**
-     * Custom compressor.
-     */
-    compressor?: Compressor
-
-    /**
      * Use import.meta polyfill.
      * @default true
      */
@@ -128,13 +134,14 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression 2.1.0 deflate-raw
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  106.506 kB -> 47.477 kB
+  106.564 kB -> 47.458 kB
 
 Finish.
 
-dist/index.html  47.47 kB
+computing gzip size...
+dist/index.html  47.45 kB │ gzip: 41.35 kB
 
-✓ built in 274ms
+✓ built in 299ms
 ```
 
 ![](effect.jpg)
