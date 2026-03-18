@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2021",
     "moduleResolution": "node16",
-    "module": "Node16",
+    "module": "node20",
     "rootDir": "src",
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
@@ -13,5 +13,5 @@
     "checkJs": false
   },
   "include": ["src"],
-  "exclude": ["src/template", "dist", "node_modules"]
+  "exclude": ["src/template", "src/getVersion.ts", "dist", "node_modules"]
 }

@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { fileURLToPath } from 'url'
-import { compress, compressFormat, compressor } from './compress.js'
+import { compress, CompressFormat, Compressor } from './compress.js'
 
 function r(name: string) {
     return fs.readFileSync(
@@ -24,7 +24,7 @@ const files = {
 }
 
 export const template = {
-    base(script: string, format: compressFormat, useBase128: boolean, compressor: compressor | undefined) {
+    base(script: string, format: CompressFormat, useBase128: boolean, compressor: Compressor | undefined) {
         script = compress(format, script, useBase128, compressor)
         if (useBase128) {
             return files.base128

@@ -58,7 +58,7 @@ export interface Options {
      * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
      * @default defaultHtmlMinifierTerserOptions
      */
-    htmlMinifierTerser?: htmlMinifierOptions | boolean
+    htmlMinifierTerser?: HtmlMinifierOptions | boolean
 
     /**
      * Try inline html used assets, if inlined or not used in JS.
@@ -93,17 +93,20 @@ export interface Options {
     useBase128?: boolean
 
     /**
-     * Compress format.  
+     * Compress format.
+     * 
      * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
-     * @type "deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd"
+     * 
+     * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
+     * 
      * @default "deflate-raw"
      */
-    compressFormat?: compressFormat
+    compressFormat?: CompressFormat | CompressFormatAlias
 
     /**
      * Custom compressor.
      */
-    compressor?: compressor
+    compressor?: Compressor
 
     /**
      * Use import.meta polyfill.
@@ -115,23 +118,23 @@ export interface Options {
 
 ## Effect
 
-https://bddjr.github.io/vite-plugin-singlefile-compression/
+Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/
 
 ```
 vite v8.0.0 building client environment for production...
 ✓ 41 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.0.14 building...
+vite-plugin-singlefile-compression 2.1.0 deflate-raw
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  106.506 kB -> 47.487 kB
+  106.506 kB -> 47.477 kB
 
 Finish.
 
-dist/index.html  47.48 kB
+dist/index.html  47.47 kB
 
-✓ built in 296ms
+✓ built in 284ms
 ```
 
 ![](effect.jpg)

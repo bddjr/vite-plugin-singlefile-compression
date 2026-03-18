@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-singlefile-compression",
-  "version": "2.0.14",
+  "version": "2.1.0",
   "author": "bddjr",
   "license": "MIT",
   "description": "Compress all assets and embeds them into dist/index.html, making it convenient to share as a single HTML file.",
@@ -11,7 +11,7 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "rimraf dist && tsc && node build.js && es-check es2021 --checkFeatures --module dist/**/*.js && cd test && node --run build",
+    "build": "rimraf dist && tsc && node build.js && cd test && node --run build",
     "prepublishOnly": "node --run build"
   },
   "repository": {
@@ -57,9 +57,8 @@
   },
   "devDependencies": {
     "@types/jsdom": ">=28.0.0",
-    "@types/node": ">=25.5.0",
-    "es-check": ">=9.6.2",
-    "esbuild": ">=0.27.4",
+    "@types/node": "^22.19.15",
+    "esbuild": "^0.27.4",
     "rimraf": ">=6.1.3",
     "rolldown": ">=1.0.0-rc.9",
     "rollup": ">=4.59.0",

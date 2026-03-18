@@ -32,12 +32,12 @@ export default singleFileCompression
 function setConfig(this: ConfigPluginContext, config: UserConfig, env: ConfigEnv) {
     config.base ??= './'
 
-    const build = config.build ??= {}
+    const build = (config.build ??= {})
 
     build.cssCodeSplit ??= false
     build.assetsInlineLimit ??= () => true
     build.chunkSizeWarningLimit ??= Number.MAX_SAFE_INTEGER
-    build.modulePreload ??= { polyfill: false }
+    build.modulePreload ?? build.polyfillModulePreload ?? (build.modulePreload = { polyfill: false })
     build.reportCompressedSize ??= false
 
     if (this.meta.rolldownVersion) {
@@ -45,7 +45,7 @@ function setConfig(this: ConfigPluginContext, config: UserConfig, env: ConfigEnv
         const rolldownOptions = build.rolldownOptions ?? build.rollupOptions ?? (build.rolldownOptions = {})
 
         for (const output of [rolldownOptions.output ??= {}].flat(1)) {
-            output.codeSplitting ??= false
+            output.codeSplitting ?? output.inlineDynamicImports ?? (output.codeSplitting = false)
         }
     } else {
         // Vite oldest
@@ -58,7 +58,7 @@ function setConfig(this: ConfigPluginContext, config: UserConfig, env: ConfigEnv
 }
 
 async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: innerOptions) {
-    console.log(pc.reset('\n\n') + pc.cyan('vite-plugin-singlefile-compression ' + version) + pc.green(' building...'))
+    console.log(pc.reset('\n\n') + pc.cyan('vite-plugin-singlefile-compression ' + version) + ' ' + pc.green(options.compressFormat))
 
     // rename
     if (options.rename
@@ -101,7 +101,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
         /** format: ["index.html"] */
         bundleHTMLNames = [] as string[]
 
-    for (const name of Object.keys(bundle)) {
+    for (const name in bundle) {
         if (name.startsWith(assetsDir))
             bundleAssetsNames.push(name)
         else if (name.endsWith('.html'))
@@ -118,7 +118,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
             document = dom.window.document,
             thisDel = new Set<string>(),
             newJSCode = [] as string[],
-            scriptElement = document.querySelector(`script[type=module]${assetsSrcSelector}`) as HTMLScriptElement | null,
+            scriptElement = document.querySelector<HTMLScriptElement>(`script[type=module]${assetsSrcSelector}`),
             scriptName = scriptElement ? cutPrefix(scriptElement.src, config.base) : ''
 
         let oldSize = oldHTML.length
@@ -261,9 +261,9 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
             if (options.useImportMetaPolyfill)
                 newJSCode.push(template.importmeta(scriptName))
 
-            // 此 polyfill 仅在以下选项的值为 true 时需要。
-            // config.build.rollupOptions.output.inlineDynamicImports
-            if (code.includes("__VITE_PRELOAD__"))
+            // 此 polyfill 仅在以下选项的值为 false 时需要。
+            // config.build.rolldownOptions.output.codeSplitting
+            if (/\b__VITE_PRELOAD__\b/.test(code))
                 newJSCode.push("var __VITE_PRELOAD__")
 
             newJSCode.push(code)

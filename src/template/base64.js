@@ -7,7 +7,7 @@ fetch("data:;base64,<script>")
 		r.body.pipeThrough(new DecompressionStream("<format>")),
 		{ headers: { "Content-Type": "text/javascript" } }
 	).blob())
-	.then(b =>
-		import(b = URL.createObjectURL(b))
-			.finally(_ => URL.revokeObjectURL(b))
-	);
+	.then(b => (
+		import(b = URL.createObjectURL(b)),
+		URL.revokeObjectURL(b)
+	));

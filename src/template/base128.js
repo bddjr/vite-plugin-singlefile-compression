@@ -30,7 +30,7 @@ while (ii < il) {
 new Response(
     new Blob([out]).stream().pipeThrough(new DecompressionStream("<format>")),
     { headers: { "Content-Type": "text/javascript" } }
-).blob().then(b =>
-    import(b = URL.createObjectURL(b))
-        .finally(_ => URL.revokeObjectURL(b))
-);
+).blob().then(b => (
+    import(b = URL.createObjectURL(b)),
+    URL.revokeObjectURL(b)
+));

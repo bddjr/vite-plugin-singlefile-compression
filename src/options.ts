@@ -1,5 +1,5 @@
-import { Options as htmlMinifierOptions } from 'html-minifier-terser'
-import { compressFormat, compressor } from './compress.js'
+import { Options as HtmlMinifierOptions } from 'html-minifier-terser'
+import { CompressFormat, compressFormatAlias, CompressFormatAlias, Compressor } from './compress.js'
 
 export interface Options {
     /**
@@ -11,7 +11,7 @@ export interface Options {
      * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
      * @default defaultHtmlMinifierTerserOptions
      */
-    htmlMinifierTerser?: htmlMinifierOptions | boolean
+    htmlMinifierTerser?: HtmlMinifierOptions | boolean
 
     /**
      * Try inline html used assets, if inlined or not used in JS.
@@ -46,17 +46,20 @@ export interface Options {
     useBase128?: boolean
 
     /**
-     * Compress format.  
+     * Compress format.
+     * 
      * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
-     * @type "deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd"
+     * 
+     * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
+     * 
      * @default "deflate-raw"
      */
-    compressFormat?: compressFormat
+    compressFormat?: CompressFormat | CompressFormatAlias
 
     /**
      * Custom compressor.
      */
-    compressor?: compressor
+    compressor?: Compressor
 
     /**
      * Use import.meta polyfill.
@@ -65,7 +68,7 @@ export interface Options {
     useImportMetaPolyfill?: boolean
 }
 
-export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
+export const defaultHtmlMinifierTerserOptions: HtmlMinifierOptions = {
     removeAttributeQuotes: true,
     removeComments: true,
     collapseWhitespace: true,
@@ -76,14 +79,14 @@ export const defaultHtmlMinifierTerserOptions: htmlMinifierOptions = {
 
 export interface innerOptions {
     rename?: string
-    htmlMinifierTerser: htmlMinifierOptions | false
+    htmlMinifierTerser: HtmlMinifierOptions | false
     tryInlineHtmlAssets: boolean
     removeInlinedAssetFiles: boolean
     tryInlineHtmlPublicIcon: boolean
     removeInlinedPublicIconFiles: boolean
     useBase128: boolean
-    compressFormat: compressFormat
-    compressor?: compressor
+    compressFormat: CompressFormat
+    compressor?: Compressor
     useImportMetaPolyfill: boolean
 }
 
@@ -91,7 +94,9 @@ export function getInnerOptions(opt?: Options): innerOptions {
     opt ||= {}
     return {
         rename:
-            opt.rename && opt.rename.replace(/(\.(html?)?)?$/, '.html'),
+            opt.rename == null
+                ? undefined
+                : String(opt.rename),
 
         htmlMinifierTerser:
             opt.htmlMinifierTerser == null || opt.htmlMinifierTerser === true
@@ -114,7 +119,13 @@ export function getInnerOptions(opt?: Options): innerOptions {
             opt.useBase128 ?? true,
 
         compressFormat:
-            opt.compressFormat || "deflate-raw",
+            opt.compressFormat
+                ? (
+                    compressFormatAlias.hasOwnProperty(opt.compressFormat)
+                        ? compressFormatAlias[opt.compressFormat as CompressFormatAlias]
+                        : String(opt.compressFormat) as CompressFormat
+                )
+                : "deflate-raw",
 
         compressor:
             typeof opt.compressor == 'function' ? opt.compressor : undefined,

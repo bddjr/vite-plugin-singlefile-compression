@@ -18,39 +18,56 @@ const compressors = {
         })
     },
     brotli: zlib.brotliCompressSync,
-    zstd: zlib.zstdCompressSync && function (buf: zlib.InputType) {
-        return zlib.zstdCompressSync(buf, {
+    zstd: zlib.zstdCompressSync && (
+        (buf: zlib.InputType) => zlib.zstdCompressSync(buf, {
             params: {
                 [zlib.constants.ZSTD_c_compressionLevel]: 19
             }
         })
-    },
+    ),
 }
 
-export type compressor = ((buf: zlib.InputType) => (Buffer | Uint8Array))
-export type compressFormat = keyof typeof compressors
+export const compressFormatAlias = Object.freeze({
+    deflateRaw: 'deflate-raw',
+    gz: 'gzip',
+    br: 'brotli',
+    brotliCompress: 'brotli',
+    zstandard: 'zstd',
+    zst: 'zstd',
+})
 
-function switchCompressor(format: compressFormat): compressor {
-    if (Object.prototype.hasOwnProperty.call(compressors, format)) {
+export type Compressor = ((buf: zlib.InputType) => (Buffer | Uint8Array))
+export type CompressFormat = keyof typeof compressors
+export type CompressFormatAlias = keyof typeof compressFormatAlias
+
+function switchCompressor(format: CompressFormat): Compressor {
+    if (compressors.hasOwnProperty(format)) {
         const f = compressors[format]
         if (f) return f
         throw Error(`Could not get compressor: Please upgrade node.js or set your compressor function.`)
     }
-    let funcName = format + 'CompressSync'
-    if (Object.prototype.hasOwnProperty.call(zlib, funcName)) {
-        const f = (zlib as any)[funcName]
-        if (typeof f == 'function') return f
+    {
+        const _format = format.replace(/-([a-zA-Z])/g, (m, a) => a.toUpperCase())
+        for (const funcName of [
+            _format + 'CompressSync',
+            _format + 'Sync'
+        ]) {
+            if (Object.prototype.hasOwnProperty.call(zlib, funcName)) {
+                const f = (zlib as any)[funcName]
+                if (typeof f == 'function') return f
+            }
+        }
     }
     throw Error(`Could not get compressor: Unknown compress format '${format}', please set your compressor function.`)
 }
 
-export function compress(format: compressFormat, buf: zlib.InputType, useBase128: boolean, compressor: compressor | undefined) {
+export function compress(format: CompressFormat, buf: zlib.InputType, useBase128: boolean, compressor: Compressor | undefined) {
     if (typeof compressor != 'function')
         compressor = switchCompressor(format)
     const outBuf = compressor(buf)
     if (useBase128)
         return base128.encode(outBuf).toJSTemplateLiterals()
-    if (outBuf instanceof Buffer)
+    if (Buffer.isBuffer(outBuf))
         return outBuf.toString('base64')
     if (typeof (outBuf as any).toBase64 == 'function') // Uint8Array Node25
         return (outBuf as any).toBase64()
