@@ -1,36 +1,18 @@
 <script setup lang="ts">
-defineProps<{
-  msg: string
-}>()
+import Markdown from '@/components/Markdown.vue';
+import mdText from '../md/description.md?raw'
 </script>
 
 <template>
   <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      <p>
-        Compress all assets and embeds them into <code>dist/index.html</code>, making it convenient to share as a single
-        HTML file.
-      </p>
-      <p>
-        The recipient can open it directly in the browser without manually unzipping the file.
-      </p>
-      <p>
-        Using <a target="_blank"
-          href="https://developer.mozilla.org/docs/Web/API/DecompressionStream">DecompressionStream</a> +
-        <a target="_blank" href="https://www.npmjs.com/package/base128-ascii">base128-ascii</a>.
-      </p>
-      <p>
-        Github: <a target="_blank"
-          href="https://github.com/bddjr/vite-plugin-singlefile-compression">https://github.com/bddjr/vite-plugin-singlefile-compression</a>
-      </p>
-    </h3>
+    <h1 class="green">vite plugin singlefile compression</h1>
+    <Markdown :md-text="mdText" class="md"></Markdown>
   </div>
 </template>
 
 <style scoped>
-p {
-  margin: 10px 0;
+.md p {
+  margin: 6px 0;
 }
 
 h1 {

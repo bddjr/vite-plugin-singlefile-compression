@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Markdown from '@/components/Markdown.vue';
-import mdText from '../md/license.md?raw'
+import mdText from '../md/setup.md?raw'
 </script>
 
 <template>

@@ -1,3 +1,5 @@
+# License
+
 The MIT License (MIT)
 Copyright © 2026 bddjr
 

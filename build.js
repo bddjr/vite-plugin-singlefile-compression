@@ -58,8 +58,9 @@ await rolldownBuild({
         dir: 'dist',
     },
     external(id) {
-        return !id.startsWith('.') && !id.startsWith('/') && !id.includes('\\');
+        return !id.startsWith('.') && !path.isAbsolute(id);
     },
+    // external: /^[^./](?!:[/\\])/,
     platform: 'node',
     plugins: [
         dts()

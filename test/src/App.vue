@@ -8,16 +8,19 @@ import HelloWorld from './components/HelloWorld.vue'
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="vite plugin singlefile compression" />
+      <HelloWorld />
 
       <nav>
         <RouterLink to="/">Setup</RouterLink>
+        <RouterLink to="/options">Options</RouterLink>
         <RouterLink to="/license">License</RouterLink>
       </nav>
     </div>
   </header>
 
-  <RouterView />
+  <Suspense>
+    <RouterView />
+  </Suspense>
 </template>
 
 <style scoped>
@@ -35,7 +38,7 @@ nav {
   width: 100%;
   font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
 }
 
 nav a.router-link-exact-active {
@@ -81,6 +84,6 @@ nav {
   font-size: 1rem;
 
   padding: 1rem 0;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 </style>
