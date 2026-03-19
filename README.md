@@ -132,14 +132,14 @@ vite v8.0.0 building client environment for production...
 vite-plugin-singlefile-compression 2.1.0 deflate-raw
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  1085.777 kB -> 455.447 kB
+  1085.847 kB -> 455.561 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  455.44 kB │ gzip: 397.40 kB
+dist/index.html  455.56 kB │ gzip: 397.49 kB
 
-✓ built in 426ms
+✓ built in 416ms
 ```
 
 ![](effect.jpg)
