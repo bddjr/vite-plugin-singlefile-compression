@@ -35,7 +35,7 @@ nav {
   width: 100%;
   font-size: 18px;
   text-align: left;
-  margin: 2rem 0 2rem -14px;
+  margin: 2rem 0 2rem -10px;
   padding: 8px 0;
 }
 
@@ -50,7 +50,7 @@ nav a.router-link-exact-active:hover {
 nav a {
   display: inline-block;
   /* padding: 0 1rem; */
-  padding: 0 14px;
+  padding: 0 10px;
   border-left: 1px solid var(--color-border);
 }
 
