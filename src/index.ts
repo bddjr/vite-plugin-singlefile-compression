@@ -170,7 +170,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                         globalDoNotDelete.add(name)
                 }
                 // add script for load css
-                allCSS += cssSource.replace(/(\/\*[^*]*\*\/)?\s*$/, '')
+                allCSS += cssSource.replace(/\s*(\/\*[^*]*\*\/)?\s*$/, '')
             }
             // remove tag
             if (options.enableCompress)
