@@ -77,7 +77,14 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
         pc.reset('\n\n') +
         pc.cyan('vite-plugin-singlefile-compression ' + version) +
         ' ' +
-        (options.enableCompress ? pc.green(options.compressFormat) : pc.red('disable compress'))
+        (options.enableCompress
+            ? pc.green(options.compressFormat + ' ' + (
+                options.useBase128
+                    ? 'base128-ascii'
+                    : 'base64'
+            ))
+            : pc.red('disable compress')
+        )
     )
 
     // rename

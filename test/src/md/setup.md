@@ -17,7 +17,7 @@ Then modify `vite.config.ts`, like [test/vite.config.ts](https://github.com/bddj
     ],
 ```
 
-Then use hash history, like [test/src/router/index.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/src/router/index.ts#L5)
+Then use hash history, like [test/src/router/index.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/src/router/index.ts)
 
 ```diff
   const router = createRouter({

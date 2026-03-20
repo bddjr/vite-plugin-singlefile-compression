@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MD from '@/md-vue/license.vue'
+import MD from '@/md-vue/clone.vue'
 </script>
 
 <template>

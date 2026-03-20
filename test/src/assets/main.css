@@ -3,32 +3,60 @@
 #app {
   max-width: 1024px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 1rem 2rem;
   font-weight: normal;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+  font-size: 14px;
+  background: rgba(128, 128, 128, 0.2);
   padding: 3px;
 }
 
-@media (hover: hover) {
+@media (prefers-color-scheme: dark) {
+  code {
+    background: rgba(128, 128, 128, 0.3);
+  }
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+a,
+.purple {
+  text-decoration: none;
+  color: hsl(270, 100%, 66%);
+  transition: background-color 0.4s;
+  padding: 3px;
+}
+
+a:hover {
+  background-color: hsla(270, 100%, 66%, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+
+  a,
+  .purple {
+    color: hsl(255, 100%, 80%);
+  }
+
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: hsla(255, 100%, 80%, 0.2);
   }
 }
 
 @media (min-width: 1024px) {
   body {
-    display: flex;
+    /* display: flex; */
     /* place-items: center; */
   }
 
   #app {
     /* display: grid; */
-    grid-template-columns: 1fr 1fr;
+    /* grid-template-columns: 1fr 1fr; */
   }
 }

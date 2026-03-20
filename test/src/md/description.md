@@ -5,3 +5,5 @@ The recipient can open it directly in the browser without manually unzipping the
 Using [DecompressionStream](https://developer.mozilla.org/docs/Web/API/DecompressionStream) + [base128-ascii](https://www.npmjs.com/package/base128-ascii).
 
 Github: https://github.com/bddjr/vite-plugin-singlefile-compression
+
+npm: https://www.npmjs.com/package/vite-plugin-singlefile-compression

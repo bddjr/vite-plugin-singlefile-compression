@@ -25,7 +25,7 @@ Then modify `vite.config.ts`, like [test/vite.config.ts](test/vite.config.ts)
     ],
 ```
 
-Then use hash history, like [test/src/router/index.ts](test/src/router/index.ts#L5)
+Then use hash history, like [test/src/router/index.ts](test/src/router/index.ts)
 
 ```diff
   const router = createRouter({
@@ -126,20 +126,20 @@ Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/
 
 ```
 vite v8.0.0 building client environment for production...
-✓ 315 modules transformed.
+✓ 42 modules transformed.
+rendering chunks (1)...
 
-
-vite-plugin-singlefile-compression 2.1.0 deflate-raw
+vite-plugin-singlefile-compression 2.1.1 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  1085.847 kB -> 455.561 kB
+  124.013 kB -> 50.35 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  455.56 kB │ gzip: 397.49 kB
+dist/index.html  50.35 kB │ gzip: 43.87 kB
 
-✓ built in 416ms
+✓ built in 296ms
 ```
 
 ![](effect.jpg)

@@ -8,10 +8,6 @@ import markdownit from 'markdown-it'
 import highlightjs from 'markdown-it-highlightjs';
 import 'highlight.js/styles/github-dark.min.css'
 
-import { ref } from 'vue';
-
-const mdHtml = ref('')
-
 const md = markdownit({
     breaks: true,
     linkify: true,
@@ -21,7 +17,7 @@ md.use(highlightjs, {
     auto: false,
 })
 
-mdHtml.value = md.render(props.mdText).replaceAll('<a ', '<a target=_blank ')
+const mdHtml = md.render(props.mdText).replaceAll('<a ', '<a target=_blank ')
 
 </script>
 
