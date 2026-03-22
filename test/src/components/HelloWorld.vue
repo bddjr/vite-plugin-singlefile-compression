@@ -12,7 +12,7 @@ import MD from '@/md-vue/description.vue'
 <style scoped>
 h1 {
   /* font-weight: 500; */
-  font-size: 2.6rem;
+  font-size: 34px;
   position: relative;
   top: -10px;
 }
@@ -27,6 +27,10 @@ h3 {
 }
 
 @media (min-width: 1024px) {
+  h1 {
+    /* font-size: 2.6rem; */
+  }
+
   .greetings h1 {
     margin-top: 0;
   }
