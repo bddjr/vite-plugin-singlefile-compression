@@ -23,7 +23,7 @@ export interface Options {
      * 
      * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
      * 
-     * @default "deflate-raw"
+     * @default "brotli"
      */
     compressFormat?: CompressFormat | CompressFormatAlias
 
@@ -135,7 +135,7 @@ export function getInnerOptions(opt?: Options): InnerOptions {
                         ? compressFormatAlias[opt.compressFormat as CompressFormatAlias]
                         : String(opt.compressFormat) as CompressFormat
                 )
-                : "deflate-raw",
+                : "brotli",
 
         compressor:
             typeof opt.compressor == 'function' ? opt.compressor : undefined,

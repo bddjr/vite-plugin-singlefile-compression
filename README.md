@@ -70,7 +70,7 @@ export interface Options {
      * 
      * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
      * 
-     * @default "deflate-raw"
+     * @default "brotli"
      */
     compressFormat?: CompressFormat | CompressFormatAlias
 
@@ -131,17 +131,17 @@ vite v8.0.1 building client environment for production...
 ✓ 42 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.1.2 deflate-raw base128-ascii
+vite-plugin-singlefile-compression 2.1.2 brotli base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  123.867 kB -> 50.297 kB
+  123.862 kB -> 43.995 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  50.29 kB │ gzip: 43.81 kB
+dist/index.html  43.99 kB │ gzip: 38.36 kB
 
-✓ built in 318ms
+✓ built in 482ms
 ```
 
 ![](effect.jpg)

@@ -32,7 +32,7 @@
      * 
      * <span class="hljs-doctag">@type</span> {<span class="hljs-type">&quot;deflate-raw&quot; | &quot;deflate&quot; | &quot;gzip&quot; | &quot;brotli&quot; | &quot;zstd&quot; | &quot;deflateRaw&quot; | &quot;gz&quot; | &quot;br&quot; | &quot;brotliCompress&quot; | &quot;zstandard&quot; | &quot;zst&quot;</span>}
      * 
-     * <span class="hljs-doctag">@default</span> &quot;deflate-raw&quot;
+     * <span class="hljs-doctag">@default</span> &quot;brotli&quot;
      */</span>
     <span class="hljs-attr">compressFormat</span>?: <span class="hljs-title class_">CompressFormat</span> | <span class="hljs-title class_">CompressFormatAlias</span>
 

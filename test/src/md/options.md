@@ -33,7 +33,7 @@ export interface Options {
      * 
      * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
      * 
-     * @default "deflate-raw"
+     * @default "brotli"
      */
     compressFormat?: CompressFormat | CompressFormatAlias
 
