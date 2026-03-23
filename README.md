@@ -144,8 +144,6 @@ dist/index.html  43.99 kB │ gzip: 38.36 kB
 ✓ built in 482ms
 ```
 
-![](effect.jpg)
-
 ## Clone
 
 ```
