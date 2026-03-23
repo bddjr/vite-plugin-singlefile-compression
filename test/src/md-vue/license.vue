@@ -1,3 +1,7 @@
+<!--
+  Generate by build-md.mjs
+  Do not manually modify!
+-->
 <template>
 <h1>License</h1>
 <p>The MIT License (MIT)<br>

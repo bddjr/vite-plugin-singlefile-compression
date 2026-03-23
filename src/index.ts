@@ -83,7 +83,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
                     ? 'base128-ascii'
                     : 'base64'
             ))
-            : pc.red('disable compress')
+            : pc.red('disable-compress')
         )
     )
 

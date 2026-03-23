@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-singlefile-compression",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "author": "bddjr",
   "license": "MIT",
   "description": "Compress all assets and embeds them into dist/index.html, making it convenient to share as a single HTML file.",
@@ -53,7 +53,8 @@
     "jsdom": ">=28.1.0",
     "mime": ">=4.1.0",
     "mini-svg-data-uri": ">=1.4.4",
-    "picocolors": ">=1.1.1"
+    "picocolors": ">=1.1.1",
+    "vite": ">=3.0.0"
   },
   "devDependencies": {
     "@types/jsdom": ">=28.0.0",
@@ -64,7 +65,6 @@
     "rolldown": ">=1.0.0-rc.9",
     "rolldown-plugin-dts": "^0.22.5",
     "rollup": ">=4.59.0",
-    "typescript": ">=5.9.3",
-    "vite": ">=8.0.0"
+    "typescript": ">=5.9.3"
   }
 }

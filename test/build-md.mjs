@@ -17,6 +17,12 @@ md.use(highlightjs, {
 for (const name of fs.readdirSync('src/md')) {
     const mdText = fs.readFileSync('src/md/' + name).toString()
     const html = md.render(mdText).replaceAll('<a ', '<a target="_blank" ')
-    const vue = '<template>\n' + html + '\n</template>'
+    const vue = `<!--
+  Generate by build-md.mjs
+  Do not manually modify!
+-->
+<template>
+${html}
+</template>`
     fs.writeFileSync('src/md-vue/' + name.replace(/\.md$/i, '.vue'), vue)
 }

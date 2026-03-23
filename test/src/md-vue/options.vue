@@ -1,3 +1,7 @@
+<!--
+  Generate by build-md.mjs
+  Do not manually modify!
+-->
 <template>
 <h1>Options</h1>
 <p>Example:</p>
@@ -5,7 +9,7 @@
   <span class="hljs-attr">rename</span>: <span class="hljs-string">&#x27;example.html&#x27;</span>
 }),
 </code></pre>
-<p>More info see <a target="_blank" href="https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/src/options.ts">src/options.ts</a></p>
+<p>More options see <a target="_blank" href="https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/src/options.ts">src/options.ts</a></p>
 <pre><code class="hljs language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Options</span> {
     <span class="hljs-comment">/**
      * Enable compress.

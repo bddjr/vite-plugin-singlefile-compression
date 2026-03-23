@@ -1,3 +1,7 @@
+<!--
+  Generate by build-md.mjs
+  Do not manually modify!
+-->
 <template>
 <h1>Setup</h1>
 <pre><code class="hljs">npm i vite-plugin-singlefile-compression@latest -D

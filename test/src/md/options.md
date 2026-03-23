@@ -8,7 +8,7 @@ singleFileCompression({
 }),
 ```
 
-More info see [src/options.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/src/options.ts)
+More options see [src/options.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/src/options.ts)
 
 ```ts
 export interface Options {
