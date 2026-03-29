@@ -3,6 +3,11 @@ import { CompressFormat, compressFormatAlias, CompressFormatAlias, Compressor } 
 
 export interface Options {
     /**
+     * Rename index.html
+     */
+    rename?: string
+
+    /**
      * Enable compress.
      * @default true
      */
@@ -31,11 +36,6 @@ export interface Options {
      * Custom compressor.
      */
     compressor?: Compressor
-
-    /**
-     * Rename index.html
-     */
-    rename?: string
 
     /**
      * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
@@ -84,29 +84,44 @@ export const defaultHtmlMinifierTerserOptions: HtmlMinifierOptions = {
 }
 
 export interface InnerOptions {
+    rename: string | undefined
     enableCompress: boolean
-    rename?: string
+    useBase128: boolean
+    compressFormat: CompressFormat
+    compressor: Compressor | undefined
     htmlMinifierTerser: HtmlMinifierOptions | false
     tryInlineHtmlAssets: boolean
     removeInlinedAssetFiles: boolean
     tryInlineHtmlPublicIcon: boolean
     removeInlinedPublicIconFiles: boolean
-    useBase128: boolean
-    compressFormat: CompressFormat
-    compressor?: Compressor
     useImportMetaPolyfill: boolean
 }
 
 export function getInnerOptions(opt?: Options): InnerOptions {
     opt ||= {}
     return {
-        enableCompress:
-            opt.enableCompress ?? true,
-
         rename:
             opt.rename == null
                 ? undefined
                 : String(opt.rename),
+
+        enableCompress:
+            opt.enableCompress ?? true,
+
+        useBase128:
+            opt.useBase128 ?? true,
+
+        compressFormat:
+            opt.compressFormat
+                ? (
+                    compressFormatAlias.hasOwnProperty(opt.compressFormat)
+                        ? compressFormatAlias[opt.compressFormat as CompressFormatAlias]
+                        : String(opt.compressFormat) as CompressFormat
+                )
+                : "deflate-raw",
+
+        compressor:
+            typeof opt.compressor == 'function' ? opt.compressor : undefined,
 
         htmlMinifierTerser:
             opt.htmlMinifierTerser == null || opt.htmlMinifierTerser === true
@@ -124,21 +139,6 @@ export function getInnerOptions(opt?: Options): InnerOptions {
 
         removeInlinedPublicIconFiles:
             opt.removeInlinedPublicIconFiles ?? true,
-
-        useBase128:
-            opt.useBase128 ?? true,
-
-        compressFormat:
-            opt.compressFormat
-                ? (
-                    compressFormatAlias.hasOwnProperty(opt.compressFormat)
-                        ? compressFormatAlias[opt.compressFormat as CompressFormatAlias]
-                        : String(opt.compressFormat) as CompressFormat
-                )
-                : "deflate-raw",
-
-        compressor:
-            typeof opt.compressor == 'function' ? opt.compressor : undefined,
 
         useImportMetaPolyfill:
             opt.useImportMetaPolyfill ?? true,

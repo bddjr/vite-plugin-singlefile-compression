@@ -9,6 +9,9 @@
   <span class="hljs-attr">rename</span>: <span class="hljs-string">&#x27;example.html&#x27;</span>
 }),
 </code></pre>
+<h3>rename</h3>
+<p>Rename index.html</p>
+<p>type: <code>string</code></p>
 <h3>enableCompress</h3>
 <p>Enable compress.</p>
 <p>default: <code>true</code></p>
@@ -40,9 +43,6 @@ If false, use Base64.<br>
 <h3>compressor</h3>
 <p>Custom compressor.</p>
 <p>type: <code>(buf: zlib.InputType) =&gt; (Buffer | Uint8Array | Promise&lt;Buffer | Uint8Array&gt;)</code></p>
-<h3>rename</h3>
-<p>Rename index.html</p>
-<p>type: <code>string</code></p>
 <h3>htmlMinifierTerser</h3>
 <p><a target="_blank" href="https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference">https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference</a></p>
 <p>default: <code>defaultHtmlMinifierTerserOptions</code></p>

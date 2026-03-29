@@ -45,6 +45,12 @@ singleFileCompression({
 }),
 ```
 
+### rename
+
+Rename index.html
+
+type: `string`
+
 ### enableCompress
 
 Enable compress.
@@ -89,12 +95,6 @@ type:
 Custom compressor.
 
 type: `(buf: zlib.InputType) => (Buffer | Uint8Array | Promise<Buffer | Uint8Array>)`
-
-### rename
-
-Rename index.html
-
-type: `string`
 
 ### htmlMinifierTerser
 
