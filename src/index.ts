@@ -359,7 +359,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
         // delete inlined public files
         for (const name of globalRemoveDistFileNames) {
             try {
-                fs.unlinkSync(path.join(config.build.outDir, name))
+                fs.rmSync(path.join(config.build.outDir, name), { force: true })
             } catch (e) {
                 console.error(e)
             }
