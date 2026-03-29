@@ -233,7 +233,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             let needInline = true
             let iconName = 'favicon.ico'
             // replace tag
-            const element = document.querySelector(`link[rel=icon][href^="${config.base}"], link[rel="shortcut icon"][href^="${config.base}"]`) as HTMLLinkElement
+            const element = document.querySelector<HTMLLinkElement>(`link[rel=icon][href^="${config.base}"], link[rel="shortcut icon"][href^="${config.base}"]`)
             if (element) {
                 iconName = cutPrefix(element.href, config.base)
                 if (bundleAssetsNames.includes(iconName)) {
