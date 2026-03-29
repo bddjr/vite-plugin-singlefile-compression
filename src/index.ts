@@ -1,6 +1,6 @@
 import { UserConfig, PluginOption, ResolvedConfig, ConfigPluginContext, ConfigEnv } from "vite"
 import { RollupOptions } from 'rollup'
-import { OutputBundle, OutputChunk, OutputAsset } from 'rolldown'
+import { OutputBundle, OutputChunk, OutputAsset, PluginContext } from 'rolldown'
 import pc from "picocolors"
 import { minify as htmlMinify } from 'html-minifier-terser'
 import { JSDOM } from 'jsdom'
@@ -21,7 +21,7 @@ export function singleFileCompression(opt?: Options): PluginOption {
     let conf: ResolvedConfig
     const innerOptions = getInnerOptions(opt)
     return {
-        name: "singleFileCompression",
+        name: "vite-plugin-singlefile-compression",
         enforce: "post",
         config(...args) {
             return setConfig.call(this, innerOptions, ...args)
@@ -29,8 +29,8 @@ export function singleFileCompression(opt?: Options): PluginOption {
         configResolved(c) {
             conf = c
         },
-        generateBundle(outputOptions, bundle) {
-            return generateBundle(bundle, conf, innerOptions)
+        generateBundle(outputOptions, bundle, isWrite) {
+            return generateBundle.call(this, bundle, conf, innerOptions)
         },
     }
 }
@@ -72,7 +72,7 @@ function setConfig(this: ConfigPluginContext, opt: InnerOptions, config: UserCon
     }
 }
 
-async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, options: InnerOptions) {
+async function generateBundle(this: PluginContext, bundle: OutputBundle, config: ResolvedConfig, options: InnerOptions) {
     console.log(
         pc.reset('\n\n') +
         pc.cyan('vite-plugin-singlefile-compression ' + version) +
