@@ -45,82 +45,107 @@ singleFileCompression({
 }),
 ```
 
-More options see [src/options.ts](src/options.ts)
+### enableCompress
 
-```ts
-export interface Options {
-    /**
-     * Enable compress.
-     * @default true
-     */
-    enableCompress?: boolean
+Enable compress.
 
-    /**
-     * Use Base128 to encode compressed script.
-     * If false, use Base64.
-     * https://www.npmjs.com/package/base128-ascii
-     * @default true
-     */
-    useBase128?: boolean
+default: `true`
 
-    /**
-     * Compress format.
-     * 
-     * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
-     * 
-     * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
-     * 
-     * @default "deflate-raw"
-     */
-    compressFormat?: CompressFormat | CompressFormatAlias
+type: `boolean`
 
-    /**
-     * Custom compressor.
-     */
-    compressor?: Compressor
+### useBase128
 
-    /**
-     * Rename index.html
-     */
-    rename?: string
+Use Base128 to encode compressed script.  
+If false, use Base64.  
+https://www.npmjs.com/package/base128-ascii
 
-    /**
-     * https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
-     * @default defaultHtmlMinifierTerserOptions
-     */
-    htmlMinifierTerser?: HtmlMinifierOptions | boolean
+default: `true`
 
-    /**
-     * Try inline html used assets, if inlined or not used in JS.
-     * @default true
-     */
-    tryInlineHtmlAssets?: boolean
+type: `boolean`
 
-    /**
-     * Remove inlined asset files.
-     * @default true
-     */
-    removeInlinedAssetFiles?: boolean
+### compressFormat
 
-    /**
-     * Try inline html icon, if icon is in public dir.
-     * @default true
-     */
-    tryInlineHtmlPublicIcon?: boolean
+Compress format.
 
-    /**
-     * Remove inlined html icon files.
-     * @default true
-     */
-    removeInlinedPublicIconFiles?: boolean
+https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
 
-    /**
-     * Use import.meta polyfill.
-     * @default true
-     */
-    useImportMetaPolyfill?: boolean
-}
-```
+default: `"deflate-raw"`
+
+type:
+ - `"deflate-raw"`
+ - `"deflate"`
+ - `"gzip"`
+ - `"brotli"`
+ - `"zstd"`
+ - `"deflateRaw"`
+ - `"gz"`
+ - `"br"`
+ - `"brotliCompress"`
+ - `"zstandard"`
+ - `"zst"`
+
+### compressor
+
+Custom compressor.
+
+type: `(buf: zlib.InputType) => (Buffer | Uint8Array)`
+
+### rename
+
+Rename index.html
+
+type: `string`
+
+### htmlMinifierTerser
+
+https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
+
+default: `defaultHtmlMinifierTerserOptions`
+
+type:
+ - `HtmlMinifierOptions`
+ - `boolean`
+
+### tryInlineHtmlAssets
+
+Try inline html used assets, if inlined or not used in JS.
+
+default: `true`
+
+type: `boolean`
+
+### removeInlinedAssetFiles
+
+Remove inlined asset files.
+
+default: `true`
+
+type: `boolean`
+
+### tryInlineHtmlPublicIcon
+
+Try inline html icon, if icon is in public dir.
+
+default: `true`
+
+type: `boolean`
+
+### removeInlinedPublicIconFiles
+
+Remove inlined html icon files.
+
+default: `true`
+
+type: `boolean`
+
+### useImportMetaPolyfill
+
+Use import.meta polyfill.
+
+default: `true`
+
+type: `boolean`
+
 
 ## Effect
 
@@ -131,17 +156,17 @@ vite v8.0.3 building client environment for production...
 ✓ 42 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.1.2 deflate-raw base128-ascii
+vite-plugin-singlefile-compression 2.1.3 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  124.166 kB -> 50.332 kB
+  122.702 kB -> 50.242 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  50.33 kB │ gzip: 43.87 kB
+dist/index.html  50.24 kB │ gzip: 43.77 kB
 
-✓ built in 315ms
+✓ built in 337ms
 ```
 
 ## Clone
@@ -153,5 +178,5 @@ npm i
 cd test
 npm i
 cd ..
-node --run build
+npm run build
 ```

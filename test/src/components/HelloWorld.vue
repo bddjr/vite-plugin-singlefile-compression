@@ -12,6 +12,7 @@ import MD from '@/md-vue/description.vue'
 <style scoped>
 h1 {
   /* font-weight: 500; */
+  font-weight: normal;
   font-size: 34px;
   position: relative;
   top: -10px;

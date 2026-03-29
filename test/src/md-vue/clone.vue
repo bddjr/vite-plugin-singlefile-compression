@@ -10,7 +10,7 @@ npm i
 cd test
 npm i
 cd ..
-node --run build
+npm run build
 </code></pre>
 
 </template>
