@@ -39,7 +39,7 @@ If false, use Base64.<br>
 </ul>
 <h3>compressor</h3>
 <p>Custom compressor.</p>
-<p>type: <code>(buf: zlib.InputType) =&gt; (Buffer | Uint8Array)</code></p>
+<p>type: <code>(buf: zlib.InputType) =&gt; (Buffer | Uint8Array | Promise&lt;Buffer | Uint8Array&gt;)</code></p>
 <h3>rename</h3>
 <p>Rename index.html</p>
 <p>type: <code>string</code></p>

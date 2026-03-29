@@ -331,7 +331,7 @@ async function generateBundle(bundle: OutputBundle, config: ResolvedConfig, opti
 
         let outputScript = newJSCode.join(';')
         if (options.enableCompress) {
-            outputScript = template.base(outputScript, options.compressFormat, options.useBase128, options.compressor)
+            outputScript = await template.base(outputScript, options.compressFormat, options.useBase128, options.compressor)
         } else {
             outputScript = outputScript.replaceAll('</script', '<\\/script')
         }

@@ -17,8 +17,8 @@ const files = {
 }
 
 export const template = {
-    base(script: string, format: CompressFormat, useBase128: boolean, compressor: Compressor | undefined) {
-        script = compress(format, script, useBase128, compressor)
+    async base(script: string, format: CompressFormat, useBase128: boolean, compressor: Compressor | undefined) {
+        script = await compress(format, script, useBase128, compressor)
         if (useBase128) {
             return files.base128
                 .replace("<format>", format)

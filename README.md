@@ -88,7 +88,7 @@ type:
 
 Custom compressor.
 
-type: `(buf: zlib.InputType) => (Buffer | Uint8Array)`
+type: `(buf: zlib.InputType) => (Buffer | Uint8Array | Promise<Buffer | Uint8Array>)`
 
 ### rename
 
@@ -159,12 +159,12 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression 2.1.3 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  122.702 kB -> 50.242 kB
+  122.739 kB -> 50.208 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  50.24 kB │ gzip: 43.77 kB
+dist/index.html  50.20 kB │ gzip: 43.76 kB
 
 ✓ built in 337ms
 ```

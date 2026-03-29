@@ -51,7 +51,7 @@ type:
 
 Custom compressor.
 
-type: `(buf: zlib.InputType) => (Buffer | Uint8Array)`
+type: `(buf: zlib.InputType) => (Buffer | Uint8Array | Promise<Buffer | Uint8Array>)`
 
 ### rename
 

@@ -36,8 +36,8 @@ export const compressFormatAlias = Object.freeze({
     zst: 'zstd',
 })
 
-export type Compressor = ((buf: zlib.InputType) => (Buffer | Uint8Array))
-export type CompressFormat = keyof typeof compressors
+export type Compressor = ((buf: zlib.InputType) => (Buffer | Uint8Array | Promise<Buffer | Uint8Array>))
+export type CompressFormat = keyof typeof compressors | CompressionFormat
 export type CompressFormatAlias = keyof typeof compressFormatAlias
 
 function switchCompressor(format: CompressFormat): Compressor {
@@ -58,13 +58,24 @@ function switchCompressor(format: CompressFormat): Compressor {
             }
         }
     }
+    try {
+        const cs = new CompressionStream(format as CompressionFormat)
+        return (buf) => new Response(
+            new ReadableStream({
+                start(controller) {
+                    controller.enqueue(buf)
+                    controller.close()
+                },
+            }).pipeThrough(cs)
+        ).bytes()
+    } catch { }
     throw Error(`Could not get compressor: Unknown compress format '${format}', please set your compressor function.`)
 }
 
-export function compress(format: CompressFormat, buf: zlib.InputType, useBase128: boolean, compressor: Compressor | undefined) {
+export async function compress(format: CompressFormat, buf: zlib.InputType, useBase128: boolean, compressor: Compressor | undefined) {
     if (typeof compressor != 'function')
         compressor = switchCompressor(format)
-    const outBuf = compressor(buf)
+    const outBuf = await compressor(buf)
     if (useBase128)
         return base128.encode(outBuf).toJSTemplateLiterals()
     if (Buffer.isBuffer(outBuf))
