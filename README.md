@@ -11,7 +11,7 @@ Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/
 ## Setup
 
 ```
-npm i vite-plugin-singlefile-compression@latest -D
+npm i -D vite-plugin-singlefile-compression@latest
 ```
 
 Then modify `vite.config.ts`, like [test/vite.config.ts](test/vite.config.ts)
@@ -156,7 +156,7 @@ vite v8.0.3 building client environment for production...
 ✓ 42 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.2.0 deflate-raw base128-ascii
+vite-plugin-singlefile-compression 2.2.1 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
   122.739 kB -> 50.220 kB
@@ -166,7 +166,7 @@ Finish.
 computing gzip size...
 dist/index.html  50.22 kB │ gzip: 43.77 kB
 
-✓ built in 317ms
+✓ built in 461ms
 ```
 
 ## Clone
