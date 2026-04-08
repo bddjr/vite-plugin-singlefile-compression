@@ -9,7 +9,9 @@ import path from 'path'
 import fs from 'fs'
 import { pathToFileURL } from "url"
 
-import { version } from './getVersion.js'
+//@ts-ignore
+import { version } from '../package.json' with { type: "json" }
+
 import { template } from './getTemplate.js'
 import { bufferToDataURL } from "./dataurl.js"
 import { kB } from "./kB.js"

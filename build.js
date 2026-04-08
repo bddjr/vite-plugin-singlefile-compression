@@ -4,9 +4,6 @@ import path from 'path'
 import esbuild from 'esbuild'
 import { minify_sync } from 'terser'
 
-import packageJson from './package.json' with {type: 'json'}
-
-fs.writeFileSync('dist/getVersion.js', `export var version=` + JSON.stringify(packageJson.version))
 
 let result = esbuild.buildSync({
     entryPoints: fs.globSync('src/template/*.js').filter(v => path.basename(v) != 'base128.js'),
