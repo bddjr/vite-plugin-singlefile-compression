@@ -1,6 +1,6 @@
-import { UserConfig, PluginOption, ResolvedConfig, ConfigPluginContext, ConfigEnv } from "vite"
-import { RollupOptions } from 'rollup'
-import { OutputBundle, OutputChunk, OutputAsset, PluginContext } from 'rolldown'
+import type { UserConfig, PluginOption, ResolvedConfig, ConfigPluginContext, ConfigEnv } from "vite"
+import type { RollupOptions } from 'rollup'
+import type { OutputBundle, OutputChunk, OutputAsset, PluginContext } from 'rolldown'
 import pc from "picocolors"
 import { minify as htmlMinify } from 'html-minifier-terser'
 import { JSDOM } from 'jsdom'
@@ -9,15 +9,14 @@ import path from 'path'
 import fs from 'fs'
 import { pathToFileURL } from "url"
 
-//@ts-ignore
 import { version } from '../package.json' with { type: "json" }
 
 import { template } from './getTemplate.js'
 import { bufferToDataURL } from "./dataurl.js"
 import { kB } from "./kB.js"
-import { getInnerOptions, Options, InnerOptions as InnerOptions, HtmlMinifierOptions, defaultHtmlMinifierTerserOptions } from "./options.js"
+import { getInnerOptions, type Options, type InnerOptions as InnerOptions, type HtmlMinifierOptions, defaultHtmlMinifierTerserOptions } from "./options.js"
 import { cutPrefix } from "./cutPrefix.js"
-import { CompressFormat, CompressFormatAlias, Compressor } from "./compress.js"
+import { type CompressFormat, type CompressFormatAlias, type Compressor } from "./compress.js"
 
 export function singleFileCompression(opt?: Options): PluginOption {
     let conf: ResolvedConfig

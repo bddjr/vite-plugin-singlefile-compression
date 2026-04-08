@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
     "target": "es2021",
-    "module": "node20",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "rootDir": "src",
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "declaration": true,
+    "declaration": false,
     "sourceMap": false,
     "strict": true,
     "checkJs": false,
-    "removeComments": false
+    "removeComments": false,
+    "noEmit": true
   },
   "include": ["src"],
   "exclude": ["src/template", "dist", "_dist", "node_modules"]

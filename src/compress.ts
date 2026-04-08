@@ -19,22 +19,22 @@ const compressors = {
     },
     brotli: zlib.brotliCompressSync,
     zstd: zlib.zstdCompressSync && (
-        (buf: zlib.InputType) => zlib.zstdCompressSync(buf, {
+        (buf: zlib.InputType): Buffer => zlib.zstdCompressSync(buf, {
             params: {
                 [zlib.constants.ZSTD_c_compressionLevel]: 19
             }
         })
     ),
-}
+} as const
 
-export const compressFormatAlias = Object.freeze({
+export const compressFormatAlias = {
     deflateRaw: 'deflate-raw',
     gz: 'gzip',
     br: 'brotli',
     brotliCompress: 'brotli',
     zstandard: 'zstd',
     zst: 'zstd',
-})
+} as const
 
 export type Compressor = ((buf: zlib.InputType) => (Buffer | Uint8Array | Promise<Buffer | Uint8Array>))
 export type CompressFormat = keyof typeof compressors | CompressionFormat

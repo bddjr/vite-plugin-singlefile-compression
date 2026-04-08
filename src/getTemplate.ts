@@ -1,5 +1,5 @@
 import { compress, CompressFormat, Compressor } from './compress.js'
-import { raw } from './templateRaw.js'
+import raw from './templateRaw.js'
 
 function split2(str: string, separator: string) {
     const s = str.split(separator)

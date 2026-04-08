@@ -1,8 +1,8 @@
-export var raw: {
-    base64: string,
-    base128: string,
-    assets: string,
-    css: string,
-    icon: string,
-    importmeta: string,
+export default {} as {
+    readonly base64: string
+    readonly base128: string
+    readonly assets: string
+    readonly css: string
+    readonly icon: string
+    readonly importmeta: string
 }

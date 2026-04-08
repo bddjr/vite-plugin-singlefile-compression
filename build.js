@@ -4,6 +4,8 @@ import path from 'path'
 import esbuild from 'esbuild'
 import { minify_sync } from 'terser'
 
+fs.rmSync('dist', { recursive: true, force: true })
+fs.mkdirSync('dist')
 
 let result = esbuild.buildSync({
     entryPoints: fs.globSync('src/template/*.js').filter(v => path.basename(v) != 'base128.js'),
@@ -42,16 +44,12 @@ for (const i of result.outputFiles) {
         }
     })
     // @ts-ignore
-    raw['base128'] = minifyOutput.code.replace(/;?\s*$/, '')
+    raw.base128 = minifyOutput.code.replace(/;?\s*$/, '')
 }
 
-fs.writeFileSync('dist/templateRaw.js', `export var raw=` + JSON.stringify(raw))
+const templateRawFilePath = 'dist/templateRaw.json'
 
-for (const name of fs.globSync('src/**/*.d.ts')) {
-    const distName = name.replace('src', 'dist');
-    fs.existsSync(distName) || fs.cpSync(name, distName)
-}
-
+fs.writeFileSync(templateRawFilePath, JSON.stringify(raw))
 
 
 // bundle
@@ -59,12 +57,9 @@ for (const name of fs.globSync('src/**/*.d.ts')) {
 import { build as rolldownBuild } from 'rolldown'
 import { dts } from 'rolldown-plugin-dts'
 
-fs.renameSync('dist', '_dist')
-
 await rolldownBuild({
     input: [
-        './_dist/index.js',
-        './_dist/index.d.ts',
+        'src/index.ts',
     ],
     transform: {
         target: 'es2021'
@@ -76,9 +71,15 @@ await rolldownBuild({
     external(id) {
         return !id.startsWith('.') && !path.isAbsolute(id);
     },
-    // external: /^[^./](?!:[/\\])/,
     platform: 'node',
     plugins: [
         dts()
     ],
+    resolve: {
+        alias: {
+            './templateRaw.js': '../' + templateRawFilePath,
+        },
+    },
 })
+
+fs.rmSync(templateRawFilePath)

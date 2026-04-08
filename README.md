@@ -166,7 +166,7 @@ Finish.
 computing gzip size...
 dist/index.html  50.17 kB │ gzip: 43.76 kB
 
-✓ built in 293ms
+✓ built in 280ms
 ```
 
 ## Clone
