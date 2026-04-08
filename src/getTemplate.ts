@@ -21,12 +21,12 @@ export const template = {
         script = await compress(format, script, useBase128, compressor)
         if (useBase128) {
             return files.base128
-                .replace("<format>", format)
-                .split('"<script>"', 2).join(script)
+                .replace("<format>", () => format)
+                .replace('"<script>"', () => script)
         }
         return files.base64
-            .replace("<format>", format)
-            .split("<script>", 2).join(script)
+            .replace("<format>", () => format)
+            .replace("<script>", () => script)
     },
     assets(assetsJSON: string) {
         return files.assets.join(assetsJSON)

@@ -338,7 +338,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             outputScript = outputScript.replaceAll('</script', '<\\/script')
         }
 
-        htmlChunk.source = htmlChunk.source.split(fakeScript, 2).join(outputScript)
+        htmlChunk.source = htmlChunk.source.replace(fakeScript, () => outputScript)
 
         // log
         console.log("  " + pc.gray(kB(oldSize) + " -> ") + pc.cyanBright(kB(Buffer.byteLength(htmlChunk.source))) + '\n')
