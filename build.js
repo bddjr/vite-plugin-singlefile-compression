@@ -2,13 +2,14 @@ import fs from 'fs'
 import path from 'path'
 
 import esbuild from 'esbuild'
+import { minify_sync } from 'terser'
 
 import packageJson from './package.json' with {type: 'json'}
 
 fs.writeFileSync('dist/getVersion.js', `export var version=` + JSON.stringify(packageJson.version))
 
 let result = esbuild.buildSync({
-    entryPoints: fs.globSync('src/template/*.js'),
+    entryPoints: fs.globSync('src/template/*.js').filter(v => path.basename(v) != 'base128.js'),
     outdir: './',
     entryNames: '[name]',
     write: false,
@@ -27,6 +28,23 @@ const raw = {}
 
 for (const i of result.outputFiles) {
     raw[path.basename(i.path).replace(/\.js$/, '')] = i.text.replace(/;?\s*$/, '')
+}
+
+{
+    const rawCode = fs.readFileSync('src/template/base128.js').toString()
+    const minifyOutput = minify_sync(rawCode, {
+        module: true,
+        format: {
+            wrap_iife: false,
+            quote_style: 2,
+        },
+        compress: {
+            module: true,
+            evaluate: false,
+        }
+    })
+    // @ts-ignore
+    raw['base128'] = minifyOutput.code.replace(/;?\s*$/, '')
 }
 
 fs.writeFileSync('dist/templateRaw.js', `export var raw=` + JSON.stringify(raw))
