@@ -148,7 +148,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             scriptElement = document.querySelector<HTMLScriptElement>(`script[type=module]${assetsSrcSelector}`),
             scriptName = scriptElement ? cutPrefix(scriptElement.src, config.base) : ''
 
-        let oldSize = oldHTML.length
+        let oldSize = Buffer.byteLength(oldHTML)
 
         // fill fake script
         if (scriptElement) {
@@ -170,7 +170,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             const css = bundle[name] as OutputAsset
             const cssSource = css.source as string
             if (cssSource) {
-                oldSize += cssSource.length
+                oldSize += Buffer.byteLength(cssSource)
                 // do not delete not inlined asset
                 for (const name of bundleAssetsNames) {
                     if (cssSource.includes(name.slice(assetsDir.length)))
@@ -209,12 +209,14 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
                     if (!a)
                         continue
                     thisDel.add(bundleName)
-                    oldSize += a.source.length
                     let dataURL: string
                     if (Object.prototype.hasOwnProperty.call(globalAssetsDataURL, name)) {
+                        oldSize += Buffer.byteLength(a.source)
                         dataURL = globalAssetsDataURL[name]
                     } else {
-                        globalAssetsDataURL[name] = dataURL = bufferToDataURL(name, Buffer.from(a.source))
+                        const buf = Buffer.from(a.source)
+                        oldSize += buf.length
+                        globalAssetsDataURL[name] = dataURL = bufferToDataURL(name, buf)
                     }
                     if (options.enableCompress) {
                         assetsDataURL[name] = dataURL
@@ -304,7 +306,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         if (scriptElement) {
             thisDel.add(scriptName)
             let { code } = bundle[scriptName] as OutputChunk
-            oldSize += code.length
+            oldSize += Buffer.byteLength(code)
             code = code.replace(/;?\n?$/, '')
             // do not delete not inlined asset
             for (const name of bundleAssetsNames) {
@@ -339,7 +341,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         htmlChunk.source = htmlChunk.source.split(fakeScript, 2).join(outputScript)
 
         // log
-        console.log("  " + pc.gray(kB(oldSize) + " -> ") + pc.cyanBright(kB(htmlChunk.source.length)) + '\n')
+        console.log("  " + pc.gray(kB(oldSize) + " -> ") + pc.cyanBright(kB(Buffer.byteLength(htmlChunk.source))) + '\n')
 
         // delete assets
         for (const name of thisDel) {
