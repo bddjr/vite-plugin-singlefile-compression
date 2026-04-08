@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-// Unlicense.
+// License: Unlicense
 
 for (var input = "<script>"
     , il = input.length

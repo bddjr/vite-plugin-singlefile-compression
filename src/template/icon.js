@@ -1,5 +1,5 @@
 //@ts-nocheck
 
-// Unlicense.
+// License: Unlicense
 
 document.querySelector("link[rel=icon]").href = "<icon>"

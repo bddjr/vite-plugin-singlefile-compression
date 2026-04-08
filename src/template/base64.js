@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-// Unlicense.
+// License: Unlicense
 
 fetch("data:;base64,<script>")
 	.then(r => new Response(

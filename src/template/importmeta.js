@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-// Unlicense.
+// License: Unlicense
 
 {
     let meta = import.meta
