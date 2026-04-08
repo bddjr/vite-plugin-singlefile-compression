@@ -5,7 +5,7 @@
 {
     let meta = import.meta
         , resolve = meta.resolve
-        , url = (meta.url = new URL("<path>", location).href)
+        , url = (meta.url = new URL(__SPLIT__, location).href)
 
     meta.resolve = function (name) {
         return /^\.{0,2}\//.test(name)

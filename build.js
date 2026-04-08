@@ -23,11 +23,12 @@ let result = esbuild.buildSync({
 if (result.errors.length)
     throw result.errors
 
-/** @type {{[k:string]:string}} */
+/** @type {{[k:string]:string[]}} */
 const raw = {}
 
 for (const i of result.outputFiles) {
-    raw[path.basename(i.path).replace(/\.js$/, '')] = i.text.replace(/;?\s*$/, '')
+    // @ts-ignore
+    raw[/([^/\\]+)\.js$/i.exec(i.path)[1]] = i.text.replace(/;?\s*$/, '').split('__SPLIT__')
 }
 
 {
@@ -44,12 +45,12 @@ for (const i of result.outputFiles) {
         }
     })
     // @ts-ignore
-    raw.base128 = minifyOutput.code.replace(/;?\s*$/, '')
+    raw.base128 = minifyOutput.code.replace(/;?\s*$/, '').split('__SPLIT__')
 }
 
-const templateRawFilePath = 'dist/templateRaw.json'
+const templateRawFilePath = 'dist/templateRaw.js'
 
-fs.writeFileSync(templateRawFilePath, JSON.stringify(raw))
+fs.writeFileSync(templateRawFilePath, `export default ${JSON.stringify(raw)}`)
 
 
 // bundle

@@ -2,7 +2,7 @@
 
 // License: Unlicense
 
-for (var input = "<script>"
+for (var /**@type {string}*/ input = __SPLIT__
     , il = input.length
     , out = new Uint8Array(il / 8 * 7)
     , ii = 0
@@ -29,7 +29,7 @@ for (var input = "<script>"
 }
 
 new R(
-    new R(out).body.pipeThrough(new DecompressionStream("<format>")),
+    new R(out).body.pipeThrough(new DecompressionStream(__SPLIT__)),
     { headers: { "Content-Type": "text/javascript" } }
 ).blob().then(b => (
     import(b = URL.createObjectURL(b)),

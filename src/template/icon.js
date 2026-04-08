@@ -2,4 +2,4 @@
 
 // License: Unlicense
 
-document.querySelector("link[rel=icon]").href = "<icon>"
+document.querySelector("link[rel=icon]").href = __SPLIT__
