@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import esbuild from 'esbuild'
 import { minify_sync } from 'terser'
 import { build as rolldownBuild } from 'rolldown'
 import { dts } from 'rolldown-plugin-dts'
@@ -10,23 +9,6 @@ for (const dir of ['dist', '_dist']) {
     fs.rmSync(dir, { recursive: true, force: true })
     fs.mkdirSync(dir)
 }
-
-let result = esbuild.buildSync({
-    entryPoints: fs.globSync('src/template/*.js').filter(v => path.basename(v) != 'base128.js'),
-    outdir: './',
-    entryNames: '[name]',
-    write: false,
-    minify: true,
-    bundle: true,
-    format: 'esm',
-    charset: 'ascii',
-    logLevel: 'warning',
-    legalComments: 'none',
-})
-
-if (result.errors.length)
-    throw result.errors
-
 
 /** @type {{[k: string]: string | string[]}} */
 const raw = {}
@@ -45,13 +27,8 @@ function toTemplate(code) {
     return arr.length > 1 ? arr : code
 }
 
-for (const i of result.outputFiles) {
-    // @ts-ignore
-    raw[/([^/\\]+)\.js$/i.exec(i.path)[1]] = toTemplate(i.text)
-}
-
-{
-    const rawCode = fs.readFileSync('src/template/base128.js').toString()
+for (const filename of fs.globSync('src/template/*.js')) {
+    const rawCode = fs.readFileSync(filename).toString()
     const minifyOutput = minify_sync(rawCode, {
         module: true,
         format: {
@@ -63,7 +40,7 @@ for (const i of result.outputFiles) {
         }
     })
     // @ts-ignore
-    raw.base128 = toTemplate(minifyOutput.code)
+    raw[/([^/\\]+)\.js$/i.exec(filename)[1]] = toTemplate(minifyOutput.code)
 }
 
 const templateRawFileImportPath = './templateRaw.js'

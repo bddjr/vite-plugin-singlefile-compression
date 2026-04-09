@@ -159,14 +159,14 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression 2.2.3 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  122.750 kB -> 50.197 kB
+  122.750 kB -> 50.229 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  50.19 kB │ gzip: 43.76 kB
+dist/index.html  50.22 kB │ gzip: 43.78 kB
 
-✓ built in 270ms
+✓ built in 271ms
 ```
 
 ## Clone
