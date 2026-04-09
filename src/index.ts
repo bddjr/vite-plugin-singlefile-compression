@@ -1,5 +1,4 @@
 import type { UserConfig, PluginOption, ResolvedConfig, ConfigPluginContext, ConfigEnv } from "vite"
-import type { RollupOptions } from 'rollup'
 import type { OutputBundle, OutputChunk, OutputAsset, PluginContext } from 'rolldown'
 import pc from "picocolors"
 import { minify as htmlMinify } from 'html-minifier-terser'
@@ -11,6 +10,7 @@ import { pathToFileURL } from "url"
 
 import { version } from '../package.json' with { type: "json" }
 
+import type { RollupOptions } from './types/RollupOptions.d.ts'
 import { template } from './getTemplate.js'
 import { bufferToDataURL } from "./dataurl.js"
 import { kB } from "./kB.js"
