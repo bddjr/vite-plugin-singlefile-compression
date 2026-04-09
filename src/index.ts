@@ -324,8 +324,13 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
 
             // 此 polyfill 仅在以下选项的值为 false 时需要。
             // config.build.rolldownOptions.output.codeSplitting
-            if (/\b__VITE_PRELOAD__\b/.test(code))
-                newJSCode.push("var __VITE_PRELOAD__")
+            if (/\b__VITE_PRELOAD__\b/.test(code)) {
+                if (code.startsWith('var ')) {
+                    code = 'var __VITE_PRELOAD__,' + code.slice(4)
+                } else {
+                    newJSCode.push("var __VITE_PRELOAD__")
+                }
+            }
 
             newJSCode.push(code)
         } else {
