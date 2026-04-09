@@ -11,7 +11,7 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "tsc && node build.js && cd test && node --run build",
+    "build": "tsc && node build.js && tsc _dist/templateRaw.ts --ignoreConfig --noEmit && cd test && node --run build",
     "prepublishOnly": "node --run build"
   },
   "repository": {

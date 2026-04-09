@@ -3,9 +3,13 @@ import path from 'path'
 
 import esbuild from 'esbuild'
 import { minify_sync } from 'terser'
+import { build as rolldownBuild } from 'rolldown'
+import { dts } from 'rolldown-plugin-dts'
 
-fs.rmSync('dist', { recursive: true, force: true })
-fs.mkdirSync('dist')
+for (const dir of ['dist', '_dist']) {
+    fs.rmSync(dir, { recursive: true, force: true })
+    fs.mkdirSync(dir)
+}
 
 let result = esbuild.buildSync({
     entryPoints: fs.globSync('src/template/*.js').filter(v => path.basename(v) != 'base128.js'),
@@ -23,12 +27,27 @@ let result = esbuild.buildSync({
 if (result.errors.length)
     throw result.errors
 
-/** @type {{[k:string]:string[]}} */
+
+/** @type {{[k: string]: string | string[]}} */
 const raw = {}
+
+/**
+ * @param {string} code 
+ */
+function toTemplate(code) {
+    code = code.replace(/;?\s*$/, '')
+    const arr = code.split('__SPLIT__')
+    if (arr.at(-1) === '') {
+        if (arr.length == 2) return arr[0]
+        if (arr.length == 1) throw Error('invalid template')
+        arr.splice(-1, 1)
+    }
+    return arr.length > 1 ? arr : code
+}
 
 for (const i of result.outputFiles) {
     // @ts-ignore
-    raw[/([^/\\]+)\.js$/i.exec(i.path)[1]] = i.text.replace(/;?\s*$/, '').split('__SPLIT__')
+    raw[/([^/\\]+)\.js$/i.exec(i.path)[1]] = toTemplate(i.text)
 }
 
 {
@@ -37,7 +56,6 @@ for (const i of result.outputFiles) {
         module: true,
         format: {
             wrap_iife: false,
-            quote_style: 2,
         },
         compress: {
             module: true,
@@ -45,18 +63,18 @@ for (const i of result.outputFiles) {
         }
     })
     // @ts-ignore
-    raw.base128 = minifyOutput.code.replace(/;?\s*$/, '').split('__SPLIT__')
+    raw.base128 = toTemplate(minifyOutput.code)
 }
 
-const templateRawFilePath = 'dist/templateRaw.js'
+const templateRawFileImportPath = './templateRaw.js'
+const templateRawFileDistPath = '_dist/templateRaw.ts'
 
-fs.writeFileSync(templateRawFilePath, `export default ${JSON.stringify(raw)}`)
+const templateRawDTS = fs.readFileSync('src/templateRaw.d.ts').toString()
+
+fs.writeFileSync(templateRawFileDistPath, templateRawDTS.replace('/*={}*/', () => ` = ${JSON.stringify(raw, null, 2)}`))
 
 
 // bundle
-
-import { build as rolldownBuild } from 'rolldown'
-import { dts } from 'rolldown-plugin-dts'
 
 await rolldownBuild({
     input: [
@@ -78,9 +96,7 @@ await rolldownBuild({
     ],
     resolve: {
         alias: {
-            './templateRaw.js': '../' + templateRawFilePath,
+            [templateRawFileImportPath]: '../' + templateRawFileDistPath,
         },
     },
 })
-
-fs.rmSync(templateRawFilePath)

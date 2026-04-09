@@ -13,15 +13,23 @@ export const template = {
         )
     },
     assets(assetsJSON: string) {
-        return files.assets.join(assetsJSON)
+        const t = files.assets
+        return t[0].concat(
+            JSON.stringify(assetsJSON),
+            t[1]
+        )
     },
     css(cssSource: string) {
-        return files.css.join(JSON.stringify(cssSource))
+        return files.css + JSON.stringify(cssSource)
     },
     icon(dataURL: string) {
-        return files.icon.join(JSON.stringify(dataURL))
+        return files.icon + JSON.stringify(dataURL)
     },
     importmeta(p: string) {
-        return files.importmeta.join(JSON.stringify(p))
+        const t = files.importmeta
+        return t[0].concat(
+            JSON.stringify(p),
+            t[1]
+        )
     },
 }
