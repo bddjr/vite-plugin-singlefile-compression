@@ -156,7 +156,7 @@ vite v8.0.8 building client environment for production...
 ✓ 42 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.3.0 deflate-raw base128-ascii
+vite-plugin-singlefile-compression 2.3.1 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
   122.767 kB -> 50.111 kB
@@ -166,7 +166,7 @@ Finish.
 computing gzip size...
 dist/index.html  50.11 kB │ gzip: 43.67 kB
 
-✓ built in 313ms
+✓ built in 269ms
 ```
 
 ## Clone

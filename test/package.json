@@ -11,20 +11,20 @@
     "type-check": "vue-tsc --build --force"
   },
   "devDependencies": {
-    "@tsconfig/node22": ">=22.0.0",
-    "@types/markdown-it": "^14.1.2",
-    "@types/node": ">=22.9.0",
-    "@vitejs/plugin-vue": ">=5.1.4",
-    "@vue/tsconfig": ">=0.7.0",
-    "markdown-it": "^14.1.1",
-    "markdown-it-highlightjs": "^4.3.0",
-    "npm-run-all2": ">=7.0.1",
-    "typescript": ">=5.7.3",
+    "@tsconfig/node22": ">=22.0.5",
+    "@types/markdown-it": ">=14.1.2",
+    "@types/node": "^24.12.2",
+    "@vitejs/plugin-vue": ">=6.0.6",
+    "@vue/tsconfig": ">=0.9.1",
+    "markdown-it": ">=14.1.1",
+    "markdown-it-highlightjs": ">=4.3.0",
+    "npm-run-all2": ">=8.0.4",
+    "typescript": ">=6.0.2",
     "vite": "file:../node_modules/vite",
     "vite-plugin-singlefile-compression": "file:..",
-    "vite-plugin-vue-devtools": "^8.1.0",
-    "vue": "^3.5.30",
-    "vue-router": "^5.0.3",
-    "vue-tsc": ">=2.1.10"
+    "vite-plugin-vue-devtools": ">=8.1.1",
+    "vue": ">=3.5.30",
+    "vue-router": ">=5.0.4",
+    "vue-tsc": ">=3.2.6"
   }
 }
