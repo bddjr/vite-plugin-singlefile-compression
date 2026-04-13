@@ -37,6 +37,10 @@ a:hover {
   background-color: hsla(270, 100%, 66%, 0.2);
 }
 
+li {
+  margin: 8px 0;
+}
+
 @media (prefers-color-scheme: dark) {
 
   a,
