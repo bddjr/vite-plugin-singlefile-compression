@@ -142,7 +142,7 @@ type: `boolean`
 
 Use import.meta polyfill.
 
-default: `true`
+default: `false`
 
 type: `boolean`
 
@@ -156,17 +156,17 @@ vite v8.0.8 building client environment for production...
 ✓ 42 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.2.4 deflate-raw base128-ascii
+vite-plugin-singlefile-compression 2.3.0 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  122.750 kB -> 50.221 kB
+  122.751 kB -> 50.113 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  50.22 kB │ gzip: 43.79 kB
+dist/index.html  50.11 kB │ gzip: 43.68 kB
 
-✓ built in 282ms
+✓ built in 292ms
 ```
 
 ## Clone

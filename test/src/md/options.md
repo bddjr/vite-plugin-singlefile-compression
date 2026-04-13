@@ -105,6 +105,6 @@ type: `boolean`
 
 Use import.meta polyfill.
 
-default: `true`
+default: `false`
 
 type: `boolean`

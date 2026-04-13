@@ -69,7 +69,7 @@ export interface Options {
 
     /**
      * Use import.meta polyfill.
-     * @default true
+     * @default false
      */
     useImportMetaPolyfill?: boolean
 }
@@ -141,7 +141,7 @@ export function getInnerOptions(opt?: Options): InnerOptions {
             opt.removeInlinedPublicIconFiles ?? true,
 
         useImportMetaPolyfill:
-            opt.useImportMetaPolyfill ?? true,
+            opt.useImportMetaPolyfill ?? false,
     }
 }
 

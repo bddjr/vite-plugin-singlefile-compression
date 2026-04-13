@@ -69,7 +69,7 @@ If false, use Base64.<br>
 <p>type: <code>boolean</code></p>
 <h3>useImportMetaPolyfill</h3>
 <p>Use import.meta polyfill.</p>
-<p>default: <code>true</code></p>
+<p>default: <code>false</code></p>
 <p>type: <code>boolean</code></p>
 
 </template>
