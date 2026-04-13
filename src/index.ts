@@ -337,11 +337,9 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             inlineHtmlAssets()
         }
 
-        let outputScript = newJSCode.join(';')
+        let outputScript = newJSCode.join(';').replaceAll('</script', '<\\/script')
         if (options.enableCompress) {
             outputScript = await template.base(outputScript, options.compressFormat, options.useBase128, options.compressor)
-        } else {
-            outputScript = outputScript.replaceAll('</script', '<\\/script')
         }
 
         htmlChunk.source = htmlChunk.source.replace(fakeScript, () => outputScript)

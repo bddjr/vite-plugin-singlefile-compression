@@ -4,10 +4,11 @@
 
 fetch("data:;base64,__SPLIT__")
 	.then(r => new Response(
-		r.body.pipeThrough(new DecompressionStream(__SPLIT__)),
-		{ headers: { "Content-Type": "text/javascript" } }
-	).blob())
-	.then(b => (
-		import(b = URL.createObjectURL(b)),
-		URL.revokeObjectURL(b)
-	));
+		r.body.pipeThrough(new DecompressionStream(__SPLIT__))
+	).text())
+	.then(t => {
+		var script = document.createElement("script")
+		script.type = 'module'
+		script.innerHTML = t
+		document.head.appendChild(script)
+	});

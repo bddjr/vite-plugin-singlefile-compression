@@ -14,6 +14,7 @@ for (var /**@type {string}*/ input = __SPLIT__
             : cache
     )
     , R = Response
+    , script = document.createElement("script")
     ; ii < il;) {
     //     0        1        2        3        4        5        6        7
     // in  _0000000 _1111111 _2222222 _3333333 _4444444 _5555555 _6666666 _7777777
@@ -29,9 +30,9 @@ for (var /**@type {string}*/ input = __SPLIT__
 }
 
 new R(
-    new R(out).body.pipeThrough(new DecompressionStream(__SPLIT__)),
-    { headers: { "Content-Type": "text/javascript" } }
-).blob().then(b => (
-    import(b = URL.createObjectURL(b)),
-    URL.revokeObjectURL(b)
-));
+    new R(out).body.pipeThrough(new DecompressionStream(__SPLIT__))
+).text().then(t => {
+    script.type = 'module'
+    script.innerHTML = t
+    document.head.appendChild(script)
+});
