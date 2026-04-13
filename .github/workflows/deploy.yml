@@ -29,7 +29,7 @@ jobs:
       - name: Upload static files as artifact
         if: github.event_name == 'push' && github.ref_name == 'main'
         id: deployment
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: test/dist
 
@@ -48,4 +48,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
