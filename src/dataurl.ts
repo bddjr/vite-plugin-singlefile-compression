@@ -1,8 +1,8 @@
 import svgToTinyDataUri from "mini-svg-data-uri";
-import mime from 'mime'
+import { lookup } from 'mrmime'
 
 export function bufferToDataURL(name: string, b: Buffer) {
     return /\.svg$/i.test(name)
         ? svgToTinyDataUri(b.toString())
-        : `data:${mime.getType(name)};base64,${b.toString('base64')}`
+        : `data:${lookup(name)};base64,${b.toString('base64')}`
 }
