@@ -12,8 +12,8 @@ importers:
         specifier: '>=7.0.2'
         version: 7.0.2
       base128-ascii:
-        specifier: '>=3.1.1'
-        version: 3.1.1
+        specifier: '>=4.0.1'
+        version: 4.0.1
       html-minifier-terser:
         specifier: '>=7.2.0'
         version: 7.2.0
@@ -623,9 +623,6 @@ packages:
   '@types/node@24.12.2':
     resolution: {integrity: sha512-A1sre26ke7HDIuY/M23nd9gfB+nrmhtYyMINbjI1zHJxYteKR6qSMX56FsmjMcDb3SMcjJg5BiRRgOCC/yBD0g==}
 
-  '@types/node@25.6.0':
-    resolution: {integrity: sha512-+qIYRKdNYJwY3vRCZMdJbPLJAtGjQBudzZzdzwQYkEPQd+PJGixUL5QfvCLDaULoLv+RhT3LDkwEfKaAkgSmNQ==}
-
   '@types/tough-cookie@4.0.5':
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
 
@@ -781,8 +778,8 @@ packages:
     resolution: {integrity: sha512-cbdCP0PGOBq0ASG+sjnKIoYkWMKhhz+F/h9pRexUdX2Hd38+WOlBkRKlqkGOSm0YQpcFMQBJeK4WspUAkwsEdg==}
     engines: {node: '>=20.19.0'}
 
-  base128-ascii@3.1.1:
-    resolution: {integrity: sha512-lf/Zpp3KsmT1LjLISyu/ZEVxMnFxDeCzpeRsU9RJec5C4STksZP5l8Pm5Xk/G3ue4E/V7+usjBqNlkivEa/8lA==}
+  base128-ascii@4.0.1:
+    resolution: {integrity: sha512-SRfHBfYbiqdsBgW2a5K3xI4JuhbkM9L7vRcZlTbdosgkaU8vlg9UrjrUv+c8zSs+jIzZhMR86xwP0rPJDmz+LQ==}
 
   baseline-browser-mapping@2.10.18:
     resolution: {integrity: sha512-VSnGQAOLtP5mib/DPyg2/t+Tlv65NTBz83BJBJvmLVHHuKJVaDOBvJJykiT5TR++em5nfAySPccDZDa4oSrn8A==}
@@ -1377,9 +1374,6 @@ packages:
 
   undici-types@7.16.0:
     resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
-
-  undici-types@7.19.2:
-    resolution: {integrity: sha512-qYVnV5OEm2AW8cJMCpdV20CDyaN3g0AjDlOGf1OW4iaDEx8MwdtChUp4zu4H0VP3nDRF/8RKWH+IPp9uW0YGZg==}
 
   undici-types@7.25.0:
     resolution: {integrity: sha512-AXNgS1Byr27fTI+2bsPEkV9CxkT8H6xNyRI68b3TatlZo3RkzlqQBLL+w7SmGPVpokjHbcuNVQUWE7FRTg+LRA==}
@@ -1991,7 +1985,7 @@ snapshots:
 
   '@types/jsdom@28.0.1':
     dependencies:
-      '@types/node': 25.6.0
+      '@types/node': 24.12.2
       '@types/tough-cookie': 4.0.5
       parse5: 7.3.0
       undici-types: 7.25.0
@@ -2010,10 +2004,6 @@ snapshots:
   '@types/node@24.12.2':
     dependencies:
       undici-types: 7.16.0
-
-  '@types/node@25.6.0':
-    dependencies:
-      undici-types: 7.19.2
 
   '@types/tough-cookie@4.0.5': {}
 
@@ -2235,7 +2225,7 @@ snapshots:
       '@babel/parser': 7.29.2
       ast-kit: 2.2.0
 
-  base128-ascii@3.1.1: {}
+  base128-ascii@4.0.1: {}
 
   baseline-browser-mapping@2.10.18: {}
 
@@ -2786,8 +2776,6 @@ snapshots:
   ufo@1.6.3: {}
 
   undici-types@7.16.0: {}
-
-  undici-types@7.19.2: {}
 
   undici-types@7.25.0: {}
 
