@@ -4,7 +4,7 @@
 -->
 <template>
 <h1>Setup</h1>
-<pre><code class="hljs">npm i vite-plugin-singlefile-compression@latest -D
+<pre><code class="hljs">npm i -D vite-plugin-singlefile-compression@latest
 </code></pre>
 <p>Then modify <code>vite.config.ts</code>, like <a target="_blank" href="https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/vite.config.ts">test/vite.config.ts</a></p>
 <pre><code class="hljs language-diff"><span class="hljs-addition">+ import singleFileCompression from &#x27;vite-plugin-singlefile-compression&#x27;</span>

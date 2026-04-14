@@ -1,7 +1,7 @@
 # Setup
 
 ```
-npm i vite-plugin-singlefile-compression@latest -D
+npm i -D vite-plugin-singlefile-compression@latest
 ```
 
 Then modify `vite.config.ts`, like [test/vite.config.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/vite.config.ts)

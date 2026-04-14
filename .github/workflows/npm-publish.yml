@@ -5,12 +5,11 @@ on:
     types: [created]
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write # Required for OIDC
   contents: read
 
 jobs:
   publish-npm:
-    #needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -27,6 +26,5 @@ jobs:
           version: 10
 
       - run: pnpm i
-      - run: cd test && pnpm i
 
       - run: pnpm publish
