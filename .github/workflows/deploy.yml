@@ -22,8 +22,13 @@ jobs:
           node-version: latest
           check-latest: true
 
-      - run: npm i
-      - run: cd test && npm i
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - run: pnpm i
+      - run: cd test && pnpm i
       - run: node --run build
 
       - name: Upload static files as artifact
