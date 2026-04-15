@@ -97,6 +97,7 @@
     "picocolors": ">=1.1.1"
   },
   "devDependencies": {
+    "@bddjr/types-rollupoptions-4.43.0": "4.43.0",
     "@types/jsdom": ">=28.0.1",
     "@types/node": "^24.12.2",
     "rolldown": ">=1.0.0-rc.15",

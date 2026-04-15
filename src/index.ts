@@ -10,7 +10,7 @@ import { pathToFileURL } from "url"
 
 import { version } from '../package.json' with { type: "json" }
 
-import type { RollupOptions } from './types/RollupOptions.d.ts'
+import type { RollupOptions } from "@bddjr/types-rollupoptions-4.43.0"
 import { template } from './getTemplate.js'
 import { bufferToDataURL } from "./dataurl.js"
 import { kB } from "./kB.js"
