@@ -232,11 +232,21 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         }
 
         // inline html favicon
-        const linkFavicon = document.querySelector<HTMLLinkElement>(`link[rel=icon][href^="${config.base}"], link[rel="shortcut icon"][href^="${config.base}"]`)
+        let linkFavicon = document.querySelector<HTMLLinkElement>(`link[rel=icon][href^="${config.base}"]`)
+        {
+            const link_shortcut_icon = document.querySelector<HTMLLinkElement>(`link[rel="shortcut icon"][href^="${config.base}"]`)
+            if (link_shortcut_icon) {
+                if (linkFavicon) {
+                    link_shortcut_icon.remove()
+                } else {
+                    link_shortcut_icon.rel = 'icon'
+                    linkFavicon = link_shortcut_icon
+                }
+            }
+        }
         let faviconName = 'favicon.ico'
         let faviconIsDataURL = false
         if (linkFavicon) {
-            linkFavicon.rel = 'icon'
             faviconName = linkFavicon.href
             faviconIsDataURL = /^data:/i.test(faviconName)
             if (!faviconIsDataURL)
