@@ -10,7 +10,7 @@
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
   font-size: 14px;
-  background: rgba(128, 128, 128, 0.2);
+  background: #818b981f;
   padding: 3px;
 }
 
@@ -30,7 +30,7 @@ a,
   text-decoration: none;
   color: hsl(270, 100%, 66%);
   transition: background-color 0.4s;
-  padding: 3px;
+  /* padding: 3px; */
 }
 
 a:hover {
