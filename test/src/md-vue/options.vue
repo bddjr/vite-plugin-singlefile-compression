@@ -63,11 +63,11 @@ If false, use Base64.<br>
 <p>default: <code>true</code></p>
 <p>type: <code>boolean</code></p>
 <h3>tryInlineHtmlPublicIcon</h3>
-<p>Try inline html icon, if icon is in public dir.</p>
+<p>Try inline html favicon, if icon is in public dir.</p>
 <p>default: <code>true</code></p>
 <p>type: <code>boolean</code></p>
 <h3>removeInlinedPublicIconFiles</h3>
-<p>Remove inlined html icon files.</p>
+<p>Remove inlined html favicon files.</p>
 <p>default: <code>true</code></p>
 <p>type: <code>boolean</code></p>
 <h3>enableCompressInlinedIcon</h3>

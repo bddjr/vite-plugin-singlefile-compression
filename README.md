@@ -130,7 +130,7 @@ type: `boolean`
 
 ### tryInlineHtmlPublicIcon
 
-Try inline html icon, if icon is in public dir.
+Try inline html favicon, if icon is in public dir.
 
 default: `true`
 
@@ -138,7 +138,7 @@ type: `boolean`
 
 ### removeInlinedPublicIconFiles
 
-Remove inlined html icon files.
+Remove inlined html favicon files.
 
 default: `true`
 
@@ -177,14 +177,14 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression 2.4.0 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  126.503 kB -> 59.651 kB
+  126.509 kB -> 59.649 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  59.65 kB │ gzip: 44.93 kB
+dist/index.html  59.64 kB │ gzip: 44.92 kB
 
-✓ built in 286ms
+✓ built in 309ms
 ```
 
 ## Clone

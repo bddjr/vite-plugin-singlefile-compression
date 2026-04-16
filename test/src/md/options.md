@@ -93,7 +93,7 @@ type: `boolean`
 
 ### tryInlineHtmlPublicIcon
 
-Try inline html icon, if icon is in public dir.
+Try inline html favicon, if icon is in public dir.
 
 default: `true`
 
@@ -101,7 +101,7 @@ type: `boolean`
 
 ### removeInlinedPublicIconFiles
 
-Remove inlined html icon files.
+Remove inlined html favicon files.
 
 default: `true`
 
