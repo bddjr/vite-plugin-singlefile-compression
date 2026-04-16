@@ -14,7 +14,7 @@
     "build": "tsc && node build.js && tsc _dist/templateRaw.ts --ignoreConfig --noEmit && cd test && node --run build",
     "prepublishOnly": "node --run build"
   },
-  "homepage": "https://bddjr.github.io/vite-plugin-singlefile-compression/",
+  "homepage": "https://bddjr.github.io/vite-plugin-singlefile-compression/#/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bddjr/vite-plugin-singlefile-compression.git"

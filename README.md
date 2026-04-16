@@ -6,7 +6,7 @@ The recipient can open it directly in the browser without manually unzipping the
 
 Using [DecompressionStream](https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream) + [base128-ascii](https://www.npmjs.com/package/base128-ascii).
 
-Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/
+Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/#/
 
 ## Setup
 
@@ -167,7 +167,7 @@ type: `boolean`
 
 ## Effect
 
-Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/
+Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/#/
 
 ```
 vite v8.0.8 building client environment for production...
