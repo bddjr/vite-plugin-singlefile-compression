@@ -14,9 +14,12 @@ export interface Options {
     enableCompress?: boolean
 
     /**
-     * Use Base128 to encode compressed script.
-     * If false, use Base64.
+     * Use Base128 to encode compressed script.  
+     * If false, use Base64.  
      * https://www.npmjs.com/package/base128-ascii
+     * 
+     * This option is only valid when the `enableCompress` option is set to true.
+     * 
      * @default true
      */
     useBase128?: boolean
@@ -25,6 +28,8 @@ export interface Options {
      * Compress format.
      * 
      * https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
+     * 
+     * This option is only valid when the `enableCompress` option is set to true.
      * 
      * @type {"deflate-raw" | "deflate" | "gzip" | "brotli" | "zstd" | "deflateRaw" | "gz" | "br" | "brotliCompress" | "zstandard" | "zst"}
      * 
@@ -56,16 +61,27 @@ export interface Options {
     removeInlinedAssetFiles?: boolean
 
     /**
-     * Try inline html icon, if icon is in public dir.
+     * Try inline html favicon, if icon is in public dir.
      * @default true
      */
     tryInlineHtmlPublicIcon?: boolean
 
     /**
-     * Remove inlined html icon files.
+     * Remove inlined html favicon files.
      * @default true
      */
     removeInlinedPublicIconFiles?: boolean
+
+    /**
+     * Enable compress inlined html favicon.
+     * 
+     * This option is only valid when the `enableCompress` option is set to true.
+     * 
+     * ⚠️ Not works on Safari (See [#20](https://github.com/bddjr/vite-plugin-singlefile-compression/issues/20))
+     * 
+     * @default false
+     */
+    enableCompressInlinedIcon?: boolean
 
     /**
      * Use import.meta polyfill.
@@ -94,19 +110,20 @@ export interface InnerOptions {
     removeInlinedAssetFiles: boolean
     tryInlineHtmlPublicIcon: boolean
     removeInlinedPublicIconFiles: boolean
+    enableCompressInlinedIcon: boolean
     useImportMetaPolyfill: boolean
 }
 
 export function getInnerOptions(opt?: Options): InnerOptions {
     opt ||= {}
+    const enableCompress: boolean = opt.enableCompress ?? true
     return {
         rename:
             opt.rename == null
                 ? undefined
                 : String(opt.rename),
 
-        enableCompress:
-            opt.enableCompress ?? true,
+        enableCompress,
 
         useBase128:
             opt.useBase128 ?? true,
@@ -139,6 +156,9 @@ export function getInnerOptions(opt?: Options): InnerOptions {
 
         removeInlinedPublicIconFiles:
             opt.removeInlinedPublicIconFiles ?? true,
+
+        enableCompressInlinedIcon:
+            enableCompress && (opt.enableCompressInlinedIcon ?? false),
 
         useImportMetaPolyfill:
             opt.useImportMetaPolyfill ?? false,

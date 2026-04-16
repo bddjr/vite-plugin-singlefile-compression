@@ -231,60 +231,70 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             }
         }
 
-        // inline html icon
-        if (options.tryInlineHtmlPublicIcon) {
-            let needInline = true
-            let iconName = 'favicon.ico'
-            // replace tag
-            const element = document.querySelector<HTMLLinkElement>(`link[rel=icon][href^="${config.base}"], link[rel="shortcut icon"][href^="${config.base}"]`)
-            if (element) {
-                iconName = cutPrefix(element.href, config.base)
-                if (bundleAssetsNames.includes(iconName)) {
-                    needInline = false
+        // inline html favicon
+        const linkFavicon = document.querySelector<HTMLLinkElement>(`link[rel=icon][href^="${config.base}"], link[rel="shortcut icon"][href^="${config.base}"]`)
+        let faviconName = 'favicon.ico'
+        let faviconIsDataURL = false
+        if (linkFavicon) {
+            linkFavicon.rel = 'icon'
+            faviconName = linkFavicon.href
+            faviconIsDataURL = /^data:/i.test(faviconName)
+            if (!faviconIsDataURL)
+                faviconName = cutPrefix(faviconName, config.base)
+        }
+
+        function setFaviconDataURL(dataURL: string) {
+            if (options.enableCompressInlinedIcon) {
+                newJSCode.push(template.icon(dataURL))
+                if (linkFavicon) {
+                    linkFavicon.href = 'data:'
                 } else {
-                    element.rel = 'icon'
-                    element.href = 'data:'
+                    // add link icon tag
+                    document.head.insertAdjacentHTML('beforeend', '<link rel="icon" href="data:">')
+                }
+            } else {
+                if (linkFavicon) {
+                    linkFavicon.href = dataURL
+                } else {
+                    const e = document.head.appendChild(document.createElement('link'))
+                    e.rel = 'icon'
+                    e.href = dataURL
                 }
             }
-            if (needInline) {
-                // inline
-                try {
-                    if (!Object.prototype.hasOwnProperty.call(globalPublicFilesCache, iconName)) {
-                        // dist/favicon.ico
-                        let Path = path.join(config.build.outDir, iconName)
-                        if (fs.existsSync(Path)) {
-                            globalRemoveDistFileNames.add(iconName)
-                        } else {
-                            // public/favicon.ico
-                            Path = path.join(config.publicDir, iconName)
-                        }
-                        // read
-                        const b = fs.readFileSync(Path)
-                        globalPublicFilesCache[iconName] = {
-                            dataURL: bufferToDataURL(iconName, b),
-                            size: b.length
-                        }
-                    }
-                    const { dataURL, size } = globalPublicFilesCache[iconName]
-                    oldSize += size
-                    if (options.enableCompress) {
-                        newJSCode.push(template.icon(dataURL))
-                        if (!element) {
-                            // add link icon tag
-                            document.head.insertAdjacentHTML('beforeend', '<link rel="icon" href="data:">')
-                        }
+        }
+
+        if (faviconIsDataURL) {
+            if (options.enableCompressInlinedIcon) {
+                newJSCode.push(template.icon(faviconName))
+                linkFavicon!.href = 'data:'
+            }
+        } else if (bundleAssetsNames.includes(faviconName)) {
+            const asset = bundle[faviconName] as OutputAsset
+            if (asset)
+                setFaviconDataURL(bufferToDataURL(faviconName, Buffer.from(asset.source)))
+        } else if (options.tryInlineHtmlPublicIcon) {
+            try {
+                if (!Object.prototype.hasOwnProperty.call(globalPublicFilesCache, faviconName)) {
+                    // dist/favicon.ico
+                    let Path = path.join(config.build.outDir, faviconName)
+                    if (fs.existsSync(Path)) {
+                        globalRemoveDistFileNames.add(faviconName)
                     } else {
-                        if (element) {
-                            element.href = dataURL
-                        } else {
-                            const e = document.head.appendChild(document.createElement('link'))
-                            e.rel = 'icon'
-                            e.href = dataURL
-                        }
+                        // public/favicon.ico
+                        Path = path.join(config.publicDir, faviconName)
                     }
-                } catch (e) {
-                    if (element) console.error(e)
+                    // read
+                    const b = fs.readFileSync(Path)
+                    globalPublicFilesCache[faviconName] = {
+                        dataURL: bufferToDataURL(faviconName, b),
+                        size: b.length
+                    }
                 }
+                const { dataURL, size } = globalPublicFilesCache[faviconName]
+                oldSize += size
+                setFaviconDataURL(dataURL)
+            } catch (e) {
+                if (linkFavicon) console.error(e)
             }
         }
 

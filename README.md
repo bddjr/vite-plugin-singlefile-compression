@@ -65,6 +65,8 @@ Use Base128 to encode compressed script.
 If false, use Base64.  
 https://www.npmjs.com/package/base128-ascii
 
+This option is only valid when the `enableCompress` option is set to true.
+
 default: `true`
 
 type: `boolean`
@@ -72,6 +74,8 @@ type: `boolean`
 ### compressFormat
 
 Compress format.
+
+This option is only valid when the `enableCompress` option is set to true.
 
 https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
 
@@ -93,6 +97,8 @@ type:
 ### compressor
 
 Custom compressor.
+
+This option is only valid when the `enableCompress` option is set to true.
 
 type: `(buf: zlib.InputType) => (Buffer | Uint8Array | Promise<Buffer | Uint8Array>)`
 
@@ -138,6 +144,18 @@ default: `true`
 
 type: `boolean`
 
+### enableCompressInlinedIcon
+
+Enable compress inlined html favicon.
+
+This option is only valid when the `enableCompress` option is set to true.
+
+⚠️ Not works on Safari (See [#20](https://github.com/bddjr/vite-plugin-singlefile-compression/issues/20))
+
+default: `false`
+
+type: `boolean`
+
 ### useImportMetaPolyfill
 
 Use import.meta polyfill.
@@ -156,17 +174,17 @@ vite v8.0.8 building client environment for production...
 ✓ 43 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.3.3 deflate-raw base128-ascii
+vite-plugin-singlefile-compression 2.4.0 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  125.847 kB -> 51.312 kB
+  126.503 kB -> 59.657 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  51.31 kB │ gzip: 44.73 kB
+dist/index.html  59.65 kB │ gzip: 44.93 kB
 
-✓ built in 285ms
+✓ built in 277ms
 ```
 
 ## Clone

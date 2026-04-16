@@ -20,10 +20,12 @@
 <p>Use Base128 to encode compressed script.<br>
 If false, use Base64.<br>
 <a target="_blank" href="https://www.npmjs.com/package/base128-ascii">https://www.npmjs.com/package/base128-ascii</a></p>
+<p>This option is only valid when the <code>enableCompress</code> option is set to true.</p>
 <p>default: <code>true</code></p>
 <p>type: <code>boolean</code></p>
 <h3>compressFormat</h3>
 <p>Compress format.</p>
+<p>This option is only valid when the <code>enableCompress</code> option is set to true.</p>
 <p><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream">https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream</a></p>
 <p>default: <code>&quot;deflate-raw&quot;</code></p>
 <p>type:</p>
@@ -42,6 +44,7 @@ If false, use Base64.<br>
 </ul>
 <h3>compressor</h3>
 <p>Custom compressor.</p>
+<p>This option is only valid when the <code>enableCompress</code> option is set to true.</p>
 <p>type: <code>(buf: zlib.InputType) =&gt; (Buffer | Uint8Array | Promise&lt;Buffer | Uint8Array&gt;)</code></p>
 <h3>htmlMinifierTerser</h3>
 <p><a target="_blank" href="https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference">https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference</a></p>
@@ -66,6 +69,12 @@ If false, use Base64.<br>
 <h3>removeInlinedPublicIconFiles</h3>
 <p>Remove inlined html icon files.</p>
 <p>default: <code>true</code></p>
+<p>type: <code>boolean</code></p>
+<h3>enableCompressInlinedIcon</h3>
+<p>Enable compress inlined html favicon.</p>
+<p>This option is only valid when the <code>enableCompress</code> option is set to true.</p>
+<p>⚠️ Not works on Safari (See <a target="_blank" href="https://github.com/bddjr/vite-plugin-singlefile-compression/issues/20">#20</a>)</p>
+<p>default: <code>false</code></p>
 <p>type: <code>boolean</code></p>
 <h3>useImportMetaPolyfill</h3>
 <p>Use import.meta polyfill.</p>
