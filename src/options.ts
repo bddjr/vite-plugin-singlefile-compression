@@ -39,6 +39,8 @@ export interface Options {
 
     /**
      * Custom compressor.
+     * 
+     * This option is only valid when the `enableCompress` option is set to true.
      */
     compressor?: Compressor
 

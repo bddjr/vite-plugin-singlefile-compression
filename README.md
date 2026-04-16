@@ -75,9 +75,9 @@ type: `boolean`
 
 Compress format.
 
-This option is only valid when the `enableCompress` option is set to true.
-
 https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream
+
+This option is only valid when the `enableCompress` option is set to true.
 
 default: `"deflate-raw"`
 
@@ -177,14 +177,14 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression 2.4.0 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  126.503 kB -> 59.657 kB
+  126.503 kB -> 59.651 kB
 
 Finish.
 
 computing gzip size...
 dist/index.html  59.65 kB │ gzip: 44.93 kB
 
-✓ built in 277ms
+✓ built in 286ms
 ```
 
 ## Clone

@@ -270,8 +270,10 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             }
         } else if (bundleAssetsNames.includes(faviconName)) {
             const asset = bundle[faviconName] as OutputAsset
-            if (asset)
+            if (asset) {
                 setFaviconDataURL(bufferToDataURL(faviconName, Buffer.from(asset.source)))
+                thisDel.add(faviconName)
+            }
         } else if (options.tryInlineHtmlPublicIcon) {
             try {
                 if (!Object.prototype.hasOwnProperty.call(globalPublicFilesCache, faviconName)) {
@@ -324,7 +326,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
                 const assetName = name.slice(assetsDir.length)
                 if (code.includes(assetName)) {
                     globalDoNotDelete.add(name)
-                    delete assetsDataURL[assetName]
+                    // delete assetsDataURL[assetName]
                 }
             }
             inlineHtmlAssets()
