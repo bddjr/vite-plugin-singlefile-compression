@@ -79,7 +79,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/Decompressi
 
 This option is only valid when the `enableCompress` option is set to true.
 
-default: `"deflate-raw"`
+default: `"brotli"`
 
 type:
  - `"deflate-raw"`
