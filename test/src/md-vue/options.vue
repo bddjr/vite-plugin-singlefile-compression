@@ -27,7 +27,7 @@ If false, use Base64.<br>
 <p>Compress format.</p>
 <p><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream">https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream/DecompressionStream</a></p>
 <p>This option is only valid when the <code>enableCompress</code> option is set to true.</p>
-<p>default: <code>&quot;deflate-raw&quot;</code></p>
+<p>default: <code>&quot;brotli&quot;</code></p>
 <p>type:</p>
 <ul>
 <li><code>&quot;deflate-raw&quot;</code></li>
