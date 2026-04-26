@@ -19,12 +19,6 @@ export const template = {
             t[1]
         )
     },
-    css(cssSource: string) {
-        return files.css + JSON.stringify(cssSource)
-    },
-    icon(dataURL: string) {
-        return files.icon + JSON.stringify(dataURL)
-    },
     importmeta(p: string) {
         const t = files.importmeta
         return t[0].concat(
