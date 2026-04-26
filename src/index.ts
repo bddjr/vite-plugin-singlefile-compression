@@ -401,9 +401,14 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
     }
     if (options.removeInlinedPublicIconFiles) {
         // delete inlined public files
+        const { outDir } = config.build
+        const mustStartsWith = path.resolve(outDir) + path.sep
         for (const name of globalRemoveDistFileNames) {
             try {
-                fs.rmSync(path.join(config.build.outDir, name), { force: true })
+                const _path = path.resolve(outDir, name)
+                if (_path.startsWith(mustStartsWith)) {
+                    fs.rmSync(_path, { force: true })
+                }
             } catch (e) {
                 console.error(e)
             }
