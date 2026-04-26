@@ -240,25 +240,25 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         }
 
         const getPublicIcon = (faviconName: string) => {
-            if (!Object.prototype.hasOwnProperty.call(globalPublicFilesCache, faviconName)) {
-                // dist/favicon.ico
-                let _path = path.join(config.build.outDir, faviconName)
-                if (fs.existsSync(_path)) {
-                    globalRemoveDistFileNames.add(faviconName)
-                } else {
-                    // public/favicon.ico
-                    _path = path.join(config.publicDir, faviconName)
-                    if (!fs.existsSync(_path)) return null
-                }
-                // read
-                const b = fs.readFileSync(_path)
-                globalPublicFilesCache[faviconName] = {
-                    buffer: b,
-                    dataURL: bufferToDataURL(faviconName, b),
-                    size: b.length
-                }
+            if (Object.prototype.hasOwnProperty.call(globalPublicFilesCache, faviconName)) {
+                return globalPublicFilesCache[faviconName]
             }
-            return globalPublicFilesCache[faviconName]
+            // dist/favicon.ico
+            let _path = path.join(config.build.outDir, faviconName)
+            if (fs.existsSync(_path)) {
+                globalRemoveDistFileNames.add(faviconName)
+            } else {
+                // public/favicon.ico
+                _path = path.join(config.publicDir, faviconName)
+                if (!fs.existsSync(_path)) return null
+            }
+            // read
+            const b = fs.readFileSync(_path)
+            return globalPublicFilesCache[faviconName] = {
+                buffer: b,
+                dataURL: bufferToDataURL(faviconName, b),
+                size: b.length
+            }
         }
 
         const linkFaviconAll = document.querySelectorAll<HTMLLinkElement>(`link[rel=icon][href]:not([href=""]),link[rel="shortcut icon"][href]:not([href=""])`)
