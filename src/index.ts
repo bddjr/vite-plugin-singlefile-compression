@@ -109,7 +109,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         /** '[src^="./assets/"]' */
         , assetsSrcSelector = `[src^="${assetsDirWithBase}"]`
 
-        , fakeScript = `_vitePluginSinglefileCompression(${Date.now()})`
+        , fakeScript = '_xxxxxxxx()'.replaceAll('x', () => '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_$'.charAt(Math.random() * 64))
 
         , globalDelete = new Set<string>()
         , globalDoNotDelete = new Set<string>()
@@ -178,7 +178,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
                         globalDoNotDelete.add(name)
                 }
                 // add script for load css
-                allCSS += cssSource.replace(/\s*(\/\*[^*]*\*\/)?\s*$/, '')
+                allCSS += cssSource.replace(/(\s*\/\*([^*]|\*(?!\/))*\*\/)*\s*$/, '')
             }
             // remove tag
             if (options.enableCompress)
