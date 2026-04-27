@@ -109,7 +109,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         /** '[src^="./assets/"]' */
         , assetsSrcSelector = `[src^="${assetsDirWithBase}"]`
 
-        , fakeScript = `_${Math.random().toString(36).slice(2, 10)}()`
+        , fakeScript = `_VITE${Math.random().toString(36).slice(2, 10)}()`
 
         , globalDelete = new Set<string>()
         , globalDoNotDelete = new Set<string>()
