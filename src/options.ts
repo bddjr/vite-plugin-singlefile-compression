@@ -137,7 +137,7 @@ export function getInnerOptions(opt?: Options): InnerOptions {
                         ? compressFormatAlias[opt.compressFormat as CompressFormatAlias]
                         : String(opt.compressFormat) as CompressFormat
                 )
-                : "deflate-raw",
+                : "brotli",
 
         compressor:
             typeof opt.compressor == 'function' ? opt.compressor : undefined,
