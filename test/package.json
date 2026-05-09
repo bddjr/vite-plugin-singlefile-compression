@@ -13,42 +13,27 @@
     "format": "oxfmt src/"
   },
   "dependencies": {
-    "vue": "beta",
-    "vue-router": ">=5.0.6"
+    "vue": "catalog:",
+    "vue-router": "catalog:"
   },
   "devDependencies": {
-    "@tsconfig/node24": "^24.0.4",
-    "@types/markdown-it": ">=14.1.2",
-    "@types/node": "^24.12.2",
-    "@vitejs/plugin-vue": ">=6.0.6",
-    "@vue/tsconfig": ">=0.9.1",
-    "highlight.js": ">=11.11.1",
-    "markdown-it": ">=14.1.1",
-    "markdown-it-highlightjs": ">=4.3.0",
-    "npm-run-all2": ">=8.0.4",
-    "oxfmt": ">=0.47.0",
-    "typescript": ">=6.0.3",
-    "vite": ">=8.0.10",
+    "@tsconfig/node24": "catalog:",
+    "@types/markdown-it": "catalog:",
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vue/tsconfig": "catalog:",
+    "highlight.js": "catalog:",
+    "markdown-it": "catalog:",
+    "markdown-it-highlightjs": "catalog:",
+    "npm-run-all2": "catalog:",
+    "oxfmt": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
     "vite-plugin-singlefile-compression": "link:..",
-    "vite-plugin-vue-devtools": ">=8.1.1",
-    "vue-tsc": ">=3.2.7"
+    "vite-plugin-vue-devtools": "catalog:",
+    "vue-tsc": "catalog:"
   },
   "engines": {
     "node": ">=20.19.0 || >=22.12.0"
-  },
-  "overrides": {
-    "vue": "beta",
-    "@vue/compiler-core": "beta",
-    "@vue/compiler-dom": "beta",
-    "@vue/compiler-sfc": "beta",
-    "@vue/compiler-ssr": "beta",
-    "@vue/compiler-vapor": "beta",
-    "@vue/reactivity": "beta",
-    "@vue/runtime-core": "beta",
-    "@vue/runtime-dom": "beta",
-    "@vue/runtime-vapor": "beta",
-    "@vue/server-renderer": "beta",
-    "@vue/shared": "beta",
-    "@vue/compat": "beta"
   }
 }
