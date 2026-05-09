@@ -72,15 +72,22 @@ function switchCompressor(format: CompressFormat): Compressor {
     throw Error(`Could not get compressor: Unknown compress format '${format}', please set your compressor function.`)
 }
 
-export async function compress(format: CompressFormat, buf: zlib.InputType, useBase128: boolean, compressor: Compressor | undefined) {
-    if (typeof compressor != 'function')
+export async function compress(format: CompressFormat, buf: zlib.InputType, useBase128: boolean, compressor: Compressor | undefined): Promise<string> {
+    if (typeof compressor != 'function') {
         compressor = switchCompressor(format)
-    const outBuf = await compressor(buf)
-    if (useBase128)
-        return base128.encode(outBuf).toJSTemplateLiterals()
-    if (Buffer.isBuffer(outBuf))
-        return outBuf.toString('base64')
-    if (typeof (outBuf as any).toBase64 == 'function') // Uint8Array Node25
-        return (outBuf as any).toBase64()
-    return Buffer.from(outBuf).toString('base64')
+    }
+    const out = await compressor(buf)
+    if (useBase128) {
+        return base128.encode(out).toJSTemplateLiterals()
+    }
+    if (typeof (Uint8Array.prototype as any).toBase64 == 'function') { // Uint8Array Node25
+        return (Uint8Array.prototype as any).toBase64.call(out) as string
+    }
+    if (typeof Buffer.prototype.base64Slice == 'function') {
+        return Buffer.prototype.base64Slice.call(out) as string
+    }
+    if (Buffer.isBuffer(out)) {
+        return out.toString('base64')
+    }
+    return Buffer.from(out).toString('base64')
 }
