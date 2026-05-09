@@ -8,7 +8,7 @@ import path from 'path'
 import fs from 'fs'
 import { pathToFileURL } from "url"
 
-import { version } from '../package.json' with { type: "json" }
+import { version as packageVersion, name as packageName } from '../package.json' with { type: "json" }
 
 import type { RollupOptions } from "@bddjr/types-rollupoptions-4.43.0"
 import { template } from './getTemplate.js'
@@ -22,7 +22,7 @@ export function singleFileCompression(opt?: Options): PluginOption {
     let conf: ResolvedConfig
     const innerOptions = getInnerOptions(opt)
     return {
-        name: "vite-plugin-singlefile-compression",
+        name: packageName,
         enforce: "post",
         config(...args) {
             return setConfig.call(this, innerOptions, ...args)
@@ -76,7 +76,7 @@ function setConfig(this: ConfigPluginContext, opt: InnerOptions, config: UserCon
 async function generateBundle(this: PluginContext, bundle: OutputBundle, config: ResolvedConfig, options: InnerOptions) {
     console.log(
         pc.reset('\n\n') +
-        pc.cyan('vite-plugin-singlefile-compression ' + version) +
+        pc.cyan(packageName + ' ' + packageVersion) +
         ' ' +
         (options.enableCompress
             ? pc.green(options.compressFormat + ' ' + (
