@@ -81,17 +81,10 @@ export async function compress(format: CompressFormat, buf: zlib.InputType, useB
         // base128-ascii
         return base128.encode(out).toJSTemplateLiterals()
     }
-    if (typeof (Uint8Array.prototype as any).toBase64 == 'function') {
+    // base64
+    if (typeof Uint8Array.prototype.toBase64 == 'function') {
         // Uint8Array Node.js v25
-        return (Uint8Array.prototype as any).toBase64.call(out) as string
+        return Uint8Array.prototype.toBase64.call(out) as string
     }
-    if (typeof Buffer.prototype.base64Slice == 'function') {
-        // Node.js
-        return Buffer.prototype.base64Slice.call(out) as string
-    }
-    // Unknown
-    if (Buffer.isBuffer(out)) {
-        return out.toString('base64')
-    }
-    return Buffer.from(out).toString('base64')
+    return Buffer.prototype.base64Slice.call(out, 0, out.length) as string
 }
