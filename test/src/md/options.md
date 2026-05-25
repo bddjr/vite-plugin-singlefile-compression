@@ -63,7 +63,7 @@ Custom compressor.
 
 This option is only valid when the `enableCompress` option is set to true.
 
-type: `(buf: zlib.InputType) => (Buffer | Uint8Array | Promise<Buffer | Uint8Array>)`
+type: `(script: string) => (Uint8Array | Promise<Uint8Array>)`
 
 ### htmlMinifierTerser
 

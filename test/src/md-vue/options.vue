@@ -45,7 +45,7 @@ If false, use Base64.<br>
 <h3>compressor</h3>
 <p>Custom compressor.</p>
 <p>This option is only valid when the <code>enableCompress</code> option is set to true.</p>
-<p>type: <code>(buf: zlib.InputType) =&gt; (Buffer | Uint8Array | Promise&lt;Buffer | Uint8Array&gt;)</code></p>
+<p>type: <code>(script: string) =&gt; (Uint8Array | Promise&lt;Uint8Array&gt;)</code></p>
 <h3>htmlMinifierTerser</h3>
 <p><a target="_blank" href="https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference">https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference</a></p>
 <p>default: <code>defaultHtmlMinifierTerserOptions</code></p>

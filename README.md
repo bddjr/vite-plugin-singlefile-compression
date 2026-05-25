@@ -100,7 +100,7 @@ Custom compressor.
 
 This option is only valid when the `enableCompress` option is set to true.
 
-type: `(buf: zlib.InputType) => (Buffer | Uint8Array | Promise<Buffer | Uint8Array>)`
+type: `(script: string) => (Uint8Array | Promise<Uint8Array>)`
 
 ### htmlMinifierTerser
 
@@ -174,17 +174,17 @@ vite v8.0.14 building client environment for production...
 ✓ 43 modules transformed.
 rendering chunks (1)...
 
-vite-plugin-singlefile-compression 2.4.4 deflate-raw base128-ascii
+vite-plugin-singlefile-compression 2.4.5 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  126.948 kB -> 59.779 kB
+  126.925 kB -> 59.767 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  59.77 kB │ gzip: 45.12 kB
+dist/index.html  59.76 kB │ gzip: 45.11 kB
 
-✓ built in 286ms
+✓ built in 274ms
 ```
 
 ## Clone
