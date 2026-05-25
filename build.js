@@ -37,6 +37,9 @@ for (const filename of fs.globSync('src/template/*.js')) {
         compress: {
             module: true,
             evaluate: false,
+            dead_code: false,
+            side_effects: false,
+            unused: false,
         }
     })
     // @ts-ignore

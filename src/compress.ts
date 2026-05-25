@@ -67,19 +67,9 @@ function switchCompressor(format: CompressFormat): Compressor {
     throw Error(`Could not get compressor: Unknown compress format '${format}', please set your compressor function.`)
 }
 
-export async function compress(format: CompressFormat, script: string, useBase128: boolean, compressor: Compressor | undefined): Promise<string> {
+export function compress(format: CompressFormat, script: string, compressor: Compressor | undefined) {
     if (typeof compressor != 'function') {
         compressor = switchCompressor(format)
     }
-    const out = await compressor(script)
-    if (useBase128) {
-        // base128-ascii
-        return base128.encode(out).toJSTemplateLiterals()
-    }
-    // base64
-    if (typeof Uint8Array.prototype.toBase64 == 'function') {
-        // Uint8Array Node.js v25
-        return Uint8Array.prototype.toBase64.call(out)
-    }
-    return Buffer.prototype.base64Slice.call(out, 0, out.length) as string
+    return compressor(script)
 }

@@ -6,8 +6,8 @@ for (var R = Response
     , D = document
     , script = D.createElement("script")
     , input = __SPLIT__
-    , il = input.length
-    , out = new Uint8Array(il / 8 * 7)
+    , inputLen = __SPLIT__
+    , out = new Uint8Array(__SPLIT__)
     , ii = 0
     , oi = 0
     , k
@@ -16,13 +16,12 @@ for (var R = Response
         (cache = input.charCodeAt(ii++)) >> 7
             ? cache = 0 // In HTML, 0 is likely to be converted to 65533 (�)
             : cache
-    ; ii < il;) {
+    ; ii < __SPLIT__;) {
     //     0        1        2        3        4        5        6        7
     // in  _0000000 _1111111 _2222222 _3333333 _4444444 _5555555 _6666666 _7777777
     // out 00000001 11111122 22222333 33334444 44455555 55666666 67777777
-    for (next(), k = 7; k;) {
-        out[oi++] = cache << 7 - --k | next() >> k
-    }
+    k || next(k = 7)
+    out[oi++] = cache << 8 - k | next() >> --k
 }
 
 new R(
