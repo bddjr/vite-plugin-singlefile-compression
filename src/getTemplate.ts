@@ -19,55 +19,46 @@ export const template = {
         const compressedBytes = await compress(format, script, compressor)
         const _format_ = JSON.stringify(format)
         if (useBase128) {
-            const b128Result = base128.encode(compressedBytes)
-            /** input.length and out.length using const number */
-            let ioLenUsingConstNumber = true
-            /** input length string */
-            let inputLenStr = b128Result.bytes.length.toString()
-            if (inputLenStr.length > base128ConstInputLenStr.length) {
-                ioLenUsingConstNumber = false
-                inputLenStr = base128ConstInputLenStr
-            }
-            /** out length string */
-            let outLenStr = compressedBytes.length.toString()
-            if (outLenStr.length > base128ConstOutLenStr.length) {
-                ioLenUsingConstNumber = false
-                outLenStr = base128ConstOutLenStr
-            }
-            const b128Str = b128Result.toJSTemplateLiterals()
             const t = files.base128
-            if (ioLenUsingConstNumber) {
-                // remove inputLen variable
+            const b128Result = base128.encode(compressedBytes)
+            const b128Str = b128Result.toJSTemplateLiterals()
+            /** input length string */
+            const inputLenStr = b128Result.bytes.length.toString()
+            /** out length string */
+            const outLenStr = compressedBytes.length.toString()
+            if ((inputLenStr.length + outLenStr.length) > 17) {
+                // Do not remove inputLen variable
                 return t[0].concat(
                     b128Str,
+                    t[1],
+                    base128ConstInputLenStr,
                     t[2],
-                    outLenStr,
+                    base128ConstOutLenStr,
                     t[3],
-                    inputLenStr,
+                    base128InputLenVarName,
                     t[4],
                     _format_,
                     t[5]
                 )
             }
+            // Remove inputLen variable
             return t[0].concat(
                 b128Str,
-                t[1],
-                inputLenStr,
                 t[2],
                 outLenStr,
                 t[3],
-                base128InputLenVarName,
+                inputLenStr,
                 t[4],
                 _format_,
                 t[5]
             )
         }
+        const t = files.base64
         const b64 = (
             typeof Uint8Array.prototype.toBase64 == 'function'
                 ? Uint8Array.prototype.toBase64.call(compressedBytes)
                 : Buffer.prototype.base64Slice.call(compressedBytes, 0, compressedBytes.length) as string
         )
-        const t = files.base64
         return t[0].concat(
             b64,
             t[1],
