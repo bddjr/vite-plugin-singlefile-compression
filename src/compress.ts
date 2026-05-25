@@ -2,30 +2,30 @@ import base128 from "base128-ascii"
 import zlib from 'zlib'
 
 const compressors = {
-    "deflate-raw"(buf: zlib.InputType): Buffer {
-        return zlib.deflateRawSync(buf, {
+    "deflate-raw"(script) {
+        return zlib.deflateRawSync(script, {
             level: zlib.constants.Z_BEST_COMPRESSION,
         })
     },
-    deflate(buf: zlib.InputType): Buffer {
-        return zlib.deflateSync(buf, {
+    deflate(script) {
+        return zlib.deflateSync(script, {
             level: zlib.constants.Z_BEST_COMPRESSION,
         })
     },
-    gzip(buf: zlib.InputType): Buffer {
-        return zlib.gzipSync(buf, {
+    gzip(script) {
+        return zlib.gzipSync(script, {
             level: zlib.constants.Z_BEST_COMPRESSION,
         })
     },
     brotli: zlib.brotliCompressSync,
-    zstd: zlib.zstdCompressSync && (
-        (buf: zlib.InputType): Buffer => zlib.zstdCompressSync(buf, {
+    zstd: zlib.zstdCompressSync && function (script) {
+        return zlib.zstdCompressSync(script, {
             params: {
                 [zlib.constants.ZSTD_c_compressionLevel]: 19
             }
         })
-    ),
-} as const
+    },
+} as const satisfies Record<string, Compressor>
 
 export const compressFormatAlias = {
     deflateRaw: 'deflate-raw',
@@ -34,9 +34,9 @@ export const compressFormatAlias = {
     brotliCompress: 'brotli',
     zstandard: 'zstd',
     zst: 'zstd',
-} as const
+} as const satisfies Record<string, CompressFormat>
 
-export type Compressor = ((buf: zlib.InputType) => (Buffer | Uint8Array | Promise<Buffer | Uint8Array>))
+export type Compressor = ((script: string) => (Uint8Array | Promise<Uint8Array>))
 export type CompressFormat = keyof typeof compressors | CompressionFormat
 export type CompressFormatAlias = keyof typeof compressFormatAlias
 
@@ -60,23 +60,18 @@ function switchCompressor(format: CompressFormat): Compressor {
     }
     try {
         const cs = new CompressionStream(format as CompressionFormat)
-        return (buf) => new Response(
-            new ReadableStream({
-                start(controller) {
-                    controller.enqueue(buf)
-                    controller.close()
-                },
-            }).pipeThrough(cs)
+        return (script: string) => new Response(
+            new Response(script).body!.pipeThrough(cs)
         ).bytes()
     } catch { }
     throw Error(`Could not get compressor: Unknown compress format '${format}', please set your compressor function.`)
 }
 
-export async function compress(format: CompressFormat, buf: zlib.InputType, useBase128: boolean, compressor: Compressor | undefined): Promise<string> {
+export async function compress(format: CompressFormat, script: string, useBase128: boolean, compressor: Compressor | undefined): Promise<string> {
     if (typeof compressor != 'function') {
         compressor = switchCompressor(format)
     }
-    const out = await compressor(buf)
+    const out = await compressor(script)
     if (useBase128) {
         // base128-ascii
         return base128.encode(out).toJSTemplateLiterals()
@@ -84,7 +79,7 @@ export async function compress(format: CompressFormat, buf: zlib.InputType, useB
     // base64
     if (typeof Uint8Array.prototype.toBase64 == 'function') {
         // Uint8Array Node.js v25
-        return Uint8Array.prototype.toBase64.call(out) as string
+        return Uint8Array.prototype.toBase64.call(out)
     }
     return Buffer.prototype.base64Slice.call(out, 0, out.length) as string
 }
