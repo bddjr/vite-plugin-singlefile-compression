@@ -17,6 +17,7 @@ const base128ConstOutLenStr = base128InputLenVarName + '/8*7'
 export const template = {
     async base(script: string, format: CompressFormat, useBase128: boolean, compressor: Compressor | undefined) {
         const compressedBytes = await compress(format, script, compressor)
+        const _format_ = JSON.stringify(format)
         if (useBase128) {
             const b128Result = base128.encode(compressedBytes)
             /** input.length and out.length using const number */
@@ -34,7 +35,6 @@ export const template = {
                 outLenStr = base128ConstOutLenStr
             }
             const b128Str = b128Result.toJSTemplateLiterals()
-            const _format_ = JSON.stringify(format)
             const t = files.base128
             if (ioLenUsingConstNumber) {
                 // remove inputLen variable
@@ -71,7 +71,7 @@ export const template = {
         return t[0].concat(
             b64,
             t[1],
-            JSON.stringify(format),
+            _format_,
             t[2]
         )
     },
