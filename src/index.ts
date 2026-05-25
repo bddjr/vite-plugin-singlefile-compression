@@ -74,7 +74,7 @@ function setConfig(this: ConfigPluginContext, opt: InnerOptions, config: UserCon
 }
 
 async function generateBundle(this: PluginContext, bundle: OutputBundle, config: ResolvedConfig, options: InnerOptions) {
-    console.log(
+    if (!options.quiet) console.log(
         pc.reset('\n\n') +
         pc.cyan(packageName + ' ' + packageVersion) +
         ' ' +
@@ -136,7 +136,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
     }
 
     for (const htmlFileName of bundleHTMLNames) {
-        console.log("\n  " + pc.underline(pc.cyan(distURL) + pc.greenBright(bundle[htmlFileName].fileName)))
+        if (!options.quiet) console.log("\n  " + pc.underline(pc.cyan(distURL) + pc.greenBright(bundle[htmlFileName].fileName)))
 
         // init
         const htmlChunk = bundle[htmlFileName] as OutputAsset
@@ -383,7 +383,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         htmlChunk.source = htmlChunk.source.replace(fakeScript, () => outputScript)
 
         // log
-        console.log("  " + pc.gray(kB(oldSize) + " -> ") + pc.cyanBright(kB(Buffer.byteLength(htmlChunk.source))) + '\n')
+        if (!options.quiet) console.log("  " + pc.gray(kB(oldSize) + " -> ") + pc.cyanBright(kB(Buffer.byteLength(htmlChunk.source))) + '\n')
 
         // delete assets
         for (const name of thisDel) {
@@ -410,10 +410,10 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
                     fs.rmSync(_path, { force: true })
                 }
             } catch (e) {
-                console.error(e)
+                if (!options.quiet) console.error(e)
             }
         }
     }
 
-    console.log(pc.green('Finish.') + pc.reset('\n'))
+    if (!options.quiet) console.log(pc.green('Finish.') + pc.reset('\n'))
 }

@@ -90,6 +90,12 @@ export interface Options {
      * @default false
      */
     useImportMetaPolyfill?: boolean
+
+    /**
+     * Do not log.
+     * @default false
+     */
+    quiet?: boolean
 }
 
 export const defaultHtmlMinifierTerserOptions: HtmlMinifierOptions = {
@@ -114,6 +120,7 @@ export interface InnerOptions {
     removeInlinedPublicIconFiles: boolean
     enableCompressInlinedIcon: boolean
     useImportMetaPolyfill: boolean
+    quiet: boolean
 }
 
 export function getInnerOptions(opt?: Options): InnerOptions {
@@ -164,6 +171,8 @@ export function getInnerOptions(opt?: Options): InnerOptions {
 
         useImportMetaPolyfill:
             opt.useImportMetaPolyfill ?? false,
+
+        quiet: opt.quiet ?? false,
     }
 }
 

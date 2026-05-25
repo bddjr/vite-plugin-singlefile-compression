@@ -126,3 +126,11 @@ Use import.meta polyfill.
 default: `false`
 
 type: `boolean`
+
+### quiet
+
+Do not log.
+
+default: `false`
+
+type: `boolean`

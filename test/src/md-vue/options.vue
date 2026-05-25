@@ -80,5 +80,9 @@ If false, use Base64.<br>
 <p>Use import.meta polyfill.</p>
 <p>default: <code>false</code></p>
 <p>type: <code>boolean</code></p>
+<h3>quiet</h3>
+<p>Do not log.</p>
+<p>default: <code>false</code></p>
+<p>type: <code>boolean</code></p>
 
 </template>
