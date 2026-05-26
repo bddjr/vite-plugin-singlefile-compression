@@ -105,7 +105,6 @@
     "rolldown": "catalog:",
     "rolldown-plugin-dts": "catalog:",
     "terser": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:"
+    "typescript": "catalog:"
   }
 }
