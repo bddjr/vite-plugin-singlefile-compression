@@ -7,8 +7,9 @@ fetch("data:;base64,__SPLIT__")
 		r.body.pipeThrough(new DecompressionStream(__SPLIT__))
 	).text())
 	.then(t => {
-		var script = document.createElement("script")
+		var D = document
+			, script = D.createElement("script")
 		script.type = 'module'
 		script.innerHTML = t
-		document.head.appendChild(script)
+		D.head.appendChild(script)
 	});

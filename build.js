@@ -30,12 +30,12 @@ function toTemplate(code) {
 for (const filename of fs.globSync('src/template/*.js')) {
     const rawCode = fs.readFileSync(filename).toString()
     const minifyOutput = minify_sync(rawCode, {
-        module: true,
+        module: false,
         format: {
             wrap_iife: false,
         },
         compress: {
-            module: true,
+            module: false,
             evaluate: false,
             dead_code: false,
             side_effects: false,
