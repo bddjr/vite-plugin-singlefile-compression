@@ -110,6 +110,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         , assetsSrcSelector = `[src^="${assetsDirWithBase}"]`
 
         , fakeScript = `_VITE${Math.random().toString(36).slice(2, 10)}()`
+        , fakeScriptOuterHTML = `<script>${fakeScript}</script>`
 
         , globalDelete = new Set<string>()
         , globalDoNotDelete = new Set<string>()
@@ -154,13 +155,8 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         // fill fake script
         if (scriptElement) {
             scriptElement.remove()
-            scriptElement.removeAttribute('src')
-            scriptElement.removeAttribute('crossorigin')
-            scriptElement.innerHTML = fakeScript
-            document.body.appendChild(scriptElement)
-        } else {
-            document.body.insertAdjacentHTML('beforeend', `<script type="module">${fakeScript}</script>`)
         }
+        document.body.insertAdjacentHTML('beforeend', fakeScriptOuterHTML)
 
         // get css tag
         let allCSS = ''
