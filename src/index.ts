@@ -150,12 +150,10 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             , scriptName = scriptElement ? cutPrefix(scriptElement.src, config.base) : ''
             , compressHeadElements: HTMLElement[] = []
 
-        let oldSize = Buffer.byteLength(oldHTML)
+        let oldSize = options.quiet ? NaN : Buffer.byteLength(oldHTML)
 
         // fill fake script
-        if (scriptElement) {
-            scriptElement.remove()
-        }
+        scriptElement?.remove()
         document.body.insertAdjacentHTML('beforeend', fakeScriptOuterHTML)
 
         // get css tag
@@ -167,7 +165,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             const css = bundle[name] as OutputAsset
             const cssSource = css.source as string
             if (cssSource) {
-                oldSize += Buffer.byteLength(cssSource)
+                if (!options.quiet) oldSize += Buffer.byteLength(cssSource)
                 // do not delete not inlined asset
                 for (const name of bundleAssetsNames) {
                     if (cssSource.includes(name.slice(assetsDir.length)))
@@ -208,11 +206,11 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
                     thisDel.add(bundleName)
                     let dataURL: string
                     if (Object.prototype.hasOwnProperty.call(globalAssetsDataURL, name)) {
-                        oldSize += Buffer.byteLength(a.source)
+                        if (!options.quiet) oldSize += Buffer.byteLength(a.source)
                         dataURL = globalAssetsDataURL[name]
                     } else {
                         const buf = Buffer.from(a.source)
-                        oldSize += buf.length
+                        if (!options.quiet) oldSize += buf.length
                         globalAssetsDataURL[name] = dataURL = bufferToDataURL(name, buf)
                     }
                     if (options.enableCompress) {
@@ -263,7 +261,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             if (options.tryInlineHtmlPublicIcon) {
                 const fileCache = getPublicIcon('favicon.ico')
                 if (fileCache) {
-                    oldSize += fileCache.size
+                    if (!options.quiet) oldSize += fileCache.size
                     const e = createIconElement(fileCache.dataURL)
                     if (options.enableCompressInlinedIcon) {
                         compressHeadElements.push(e)
@@ -310,7 +308,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             } else if (options.tryInlineHtmlPublicIcon) {
                 const fileCache = getPublicIcon(faviconName)
                 if (fileCache) {
-                    oldSize += fileCache.size
+                    if (!options.quiet) oldSize += fileCache.size
                     setFaviconDataURL(fileCache.dataURL)
                 }
             }
@@ -341,7 +339,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         if (scriptElement) {
             thisDel.add(scriptName)
             let { code } = bundle[scriptName] as OutputChunk
-            oldSize += Buffer.byteLength(code)
+            if (!options.quiet) oldSize += Buffer.byteLength(code)
             code = code.replace(/;?\s*$/, '')
             // do not delete not inlined asset
             for (const name of bundleAssetsNames) {
