@@ -99,6 +99,18 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         delete bundle["index.html"]
     }
 
+    let fakeScript = '', fakeScriptOuterHTML = ''
+    const regenerateFakeScript = () => {
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_$0123456789'
+        fakeScript = alphabet.charAt(Math.random() * 54)
+        for (let i = 1; i < 8; i++) {
+            fakeScript += alphabet.charAt(Math.random() * 64)
+        }
+        fakeScript += '()'
+        fakeScriptOuterHTML = `<script>${fakeScript}</script>`
+    }
+    regenerateFakeScript()
+
     const distURL = pathToFileURL(config.build.outDir).href + '/'
         /** "assets/" */
         , assetsDir = path.posix.join(config.build.assetsDir, '/')
@@ -108,9 +120,6 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         , assetsHrefSelector = `[href^="${assetsDirWithBase}"]`
         /** '[src^="./assets/"]' */
         , assetsSrcSelector = `[src^="${assetsDirWithBase}"]`
-
-        , fakeScript = `_VITE${Math.random().toString(36).slice(2, 10)}()`
-        , fakeScriptOuterHTML = `<script>${fakeScript}</script>`
 
         , globalDelete = new Set<string>()
         , globalDoNotDelete = new Set<string>()
@@ -146,19 +155,30 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
 
         // init
         const htmlChunk = bundle[htmlFileName] as OutputAsset
-            , oldHTML = htmlChunk.source as string
+            , oldHTML = (
+                typeof htmlChunk.source == 'string'
+                    ? htmlChunk.source
+                    : new TextDecoder().decode(htmlChunk.source)
+            )
             , dom = new JSDOM(oldHTML)
             , document = dom.window.document
             , thisDel = new Set<string>()
             , newJSCode: string[] = []
             , scriptElement = document.querySelector<HTMLScriptElement>(`script[type=module]${assetsSrcSelector}`)
-            , scriptName = scriptElement ? cutPrefix(scriptElement.src, config.base) : ''
+            , scriptName = (
+                scriptElement
+                    ? cutPrefix(scriptElement.src, config.base)
+                    : ''
+            )
             , compressHeadElements: HTMLElement[] = []
 
         let oldSize = options.quiet ? NaN : Buffer.byteLength(oldHTML)
 
         // fill fake script
         scriptElement?.remove()
+        while (oldHTML.includes(fakeScript)) {
+            regenerateFakeScript()
+        }
         document.body.insertAdjacentHTML('beforeend', fakeScriptOuterHTML)
 
         // get css tag
@@ -336,11 +356,12 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         }
 
         // generate html
-        htmlChunk.source = dom.serialize()
+        let newHTML = dom.serialize()
 
         // minify html
-        if (options.htmlMinifierTerser)
-            htmlChunk.source = await htmlMinify(htmlChunk.source, options.htmlMinifierTerser)
+        if (options.htmlMinifierTerser) {
+            newHTML = await htmlMinify(newHTML, options.htmlMinifierTerser)
+        }
 
         // fill script
         function inlineHtmlAssets() {
@@ -389,10 +410,10 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             outputScript = await template.base(outputScript, options.compressFormat, options.useBase128, options.compressor)
         }
 
-        htmlChunk.source = htmlChunk.source.replace(fakeScript, () => outputScript)
+        htmlChunk.source = newHTML = newHTML.replace(fakeScript, () => outputScript)
 
         // log
-        if (!options.quiet) console.log("  " + pc.gray(kB(oldSize) + " -> ") + pc.cyanBright(kB(Buffer.byteLength(htmlChunk.source))) + '\n')
+        if (!options.quiet) console.log("  " + pc.gray(kB(oldSize) + " -> ") + pc.cyanBright(kB(Buffer.byteLength(newHTML))) + '\n')
 
         // delete assets
         for (const name of thisDel) {
