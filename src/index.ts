@@ -113,36 +113,36 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
     regenerateFakeScript()
 
     const distURL = pathToFileURL(config.build.outDir).href + '/'
-        /** "assets/" */
-        , assetsDir = path.posix.join(config.build.assetsDir, '/')
-        /** "./assets/" */
-        , assetsDirWithBase = config.base + assetsDir
-        /** '[href^="./assets/"]' */
-        , assetsHrefSelector = `[href^="${assetsDirWithBase}"]`
-        /** '[src^="./assets/"]' */
-        , assetsSrcSelector = `[src^="${assetsDirWithBase}"]`
+    /** "assets/" */
+    const assetsDir = path.posix.join(config.build.assetsDir, '/')
+    /** "./assets/" */
+    const assetsDirWithBase = config.base + assetsDir
+    /** '[href^="./assets/"]' */
+    const assetsHrefSelector = `[href^="${assetsDirWithBase}"]`
+    /** '[src^="./assets/"]' */
+    const assetsSrcSelector = `[src^="${assetsDirWithBase}"]`
 
-        , globalDelete = new Set<string>()
-        , globalDoNotDelete = new Set<string>()
-        , globalRemoveDistFileNames = new Set<string>()
+    const globalDelete = new Set<string>()
+    const globalDoNotDelete = new Set<string>()
+    const globalRemoveDistFileNames = new Set<string>()
+    const globalAssetsDataURLCache = {} as {
+        [key: string]: {
+            dataURL: string,
+            byteLength: number
+        }
+    }
+    const globalPublicFilesCache = {} as {
+        [key: string]: {
+            buffer: Buffer,
+            dataURL: string,
+            size: number,
+        }
+    }
 
-        , globalAssetsDataURLCache = {} as {
-            [key: string]: {
-                dataURL: string,
-                byteLength: number
-            }
-        }
-        , globalPublicFilesCache = {} as {
-            [key: string]: {
-                buffer: Buffer,
-                dataURL: string,
-                size: number,
-            }
-        }
-        /** format: ["assets/index-XXXXXXXX.js"] */
-        , bundleAssetsNames = [] as string[]
-        /** format: ["index.html"] */
-        , bundleHTMLNames = [] as string[]
+    /** format: ["assets/index-XXXXXXXX.js"] */
+    const bundleAssetsNames = [] as string[]
+    /** format: ["index.html"] */
+    const bundleHTMLNames = [] as string[]
 
     for (const name in bundle) {
         if (name.startsWith(assetsDir))
@@ -164,7 +164,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             , scriptElement = document.querySelector<HTMLScriptElement>(`script[type=module]${assetsSrcSelector}`)
             , scriptName = (
                 scriptElement
-                    ? cutPrefix(scriptElement.src, config.base)
+                    ? cutPrefix(scriptElement.getAttribute('src')!, config.base)
                     : ''
             )
             , compressHeadElements: HTMLElement[] = []
