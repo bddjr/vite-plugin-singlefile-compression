@@ -1,6 +1,7 @@
 import base128 from 'base128-ascii'
 import { compress, CompressFormat, Compressor } from './compress.js'
 import files from './templateRaw.js'
+import { toBase64 } from './to-base64.js'
 
 /** base128 input variable name */
 const base128InputVarName = files.base128[0].slice(-2, -1)
@@ -54,11 +55,7 @@ export const template = {
             )
         }
         const t = files.base64
-        const b64 = (
-            typeof Uint8Array.prototype.toBase64 == 'function'
-                ? Uint8Array.prototype.toBase64.call(compressedBytes)
-                : Buffer.prototype.base64Slice.call(compressedBytes, 0, compressedBytes.length) as string
-        )
+        const b64 = toBase64(compressedBytes)
         return t[0].concat(
             b64,
             t[1],

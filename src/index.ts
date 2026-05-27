@@ -12,7 +12,7 @@ import { version as packageVersion, name as packageName } from '../package.json'
 
 import type { RollupOptions } from "@bddjr/types-rollupoptions-4.43.0"
 import { template } from './getTemplate.js'
-import { bufferToDataURL } from "./dataurl.js"
+import { toDataURL, toDataURL_andGetByteLength } from "./dataurl.js"
 import { kB } from "./kB.js"
 import { getInnerOptions, type Options, type InnerOptions as InnerOptions, type HtmlMinifierOptions, defaultHtmlMinifierTerserOptions } from "./options.js"
 import { cutPrefix } from "./cutPrefix.js"
@@ -116,7 +116,12 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         , globalDoNotDelete = new Set<string>()
         , globalRemoveDistFileNames = new Set<string>()
 
-        , globalAssetsDataURL = {} as { [key: string]: string }
+        , globalAssetsDataURLCache = {} as {
+            [key: string]: {
+                dataURL: string,
+                byteLength: number
+            }
+        }
         , globalPublicFilesCache = {} as {
             [key: string]: {
                 buffer: Buffer,
@@ -205,13 +210,23 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
                         continue
                     thisDel.add(bundleName)
                     let dataURL: string
-                    if (Object.prototype.hasOwnProperty.call(globalAssetsDataURL, name)) {
-                        if (!options.quiet) oldSize += Buffer.byteLength(a.source)
-                        dataURL = globalAssetsDataURL[name]
+                    if (Object.prototype.hasOwnProperty.call(globalAssetsDataURLCache, name)) {
+                        const cache = globalAssetsDataURLCache[name]
+                        if (!options.quiet) oldSize += cache.byteLength
+                        dataURL = cache.dataURL
+                    } else if (options.quiet) {
+                        // quiet
+                        dataURL = toDataURL(name, a.source)
+                        globalAssetsDataURLCache[name] = {
+                            dataURL,
+                            byteLength: NaN
+                        }
                     } else {
-                        const buf = Buffer.from(a.source)
-                        if (!options.quiet) oldSize += buf.length
-                        globalAssetsDataURL[name] = dataURL = bufferToDataURL(name, buf)
+                        // not quiet
+                        const result = toDataURL_andGetByteLength(name, a.source)
+                        oldSize += result.byteLength
+                        dataURL = result.dataURL
+                        globalAssetsDataURLCache[name] = result
                     }
                     if (options.enableCompress) {
                         assetsDataURL[name] = dataURL
@@ -250,7 +265,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             const b = fs.readFileSync(_path)
             return globalPublicFilesCache[faviconName] = {
                 buffer: b,
-                dataURL: bufferToDataURL(faviconName, b),
+                dataURL: toDataURL(faviconName, b),
                 size: b.length
             }
         }
@@ -302,7 +317,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             } else if (bundleAssetsNames.includes(faviconName)) {
                 const asset = bundle[faviconName] as OutputAsset
                 if (asset) {
-                    setFaviconDataURL(bufferToDataURL(faviconName, Buffer.from(asset.source)))
+                    setFaviconDataURL(toDataURL(faviconName, asset.source))
                     thisDel.add(faviconName)
                 }
             } else if (options.tryInlineHtmlPublicIcon) {
