@@ -100,7 +100,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         delete bundle["index.html"]
     }
 
-    let fakeScript = '', fakeScriptOuterHTML = ''
+    let fakeScript = ''
     const regenerateFakeScript = () => {
         const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_$0123456789'
         fakeScript = alphabet.charAt(Math.random() * 54)
@@ -108,7 +108,6 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             fakeScript += alphabet.charAt(Math.random() * 64)
         }
         fakeScript += '()'
-        fakeScriptOuterHTML = `<script>${fakeScript}</script>`
     }
     regenerateFakeScript()
 
@@ -171,12 +170,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
 
         let oldSize = options.quiet ? NaN : Buffer.byteLength(oldHTML)
 
-        // fill fake script
         scriptElement?.remove()
-        while (oldHTML.includes(fakeScript)) {
-            regenerateFakeScript()
-        }
-        document.body.insertAdjacentHTML('beforeend', fakeScriptOuterHTML)
 
         // get css tag
         let allCSS = ''
@@ -353,7 +347,14 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         }
 
         // generate html
+        const fakeScriptElement = document.body.appendChild(document.createElement('script'))
+        fakeScriptElement.innerHTML = fakeScript
         let newHTML = dom.serialize()
+        while (newHTML.indexOf(fakeScript) !== newHTML.lastIndexOf(fakeScript)) {
+            regenerateFakeScript()
+            fakeScriptElement.innerHTML = fakeScript
+            newHTML = dom.serialize()
+        }
 
         // minify html
         if (options.htmlMinifierTerser) {
