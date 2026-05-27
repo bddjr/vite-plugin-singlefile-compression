@@ -17,6 +17,7 @@ import { kB } from "./kB.js"
 import { getInnerOptions, type Options, type InnerOptions as InnerOptions, type HtmlMinifierOptions, defaultHtmlMinifierTerserOptions } from "./options.js"
 import { cutPrefix } from "./cutPrefix.js"
 import { type CompressFormat, type CompressFormatAlias, type Compressor } from "./compress.js"
+import { sourceToString } from "./source-to-string"
 
 export function singleFileCompression(opt?: Options): PluginOption {
     let conf: ResolvedConfig
@@ -155,11 +156,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
 
         // init
         const htmlChunk = bundle[htmlFileName] as OutputAsset
-            , oldHTML = (
-                typeof htmlChunk.source == 'string'
-                    ? htmlChunk.source
-                    : new TextDecoder().decode(htmlChunk.source)
-            )
+            , oldHTML = sourceToString(htmlChunk.source)
             , dom = new JSDOM(oldHTML)
             , document = dom.window.document
             , thisDel = new Set<string>()
@@ -188,7 +185,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             const name = cutPrefix(element.href, config.base)
             thisDel.add(name)
             const css = bundle[name] as OutputAsset
-            const cssSource = css.source as string
+            const cssSource = sourceToString(css.source)
             if (cssSource) {
                 if (!options.quiet) oldSize += Buffer.byteLength(cssSource)
                 // do not delete not inlined asset
