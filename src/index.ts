@@ -347,18 +347,18 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         }
 
         // generate html
+        let newHTML = ''
         const fakeScriptElement = document.body.appendChild(document.createElement('script'))
-        fakeScriptElement.innerHTML = fakeScript
-        let newHTML = dom.serialize()
-        while (newHTML.indexOf(fakeScript) !== newHTML.lastIndexOf(fakeScript)) {
-            regenerateFakeScript()
+        for (; ;) {
             fakeScriptElement.innerHTML = fakeScript
             newHTML = dom.serialize()
-        }
-
-        // minify html
-        if (options.htmlMinifierTerser) {
-            newHTML = await htmlMinify(newHTML, options.htmlMinifierTerser)
+            if (newHTML.indexOf(fakeScript) === newHTML.lastIndexOf(fakeScript)) {
+                if (!options.htmlMinifierTerser) break;
+                // minify html
+                newHTML = await htmlMinify(newHTML, options.htmlMinifierTerser)
+                if (newHTML.indexOf(fakeScript) === newHTML.lastIndexOf(fakeScript)) break;
+            }
+            regenerateFakeScript()
         }
 
         // fill script
