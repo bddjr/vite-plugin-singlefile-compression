@@ -18,6 +18,7 @@ import { getInnerOptions, type Options, type InnerOptions as InnerOptions, type 
 import { cutPrefix } from "./cutPrefix.js"
 import { type CompressFormat, type CompressFormatAlias, type Compressor } from "./compress.js"
 import { sourceToString } from "./source-to-string"
+import { hasSubstring } from "./has-substring"
 
 export function singleFileCompression(opt?: Options): PluginOption {
     let conf: ResolvedConfig
@@ -352,11 +353,15 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
         for (; ;) {
             fakeScriptElement.innerHTML = fakeScript
             newHTML = dom.serialize()
-            if (newHTML.indexOf(fakeScript) === newHTML.lastIndexOf(fakeScript)) {
+            const has = hasSubstring(newHTML, fakeScript)
+            if (has === 0) throw Error(`Failed to inject fakeScript`);
+            if (has === 1) {
                 if (!options.htmlMinifierTerser) break;
                 // minify html
                 newHTML = await htmlMinify(newHTML, options.htmlMinifierTerser)
-                if (newHTML.indexOf(fakeScript) === newHTML.lastIndexOf(fakeScript)) break;
+                const has = hasSubstring(newHTML, fakeScript)
+                if (has === 0) throw Error(`Failed to inject fakeScript`);
+                if (has === 1) break;
             }
             regenerateFakeScript()
         }
