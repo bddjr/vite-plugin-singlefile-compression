@@ -40,30 +40,36 @@ To automatically restore the user's scroll position after a page reload or back/
 ```ts
 // Restore scroll position after page reload or back/forward navigation
 {
-    const storageKey = 'globalScrollXY';
-    const item = sessionStorage.getItem(storageKey);
-    if (item !== null) {
-        sessionStorage.removeItem(storageKey);
-        const navEntry = (
-            self.performance?.getEntriesByType?.('navigation')[0]
-        ) as PerformanceNavigationTiming | undefined;
-        const navType = navEntry?.type;
-        if (navType === 'reload' || navType === 'back_forward') {
-            const [x, y] = item.split(',', 2);
-            setTimeout(() => self.scrollTo({
-                left: Number(x),
-                top: Number(y),
-                behavior: 'instant'
-            }), 1);
-        }
+  const storageKey = 'globalScrollXY'
+  const item = sessionStorage.getItem(storageKey)
+  if (item !== null) {
+    try {
+      sessionStorage.removeItem(storageKey)
+      const navEntry = self.performance.getEntriesByType('navigation')[0] as
+        | PerformanceNavigationTiming
+        | undefined
+      const navType = navEntry?.type
+      if (navType === 'reload' || navType === 'back_forward') {
+        const [x, y] = item.split(',', 2)
+        setTimeout(() => {
+          self.scrollTo({
+            left: Number(x),
+            top: Number(y),
+            behavior: 'instant',
+          })
+        }, 1)
+      }
+    } catch (e) {
+      console.error(e)
     }
-    const saveScrollPosition = () => {
-        sessionStorage.setItem(storageKey, `${self.scrollX},${self.scrollY}`);
-    };
-    self.addEventListener('pagehide', saveScrollPosition);
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') saveScrollPosition();
-    });
+  }
+  const saveScrollPosition = () => {
+    sessionStorage.setItem(storageKey, `${self.scrollX},${self.scrollY}`)
+  }
+  self.addEventListener('pagehide', saveScrollPosition)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') saveScrollPosition()
+  })
 }
 ```
 
@@ -216,14 +222,14 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression 2.4.7 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  130.910 kB -> 60.805 kB
+  131.101 kB -> 60.875 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  60.80 kB │ gzip: 46.01 kB
+dist/index.html  60.87 kB │ gzip: 46.07 kB
 
-✓ built in 280ms
+✓ built in 275ms
 ```
 
 ## Clone

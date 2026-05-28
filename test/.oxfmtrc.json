@@ -4,6 +4,6 @@
   "singleQuote": true,
   "ignorePatterns": [
     "**/*.md",
-    "src/md-vue"
+    "src/md-vue/**/*"
   ]
 }
