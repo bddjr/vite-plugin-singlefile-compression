@@ -12,8 +12,8 @@ app.mount('#app');
 {
     const storageKey = 'globalScrollXY';
     const item = sessionStorage.getItem(storageKey);
-    sessionStorage.removeItem(storageKey);
-    if (item) {
+    if (item !== null) {
+        sessionStorage.removeItem(storageKey);
         const navEntry = (
             self.performance?.getEntriesByType?.('navigation')[0]
         ) as PerformanceNavigationTiming | undefined;

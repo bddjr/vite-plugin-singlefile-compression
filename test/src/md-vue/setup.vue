@@ -26,8 +26,8 @@
 {
     <span class="hljs-keyword">const</span> storageKey = <span class="hljs-string">&#x27;globalScrollXY&#x27;</span>;
     <span class="hljs-keyword">const</span> item = <span class="hljs-variable language_">sessionStorage</span>.<span class="hljs-title function_">getItem</span>(storageKey);
-    <span class="hljs-variable language_">sessionStorage</span>.<span class="hljs-title function_">removeItem</span>(storageKey);
-    <span class="hljs-keyword">if</span> (item) {
+    <span class="hljs-keyword">if</span> (item !== <span class="hljs-literal">null</span>) {
+        <span class="hljs-variable language_">sessionStorage</span>.<span class="hljs-title function_">removeItem</span>(storageKey);
         <span class="hljs-keyword">const</span> navEntry = (
             self.<span class="hljs-property">performance</span>?.<span class="hljs-property">getEntriesByType</span>?.(<span class="hljs-string">&#x27;navigation&#x27;</span>)[<span class="hljs-number">0</span>]
         ) <span class="hljs-keyword">as</span> <span class="hljs-title class_">PerformanceNavigationTiming</span> | <span class="hljs-literal">undefined</span>;

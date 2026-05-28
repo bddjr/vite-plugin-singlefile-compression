@@ -42,8 +42,8 @@ To automatically restore the user's scroll position after a page reload or back/
 {
     const storageKey = 'globalScrollXY';
     const item = sessionStorage.getItem(storageKey);
-    sessionStorage.removeItem(storageKey);
-    if (item) {
+    if (item !== null) {
+        sessionStorage.removeItem(storageKey);
         const navEntry = (
             self.performance?.getEntriesByType?.('navigation')[0]
         ) as PerformanceNavigationTiming | undefined;
@@ -216,14 +216,14 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression 2.4.7 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  130.856 kB -> 60.790 kB
+  130.910 kB -> 60.805 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  60.79 kB │ gzip: 46.00 kB
+dist/index.html  60.80 kB │ gzip: 46.01 kB
 
-✓ built in 291ms
+✓ built in 280ms
 ```
 
 ## Clone
