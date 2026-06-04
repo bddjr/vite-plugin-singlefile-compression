@@ -215,21 +215,21 @@ type: `boolean`
 Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/#/
 
 ```
-vite v8.0.14 building client environment for production...
+vite v8.0.16 building client environment for production...
 ✓ 43 modules transformed.
 rendering chunks (1)...
 
 vite-plugin-singlefile-compression 2.4.7 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  131.101 kB -> 60.875 kB
+  129.157 kB -> 60.249 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  60.87 kB │ gzip: 46.07 kB
+dist/index.html  60.24 kB │ gzip: 45.55 kB
 
-✓ built in 275ms
+✓ built in 331ms
 ```
 
 ## Clone
