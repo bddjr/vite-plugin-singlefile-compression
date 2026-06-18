@@ -4,7 +4,7 @@ Compress all assets and embeds them into `dist/index.html`, making it convenient
 
 The recipient can open it directly in the browser without manually unzipping the file.
 
-Using [DecompressionStream](https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream) + [base128-ascii](https://www.npmjs.com/package/base128-ascii).
+Using [DecompressionStream](https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream) + [base128-ascii](https://bddjr.github.io/base128/).
 
 Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/#/
 
@@ -222,14 +222,14 @@ rendering chunks (1)...
 vite-plugin-singlefile-compression 2.4.7 deflate-raw base128-ascii
 
   file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  129.157 kB -> 60.249 kB
+  129.146 kB -> 60.245 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  60.24 kB │ gzip: 45.55 kB
+dist/index.html  60.24 kB │ gzip: 45.54 kB
 
-✓ built in 331ms
+✓ built in 346ms
 ```
 
 ## Clone

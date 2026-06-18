@@ -16,7 +16,7 @@ md.use(highlightjs, {
 
 for (const name of fs.readdirSync('src/md')) {
     const mdText = fs.readFileSync('src/md/' + name).toString()
-    const html = md.render(mdText).replaceAll('<a ', '<a target="_blank" ')
+    const html = md.render(mdText).replaceAll('<a href=', '<a target="_blank" href=')
     const vue = `<!--
   Generate by build-md.mjs
   Do not manually modify!
