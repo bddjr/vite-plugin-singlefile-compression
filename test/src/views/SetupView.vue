@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MD from '@/md-vue/setup.vue'
+import MD from '@/md/setup.md'
 </script>
 
 <template>
