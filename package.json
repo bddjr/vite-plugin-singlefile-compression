@@ -11,7 +11,7 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "tsc && node build.js && tsc _dist/templateRaw.ts --ignoreConfig --noEmit && cd website && node --run build",
+    "build": "node build.js",
     "prepublishOnly": "node --run build"
   },
   "homepage": "https://bddjr.github.io/vite-plugin-singlefile-compression/#/",

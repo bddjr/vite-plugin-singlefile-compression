@@ -1,9 +1,12 @@
 import fs from 'fs'
 import path from 'path'
+import { execSync } from 'child_process'
 
 import { minify_sync } from 'terser'
 import { build as rolldownBuild } from 'rolldown'
 import { dts } from 'rolldown-plugin-dts'
+
+execSync('tsc', { stdio: 'inherit' });
 
 for (const dir of ['dist', '_dist']) {
     fs.rmSync(dir, { recursive: true, force: true })
@@ -53,6 +56,7 @@ const templateRawDTS = fs.readFileSync('src/templateRaw.d.ts').toString()
 
 fs.writeFileSync(templateRawFileDistPath, templateRawDTS.replace('/*={}*/', () => ` = ${JSON.stringify(raw, null, 2)}`))
 
+execSync('tsc --ignoreConfig --noEmit _dist/templateRaw.ts', { stdio: 'inherit' });
 
 // bundle
 
@@ -79,4 +83,9 @@ await rolldownBuild({
             [templateRawFileImportPath]: '../' + templateRawFileDistPath,
         },
     },
+})
+
+execSync('node --run build', {
+    stdio: 'inherit',
+    cwd: path.resolve('./website/'),
 })
