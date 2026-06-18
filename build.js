@@ -56,7 +56,7 @@ const templateRawDTS = fs.readFileSync('src/templateRaw.d.ts').toString()
 
 fs.writeFileSync(templateRawFileDistPath, templateRawDTS.replace('/*={}*/', () => ` = ${JSON.stringify(raw, null, 2)}`))
 
-execSync('tsc --ignoreConfig --noEmit _dist/templateRaw.ts', { stdio: 'inherit' });
+execSync(`tsc --ignoreConfig --noEmit "${templateRawFileDistPath}"`, { stdio: 'inherit' });
 
 // bundle
 
