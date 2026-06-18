@@ -14,7 +14,7 @@ Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/#/
 npm i -D vite-plugin-singlefile-compression@latest
 ```
 
-Then modify `vite.config.ts`, like [test/vite.config.ts](test/vite.config.ts)
+Then modify `vite.config.ts`, like [website/vite.config.ts](website/vite.config.ts)
 
 ```diff
 + import singleFileCompression from 'vite-plugin-singlefile-compression'
@@ -27,7 +27,7 @@ Then modify `vite.config.ts`, like [test/vite.config.ts](test/vite.config.ts)
     ],
 ```
 
-Then use hash history, like [test/src/router/index.ts](test/src/router/index.ts)
+Then use hash history, like [website/src/router/index.ts](website/src/router/index.ts)
 
 ```diff
   const router = createRouter({
@@ -221,15 +221,15 @@ rendering chunks (1)...
 
 vite-plugin-singlefile-compression 2.4.8 deflate-raw base128-ascii
 
-  file:///D:/code/js/vite-plugin-singlefile-compression/test/dist/index.html
-  129.999 kB -> 61.109 kB
+  file:///D:/code/js/vite-plugin-singlefile-compression/website/dist/index.html
+  130.011 kB -> 61.117 kB
 
 Finish.
 
 computing gzip size...
-dist/index.html  61.10 kB │ gzip: 45.95 kB
+dist/index.html  61.11 kB │ gzip: 45.97 kB
 
-✓ built in 308ms
+✓ built in 318ms
 ```
 
 ## Clone

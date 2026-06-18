@@ -4,7 +4,7 @@
 npm i -D vite-plugin-singlefile-compression@latest
 ```
 
-Then modify `vite.config.ts`, like [test/vite.config.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/vite.config.ts)
+Then modify `vite.config.ts`, like [website/vite.config.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/website/vite.config.ts)
 
 ```diff
 + import singleFileCompression from 'vite-plugin-singlefile-compression'
@@ -17,7 +17,7 @@ Then modify `vite.config.ts`, like [test/vite.config.ts](https://github.com/bddj
     ],
 ```
 
-Then use hash history, like [test/src/router/index.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/test/src/router/index.ts)
+Then use hash history, like [website/src/router/index.ts](https://github.com/bddjr/vite-plugin-singlefile-compression/blob/main/website/src/router/index.ts)
 
 ```diff
   const router = createRouter({
