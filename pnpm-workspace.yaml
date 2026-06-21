@@ -20,7 +20,7 @@ catalog:
   mini-svg-data-uri: "^1.4.4"
   mrmime: "^2.0.1"
   npm-run-all2: "^9.0.2"
-  oxfmt: "^0.53.0"
+  oxfmt: "^0.55.0"
   picocolors: "^1.1.1"
   rolldown: "^1.1.2"
   rolldown-plugin-dts: "^0.26.0"
