@@ -2,11 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches-ignore:
-      - gh-pages
+    branches:
+      - "**"
   pull_request:
-    branches-ignore:
-      - gh-pages
 
 jobs:
   build:
