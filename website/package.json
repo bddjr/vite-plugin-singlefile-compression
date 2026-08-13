@@ -12,26 +12,24 @@
     "type-check": "vue-tsc --build",
     "format": "oxfmt src/"
   },
-  "dependencies": {
-    "vue": "catalog:",
-    "vue-router": "catalog:"
-  },
   "devDependencies": {
-    "@tsconfig/node24": "catalog:",
-    "@types/markdown-it": "catalog:",
+    "@tsconfig/node24": "^24.0.4",
+    "@types/markdown-it": ">=14.1.2",
     "@types/node": "catalog:",
-    "@vitejs/plugin-vue": "catalog:",
+    "@vitejs/plugin-vue": "^6.0.8",
     "@vue/tsconfig": "catalog:",
-    "highlight.js": "catalog:",
-    "markdown-it": "catalog:",
-    "markdown-it-highlightjs": "catalog:",
-    "npm-run-all2": "catalog:",
-    "oxfmt": "catalog:",
+    "highlight.js": "^11.11.2",
+    "markdown-it": ">=15.0.0",
+    "markdown-it-highlightjs": "^4.3.0",
+    "npm-run-all2": "^9.0.3",
+    "oxfmt": "^0.63.0",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-singlefile-compression": "link:..",
-    "vite-plugin-vue-devtools": "catalog:",
-    "vue-tsc": "catalog:"
+    "vite-plugin-vue-devtools": "^8.2.1",
+    "vue": ">=3.6.0-rc.3",
+    "vue-router": "^5.2.0",
+    "vue-tsc": "^3.3.9"
   },
   "engines": {
     "node": ">=20.19.0 || >=22.12.0"

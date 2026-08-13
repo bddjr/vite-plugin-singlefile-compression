@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-singlefile-compression",
-  "version": "2.4.8",
+  "version": "2.4.9",
   "author": "bddjr",
   "license": "MIT",
   "description": "Compress all assets and embeds them into dist/index.html, making it convenient to share as a single HTML file.",
@@ -90,21 +90,22 @@
     }
   },
   "dependencies": {
-    "@types/html-minifier-terser": "catalog:",
-    "base128-ascii": "catalog:",
-    "html-minifier-terser": "catalog:",
-    "jsdom": "catalog:",
-    "mini-svg-data-uri": "catalog:",
-    "mrmime": "catalog:",
-    "picocolors": "catalog:"
+    "@types/html-minifier-terser": "^7.0.2",
+    "base128-ascii": "^6.0.0",
+    "html-minifier-terser": "^7.2.0",
+    "jsdom": ">=30.0.1",
+    "mini-svg-data-uri": "^1.4.4",
+    "mrmime": "^2.0.1",
+    "picocolors": "^1.1.1"
   },
   "devDependencies": {
-    "@bddjr/types-rollupoptions-4.43.0": "catalog:",
-    "@types/jsdom": "catalog:",
+    "@bddjr/types-rollupoptions-4.43.0": "4.43.0",
+    "@types/jsdom": ">=30.0.0",
     "@types/node": "catalog:",
-    "rolldown": "catalog:",
-    "rolldown-plugin-dts": "catalog:",
-    "terser": "catalog:",
-    "typescript": "catalog:"
+    "rolldown": "^1.2.3",
+    "rolldown-plugin-dts": "^0.28.1",
+    "terser": "^5.50.0",
+    "typescript": "catalog:",
+    "vite": "catalog:"
   }
 }
