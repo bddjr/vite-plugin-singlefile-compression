@@ -9,9 +9,6 @@ catalogs:
     '@types/node':
       specifier: ^24.13.2
       version: 24.13.2
-    '@vue/tsconfig':
-      specifier: ^0.9.1
-      version: 0.9.1
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
@@ -85,7 +82,7 @@ importers:
         specifier: ^6.0.8
         version: 6.0.8(vite@8.2.1(@types/node@24.13.2)(terser@5.50.0)(yaml@2.9.0))(vue@3.6.0-rc.3(typescript@6.0.3))
       '@vue/tsconfig':
-        specifier: 'catalog:'
+        specifier: ^0.9.1
         version: 0.9.1(typescript@6.0.3)(vue@3.6.0-rc.3(typescript@6.0.3))
       highlight.js:
         specifier: ^11.11.2
