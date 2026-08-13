@@ -12,10 +12,7 @@
         , oi = 0
         , k
         , cache
-        , next = _ =>
-            (cache = input.charCodeAt(ii++)) >> 7
-                ? cache = 0 // In HTML, 0 is likely to be converted to 65533 (�)
-                : cache
+        , next = _ => cache = input.charCodeAt(ii++)
 
     for (script.type = 'module'; ii < __SPLIT__; out[oi++] = cache << 8 - k | next() >> --k)
         k || next(k = 7);
