@@ -3,6 +3,6 @@ packages:
 minimumReleaseAgeExclude:
   - "base128-ascii"
 catalog:
-  "@types/node": "^24.13.2"
+  "@types/node": ^24.19.0
   typescript: "^6.0.3"
-  vite: "^8.2.1"
+  vite: ^8.3.1
