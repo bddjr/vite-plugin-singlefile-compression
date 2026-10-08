@@ -22,7 +22,7 @@
     "markdown-it": ">=15.0.0",
     "markdown-it-highlightjs": "^4.3.0",
     "npm-run-all2": "^9.0.3",
-    "oxfmt": "^0.71.0",
+    "oxfmt": "^0.72.0",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-singlefile-compression": "link:..",
