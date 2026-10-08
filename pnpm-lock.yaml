@@ -24,8 +24,8 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
       base128-ascii:
-        specifier: ^6.2.0
-        version: 6.2.0
+        specifier: 6.2.1
+        version: 6.2.1
       html-minifier-terser:
         specifier: ^7.2.0
         version: 7.2.0
@@ -271,68 +271,51 @@ packages:
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
 
-  '@base128-ascii/binding-android-arm64@6.2.0':
-    resolution: {integrity: sha512-0KuMlN+DNRdoqyRFyTsALwXYltdz32W1ddQp3H+vANHEVMGL9JrOLu0PcQkv/jtKgB2bHR9keUVAEb6g9Aw/FQ==}
+  '@base128-ascii/binding-android-arm64@6.2.1':
+    resolution: {integrity: sha512-aum57ITZQAx4ycnpK7waAMnFSYgIyNdMCElVAol7vd3tZQXjfRzJeyDrBpsDa/mhSTjEgCvD6ylIBGBUAZV8Gw==}
     cpu: [arm64]
     os: [android]
 
-  '@base128-ascii/binding-darwin-arm64@6.2.0':
-    resolution: {integrity: sha512-ZHmEKcdxxZBG1ACYt+L17sWkm0CXG4qLoHQEJ6fTZnGB0/TAITaCp7v8LY6xZklqpAH9gNHH9GawXdzZK3YhTA==}
+  '@base128-ascii/binding-darwin-arm64@6.2.1':
+    resolution: {integrity: sha512-SJv6NHfxnq17aajrXBPBJFiasTUY25HiuPZtX/YEpFMTICrdIDxqy6ZfIw+Zc53cuVWjs5Pq+yQl1oa5ewsvXQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@base128-ascii/binding-darwin-x64@6.2.0':
-    resolution: {integrity: sha512-crddpUUeu7fzbTpQP4LGGgIpdvtKplQXCDgmG+5gqu9gGfL1oxHj0slHF7T0AAMHU3VGzgEyku6HgI8BSuq6eA==}
+  '@base128-ascii/binding-darwin-x64@6.2.1':
+    resolution: {integrity: sha512-6oJgXBuOiHvsE9v7/Mi0Ds3iVgF5PxLIo46vWxX2i8eQhECn+0nOZuyAHG1pBAuF/C/BU3ig80z0oBMbE3FNGQ==}
     cpu: [x64]
     os: [darwin]
 
-  '@base128-ascii/binding-freebsd-x64@6.2.0':
-    resolution: {integrity: sha512-8Er0BtRFB1bldu0TzuZkBfkzUfBoYNIHrOpG/R6TC5/qmN14FC0xz8fiOxA38TruB+4EQ62R7yl+FykTGb1RGQ==}
-    cpu: [x64]
-    os: [freebsd]
-
-  '@base128-ascii/binding-linux-arm64-gnu@6.2.0':
-    resolution: {integrity: sha512-s47aFirJlRCChAZT2Mj3k+bQP9bIz7e8yKFVNjMXzNuAa2iIklFTRtGBOkN2h7Q4S+IAkbeFQUhzica4Rvg4rA==}
+  '@base128-ascii/binding-linux-arm64-gnu@6.2.1':
+    resolution: {integrity: sha512-5TXwigIk0xLntR5UgkXvLeed5ZTFtdYeFHSpeaH8zUdS6OpY8zv4WlYcchxXBW7WJMZ9HF+Ew4NCfMriJOMhdw==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@base128-ascii/binding-linux-arm64-musl@6.2.0':
-    resolution: {integrity: sha512-ERJIQx/Y0O0B/J62gYQrLraa2B9iUHWAntAKaVNhMaz3JfX/834Vf76FU+291UVocF+QCqfSEmWQSDOgt1jpXA==}
+  '@base128-ascii/binding-linux-arm64-musl@6.2.1':
+    resolution: {integrity: sha512-fvzzcm86vM4t8qjP3IPzSVX12CDWC5JiV2SaCde67Baz3/UdCWbLZcRozRtMZnyLAkYvMBkQiACqE6vnAmFIcg==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@base128-ascii/binding-linux-ppc64-gnu@6.2.0':
-    resolution: {integrity: sha512-iCh3gwjovphvz2mrbFTEgC7WnZuO2sTHwbxJrQrl2fvcPJL0Xj8S2w7rd4/7uC04aRFp/x+czFqQZ2MFBuxh/w==}
+  '@base128-ascii/binding-linux-ppc64-gnu@6.2.1':
+    resolution: {integrity: sha512-Let4bPSS8sSi0X0CazAn2NNlxFkLkFl/QH+AWhgjkL0goPwO2s1hLuRuL4Sq9aSCQ6mLC/riNIo65HNzqeIAtw==}
     cpu: [ppc64]
     os: [linux]
     libc: [glibc]
 
-  '@base128-ascii/binding-linux-x64-gnu@6.2.0':
-    resolution: {integrity: sha512-Svqy2uj4vshlyDmXhxu4pq1GRZRH0VSyNtEeB1d6p5pPZeTq5cNoWWt3vrA6ZtnJFcZ2jfMBbORwiGoxc/vfhg==}
-    cpu: [x64]
-    os: [linux]
-    libc: [glibc]
-
-  '@base128-ascii/binding-linux-x64-musl@6.2.0':
-    resolution: {integrity: sha512-bp0RtOzlsaZ+yoH1FDzcF/crMXShB3O9ASh8QyoZ5mN90LEcgOcGoT6MdM2T5meReygq9hX10CkiV7SabrRF2A==}
-    cpu: [x64]
-    os: [linux]
-    libc: [musl]
-
-  '@base128-ascii/binding-openharmony-arm64@6.2.0':
-    resolution: {integrity: sha512-XsLgxdr85XYQ3mJdHkbxVSNnBQfn/bbxDmOOVPb23eLR+Gbv/VLWEd/iPGsbCkxkPFdRgGS9GHRe01QeMphQEA==}
+  '@base128-ascii/binding-openharmony-arm64@6.2.1':
+    resolution: {integrity: sha512-mvBvxp9IL4gsUJp78iOlu1YYp4qGwFNdtBwtJ1rtzcOFHoAR6dOCUr1fO+r7Gm7kEFNxQsJDTmKfDUqN1w8QHA==}
     cpu: [arm64]
     os: [openharmony]
 
-  '@base128-ascii/binding-win32-arm64-msvc@6.2.0':
-    resolution: {integrity: sha512-5auOH0mN/T98W1rfBSNqQpdXhz3KEL+POr8+i3O01NbB5tUyOu52UPoi7jagGQkIQPWW9adWS8n72mllosG2BQ==}
+  '@base128-ascii/binding-win32-arm64-msvc@6.2.1':
+    resolution: {integrity: sha512-AedjJ7pjNLsNMD8AqcrtF/q0DV3j10cJXZjJRppyJoadl31LdN6ra+nX3dES86PRCnQ5DtUGcCyQV84A5ua87w==}
     cpu: [arm64]
     os: [win32]
 
-  '@base128-ascii/binding-win32-x64-msvc@6.2.0':
-    resolution: {integrity: sha512-Az2wivlz5Q0RK+uTaQE8l+ROg9QQ4j1n+CqZWwRgcYnjJ+PoQbpItNj9REGh5ixCjEF8W6Nbx2xZxS6L5dZC0w==}
+  '@base128-ascii/binding-win32-x64-msvc@6.2.1':
+    resolution: {integrity: sha512-USAtO/nbjq/L0X0MXds8tjxDqsg7QqfyQXVFr/7ooLGCWhQAitJA0ARX9aE8UIBE4UonYmNxjZ1aWlkIwN681A==}
     cpu: [x64]
     os: [win32]
 
@@ -947,8 +930,8 @@ packages:
     resolution: {integrity: sha512-IJdzo2vLiElBxKzwS36VsCue/62d6IdWjnPB2v3nuPKeWGynp6FF/CYoLa5i/3jXH/z97ZDdsXz6abpgM6w07A==}
     engines: {node: '>=20.19.0'}
 
-  base128-ascii@6.2.0:
-    resolution: {integrity: sha512-8HMRHLx4gZts8kkYrQqiqR2H1hQtKjTPUQtVXvr8ng6g6XC4/P4DjHB4x2yBWE4WlUe3S+9dSCAHGZHAx99unA==}
+  base128-ascii@6.2.1:
+    resolution: {integrity: sha512-xzOER/VCoK1PB6HzC1shgYxqTeRFRvZQEazlXV+qtjtHSn8vONnf+SYfRi3IJx+WmMWI/9AT4IJuj08Tl0c7og==}
 
   baseline-browser-mapping@2.11.27:
     resolution: {integrity: sha512-ElY12DaROGuan+lMmZ8Cvo/ZUbXPe7Enc/9VU/b1T3Kp4dwytRcNdR8DoSJN5SNJT/CuvcCA0DHDVmMOCePdRQ==}
@@ -1990,40 +1973,31 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
-  '@base128-ascii/binding-android-arm64@6.2.0':
+  '@base128-ascii/binding-android-arm64@6.2.1':
     optional: true
 
-  '@base128-ascii/binding-darwin-arm64@6.2.0':
+  '@base128-ascii/binding-darwin-arm64@6.2.1':
     optional: true
 
-  '@base128-ascii/binding-darwin-x64@6.2.0':
+  '@base128-ascii/binding-darwin-x64@6.2.1':
     optional: true
 
-  '@base128-ascii/binding-freebsd-x64@6.2.0':
+  '@base128-ascii/binding-linux-arm64-gnu@6.2.1':
     optional: true
 
-  '@base128-ascii/binding-linux-arm64-gnu@6.2.0':
+  '@base128-ascii/binding-linux-arm64-musl@6.2.1':
     optional: true
 
-  '@base128-ascii/binding-linux-arm64-musl@6.2.0':
+  '@base128-ascii/binding-linux-ppc64-gnu@6.2.1':
     optional: true
 
-  '@base128-ascii/binding-linux-ppc64-gnu@6.2.0':
+  '@base128-ascii/binding-openharmony-arm64@6.2.1':
     optional: true
 
-  '@base128-ascii/binding-linux-x64-gnu@6.2.0':
+  '@base128-ascii/binding-win32-arm64-msvc@6.2.1':
     optional: true
 
-  '@base128-ascii/binding-linux-x64-musl@6.2.0':
-    optional: true
-
-  '@base128-ascii/binding-openharmony-arm64@6.2.0':
-    optional: true
-
-  '@base128-ascii/binding-win32-arm64-msvc@6.2.0':
-    optional: true
-
-  '@base128-ascii/binding-win32-x64-msvc@6.2.0':
+  '@base128-ascii/binding-win32-x64-msvc@6.2.1':
     optional: true
 
   '@bddjr/types-rollupoptions-4.43.0@4.43.0':
@@ -2509,20 +2483,17 @@ snapshots:
       '@babel/types': 7.29.8
       ast-kit: 2.2.0
 
-  base128-ascii@6.2.0:
+  base128-ascii@6.2.1:
     optionalDependencies:
-      '@base128-ascii/binding-android-arm64': 6.2.0
-      '@base128-ascii/binding-darwin-arm64': 6.2.0
-      '@base128-ascii/binding-darwin-x64': 6.2.0
-      '@base128-ascii/binding-freebsd-x64': 6.2.0
-      '@base128-ascii/binding-linux-arm64-gnu': 6.2.0
-      '@base128-ascii/binding-linux-arm64-musl': 6.2.0
-      '@base128-ascii/binding-linux-ppc64-gnu': 6.2.0
-      '@base128-ascii/binding-linux-x64-gnu': 6.2.0
-      '@base128-ascii/binding-linux-x64-musl': 6.2.0
-      '@base128-ascii/binding-openharmony-arm64': 6.2.0
-      '@base128-ascii/binding-win32-arm64-msvc': 6.2.0
-      '@base128-ascii/binding-win32-x64-msvc': 6.2.0
+      '@base128-ascii/binding-android-arm64': 6.2.1
+      '@base128-ascii/binding-darwin-arm64': 6.2.1
+      '@base128-ascii/binding-darwin-x64': 6.2.1
+      '@base128-ascii/binding-linux-arm64-gnu': 6.2.1
+      '@base128-ascii/binding-linux-arm64-musl': 6.2.1
+      '@base128-ascii/binding-linux-ppc64-gnu': 6.2.1
+      '@base128-ascii/binding-openharmony-arm64': 6.2.1
+      '@base128-ascii/binding-win32-arm64-msvc': 6.2.1
+      '@base128-ascii/binding-win32-x64-msvc': 6.2.1
 
   baseline-browser-mapping@2.11.27: {}
 
