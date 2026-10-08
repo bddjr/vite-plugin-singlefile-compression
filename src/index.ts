@@ -408,7 +408,7 @@ async function generateBundle(this: PluginContext, bundle: OutputBundle, config:
             inlineHtmlAssets()
         }
 
-        let outputScript = newJSCode.join(';').replaceAll('</script', '<\\/script')
+        let outputScript = newJSCode.join(';').replace(/<\/(script)/gi, '<\\/$1')
         if (options.enableCompress) {
             outputScript = await template.base(outputScript, options.compressFormat, options.useBase128, options.compressor)
         }
