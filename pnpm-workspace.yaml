@@ -2,7 +2,19 @@ packages:
   - website
 minimumReleaseAgeExclude:
   - "base128-ascii"
+  - "@base128-ascii/binding-android-arm64@6.1.0"
+  - "@base128-ascii/binding-darwin-arm64@6.1.0"
+  - "@base128-ascii/binding-darwin-x64@6.1.0"
+  - "@base128-ascii/binding-freebsd-x64@6.1.0"
+  - "@base128-ascii/binding-linux-arm64-gnu@6.1.0"
+  - "@base128-ascii/binding-linux-arm64-musl@6.1.0"
+  - "@base128-ascii/binding-linux-ppc64-gnu@6.1.0"
+  - "@base128-ascii/binding-linux-x64-gnu@6.1.0"
+  - "@base128-ascii/binding-linux-x64-musl@6.1.0"
+  - "@base128-ascii/binding-openharmony-arm64@6.1.0"
+  - "@base128-ascii/binding-win32-arm64-msvc@6.1.0"
+  - "@base128-ascii/binding-win32-x64-msvc@6.1.0"
 catalog:
-  "@types/node": ^24.19.0
+  "@types/node": ^24.19.1
   typescript: "^6.0.3"
-  vite: ^8.3.1
+  vite: ^8.3.3
