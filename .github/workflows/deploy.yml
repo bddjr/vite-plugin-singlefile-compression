@@ -14,18 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: latest
-          check-latest: true
-
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/setup@v3
         with:
           version: "11"
+          runtime: node@lts
+          install: true
 
-      - run: pnpm i
       - run: pnpm build
 
       - name: Upload static files as artifact
