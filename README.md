@@ -14,6 +14,8 @@ Preview: https://bddjr.github.io/vite-plugin-singlefile-compression/#/
 npm i -D vite-plugin-singlefile-compression@latest
 ```
 
+You can also use other package managers (such as `pnpm`) instead of `npm`.
+
 Then modify `vite.config.ts`, like [website/vite.config.ts](website/vite.config.ts)
 
 ```diff
