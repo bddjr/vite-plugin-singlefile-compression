@@ -19,7 +19,7 @@
     "@vitejs/plugin-vue": "^6.0.10",
     "@vue/tsconfig": "^0.9.1",
     "highlight.js": "^11.12.0",
-    "markdown-it": ">=15.0.0",
+    "markdown-it": ">=15.0.3",
     "markdown-it-highlightjs": "^4.3.0",
     "npm-run-all2": "^9.0.3",
     "oxfmt": "^0.73.0",
